@@ -1,7 +1,13 @@
-import '../styles/globals.css'
+import "bootstrap/dist/css/bootstrap.css";
+import "../styles/globals.css";
+import { AppWrapper } from "../context/state";
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <AppWrapper>
+      <Component {...pageProps} />
+    </AppWrapper>
+  );
 }
 
-export default MyApp
+export default MyApp;
