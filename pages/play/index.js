@@ -8,11 +8,39 @@ import React, { useState, useEffect, useRef } from "react";
 import { getJSONCategory } from "../../utils/getLocalJSON";
 import { getLocale } from "../../utils/getLocaleText";
 
+//TODO : Atur Category Card agar kalau jumlah itemnya 6, bagus keliatanya
+//TODO : Fit Screen No Scroll untuk pad dan Laptop
+
 export default function HomePlay(props) {
   const router = useRouter();
 
   const kategoriObj = props.kategori_data;
   const localeGeneral = props.localeData.general;
+
+  const kategoriArray = [];
+  var tempArray = [];
+
+  Object.keys(kategoriObj).map((key, id) => {
+    tempArray.push(
+      <div
+        key={id}
+        onClick={() => router.push({ pathname: "/play/start", query: { category: key } })}
+        className={stylesCustom.card_menu}
+        style={{ marginRight: "15px", padding: "10px 10px 5px", display: "block", overflow: "auto" }}
+      >
+        <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={400} height={400} alt="PlayButton"></Image>
+        <h2 style={{ textAlign: "center" }}>{kategoriObj[key].show_name} &rarr;</h2>
+      </div>
+    );
+    if ((id + 1) % 4 == 0 && id != 0) {
+      kategoriArray.push(tempArray);
+      tempArray = [];
+    }
+    if (id + 1 == Object.keys(kategoriObj).length) {
+      kategoriArray.push(tempArray);
+      tempArray = [];
+    }
+  });
 
   return (
     <div className={(styles.container, stylesCustom.backgound_image)} style={{ backgroundImage: "url('/bg2.jpg')" }}>
@@ -27,18 +55,15 @@ export default function HomePlay(props) {
         <h2>{localeGeneral.play_title}</h2>
         <h4>{localeGeneral.play_subtitle}</h4>
         <br></br>
-
-        <div className={stylesCustom.grid}>
-          {Object.keys(kategoriObj).map((key, id) => (
-            <div
-              key={id}
-              onClick={() => router.push({ pathname: "/play/start", query: { category: key } })}
-              className={stylesCustom.card_menu}
-              style={{ marginRight: "15px", padding: "10px 10px 5px", height: '100%' }}
-            >
-              <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={400} height={400} alt="PlayButton"></Image> <h2 style={{textAlign: 'center'}}>{kategoriObj[key].show_name} &rarr;</h2>
-            </div>
-          ))}
+        
+        <div className={stylesCustom.grid_kategori_benda_parent}>
+          {kategoriArray.map((value, id) => {
+            return (
+              <div key={id} className={stylesCustom.grid_kategori_benda}>
+                {kategoriArray[id]}
+              </div>
+            );
+          })}
         </div>
       </main>
 
