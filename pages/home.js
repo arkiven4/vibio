@@ -1,17 +1,19 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import stylesCustom from "../styles/custom.module.css";
 import { useRouter } from "next/router";
 import { useAppContext } from "../context/state";
-import {useEffect} from 'react'
+import { useEffect } from "react";
 
-export default function Home() {
+import { getLocale } from "../utils/getLocaleText";
+
+export default function Home({ localeData }) {
   const router = useRouter();
   const { userdata, setUserdata } = useAppContext();
+  const localeGeneral = localeData.general;
 
   useEffect(() => {
-    console.log(userdata)
+    console.log(userdata);
     setUserdata({
       username: "hola",
     });
@@ -33,32 +35,28 @@ export default function Home() {
 
       <main className={styles.main}>
         {/* <button type="button" className="btn btn-primary">Warning</button> */}
-        <h1 className={styles.title}>Selamat Datang di Vibio</h1>
+        <h1 className={styles.title}>{localeGeneral.mainmenu_title}</h1>
+        <h3 className={styles.title}>{localeGeneral.mainmenu_subtitle}</h3>
         <br></br>
-        {/* <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p> */}
-
         <div className={stylesCustom.container_card_row}>
+          <div href="#" className={stylesCustom.card_menu}>
+            <h2>{localeGeneral.menu1_title} &rarr;</h2>
+            <p>{localeGeneral.menu1_subtitle}</p>
+          </div>
+
           <div onClick={() => router.push("/play")} className={stylesCustom.card_menu}>
-            <h2>Mainkan &rarr;</h2>
-            <p>Deskripsi</p>
+            <h2>{localeGeneral.menu2_title} &rarr;</h2>
+            <p>{localeGeneral.menu2_subtitle}</p>
           </div>
 
           <div href="#" className={stylesCustom.card_menu}>
-            <h2>Pengenalan &rarr;</h2>
-            <p>Coming Soon</p>
+            <h2>{localeGeneral.menu3_title} &rarr;</h2>
+            <p>{localeGeneral.menu3_subtitle}</p>
           </div>
 
           <div href="#" className={stylesCustom.card_menu}>
-            <h2>Cara Terapi &rarr;</h2>
-            <p>Coming Soon</p>
-          </div>
-
-          <div href="#" className={stylesCustom.card_menu}>
-            <h2>Evaluasi &rarr;</h2>
-            <p>Coming Soon</p>
+            <h2>{localeGeneral.menu3_title} &rarr;</h2>
+            <p>{localeGeneral.menu3_subtitle}</p>
           </div>
         </div>
       </main>
@@ -73,4 +71,15 @@ export default function Home() {
       </footer> */}
     </div>
   );
+}
+
+export async function getStaticProps(context) {
+  var localeDataGeneral = getLocale("id", "general");
+  return {
+    props: {
+      localeData: {
+        general: localeDataGeneral,
+      },
+    },
+  };
 }

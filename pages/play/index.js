@@ -3,9 +3,16 @@ import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 import stylesCustom from "../../styles/custom.module.css";
 import { useRouter } from "next/router";
+import React, { useState, useEffect, useRef } from "react";
 
-export default function HomePlay({ allPostsData }) {
+import { getJSONCategory } from "../../utils/getLocalJSON";
+import { getLocale } from "../../utils/getLocaleText";
+
+export default function HomePlay(props) {
   const router = useRouter();
+
+  const kategoriObj = props.kategori_data;
+  const localeGeneral = props.localeData.general;
 
   return (
     <div className={(styles.container, stylesCustom.backgound_image)} style={{ backgroundImage: "url('/bg2.jpg')" }}>
@@ -17,27 +24,16 @@ export default function HomePlay({ allPostsData }) {
       </Head>
 
       <main className={styles.main}>
-        {/* <button type="button" className="btn btn-primary">Warning</button> */}
-        <h2>Pilih Kategori Benda</h2>
+        <h2>{localeGeneral.play_title}</h2>
+        <h4>{localeGeneral.play_subtitle}</h4>
         <br></br>
 
         <div className={styles.grid}>
-          <a
-            href="#"
-            onClick={() =>
-              router.push({
-                pathname: "/play/start",
-                query: { kategori: "buah"},
-              })
-            }
-            className={stylesCustom.card_menu}
-          >
-            <h2>Buah &rarr;</h2>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Hewan &rarr;</h2>
-          </a>
+          {Object.keys(kategoriObj).map((key, id) => (
+            <div key={id} onClick={() => router.push({ pathname: "/play/start", query: { kategori: "buah" } })} className={stylesCustom.card_menu}>
+              <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={400} height={400} alt="PlayButton"></Image> <h2>{kategoriObj[key].show_name} &rarr;</h2>
+            </div>
+          ))}
         </div>
       </main>
 
@@ -52,3 +48,27 @@ export default function HomePlay({ allPostsData }) {
     </div>
   );
 }
+
+// export async function getStaticProps(context) {
+
+//   return {
+//     props: {
+//       localeData: {
+//         general: localeDataGeneral,
+//       },
+//     },
+//   };
+// }
+
+export const getStaticProps = async (context) => {
+  var kategori_data = getJSONCategory();
+  var localeDataGeneral = getLocale("id", "general");
+  return {
+    props: {
+      kategori_data: kategori_data,
+      localeData: {
+        general: localeDataGeneral,
+      },
+    },
+  };
+};
