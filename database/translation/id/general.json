@@ -10,6 +10,12 @@
     "menu3_subtitle":"menu3_subtitle",
     "menu4_title":"Evaluasi",
     "menu4_subtitle":"menu4_subtitle",
-    "play_title":"Pilih Kategori Benda",
-    "play_subtitle":""
+    "play_title1":"Pilih Jenis Permainan",
+    "play_subtitle1":"",
+    "play_title2":"Pilih Kategori Benda",
+    "play_subtitle2":"",
+    "play_choose_title1":"Mengeja Gambar",
+    "play_choose_subtitle1":"play_choose_subtitle1",
+    "play_choose_title2":"Tebak Gambar",
+    "play_choose_subtitle2":"play_choose_subtitle2"
 }

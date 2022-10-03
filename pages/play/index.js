@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 import stylesCustom from "../../styles/custom.module.css";
 import { useRouter } from "next/router";
+import { motion } from "framer-motion";
 import React, { useState, useEffect, useRef } from "react";
 
 import { getJSONCategory } from "../../utils/getLocalJSON";
@@ -13,6 +14,8 @@ import { getLocale } from "../../utils/getLocaleText";
 
 export default function HomePlay(props) {
   const router = useRouter();
+  const [pickGame, setPickGame] = useState(false);
+  const [gameType, setGameType] = useState("");
 
   const kategoriObj = props.kategori_data;
   const localeGeneral = props.localeData.general;
@@ -24,7 +27,7 @@ export default function HomePlay(props) {
     tempArray.push(
       <div
         key={id}
-        onClick={() => router.push({ pathname: "/play/start", query: { category: key } })}
+        onClick={() => router.push({ pathname: "/play/" + gameType, query: { category: key } })}
         className={stylesCustom.card_menu}
         style={{ marginRight: "15px", padding: "10px 10px 5px", display: "block", overflow: "auto" }}
       >
@@ -42,6 +45,11 @@ export default function HomePlay(props) {
     }
   });
 
+  function setGame(type) {
+    setGameType(type)
+    setPickGame(true)
+  }
+
   return (
     <div className={(styles.container, stylesCustom.backgound_image)} style={{ backgroundImage: "url('/bg2.jpg')" }}>
       <Head>
@@ -51,30 +59,53 @@ export default function HomePlay(props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <main className={styles.main}>
-        <h2>{localeGeneral.play_title}</h2>
-        <h4>{localeGeneral.play_subtitle}</h4>
-        <br></br>
-        
-        <div className={stylesCustom.grid_kategori_benda_parent}>
-          {kategoriArray.map((value, id) => {
-            return (
-              <div key={id} className={stylesCustom.grid_kategori_benda}>
-                {kategoriArray[id]}
-              </div>
-            );
-          })}
-        </div>
-      </main>
+      <main>
+        <motion.div
+          className={styles.main}
+          animate={pickGame ? "closed" : "open"}
+          variants={{
+            open: { opacity: 1, x: 0 },
+            closed: { opacity: 0, x: "-100%" },
+          }}
+        >
+          <h2>{localeGeneral.play_title1}</h2>
+          <h4>{localeGeneral.play_subtitle2}</h4>
+          <br></br>
+          <div className={stylesCustom.container_card_row}>
+            <div onClick={() => setGame("mengeja-gambar")} className={stylesCustom.card_menu}>
+              <h2>{localeGeneral.play_choose_title1} &rarr;</h2>
+              <p>{localeGeneral.play_choose_subtitle1}</p>
+            </div>
+            <div onClick={() => setGame("tebak-gambar")} className={stylesCustom.card_menu}>
+              <h2>{localeGeneral.play_choose_title2} &rarr;</h2>
+              <p>{localeGeneral.play_choose_subtitle2}</p>
+            </div>
+          </div>
+        </motion.div>
+        <motion.div
+          className={styles.main}
+          animate={pickGame ? "open" : "closed"}
+          variants={{
+            open: { opacity: 1, x: 0 },
+            closed: { opacity: 0, x: "-100%" },
+          }}
+          style={{ position: "absolute", top: "0", left: "0" }}
+        >
+          <h2>{localeGeneral.play_title2}</h2>
+          <h4>{localeGeneral.play_subtitle2}</h4>
+          <br></br>
 
-      <footer className={styles.footer}>
-        <a href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app" target="_blank" rel="noopener noreferrer">
-          Powered by{" "}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+          <div className={stylesCustom.grid_kategori_benda_parent}>
+            {kategoriArray.map((value, id) => {
+              return (
+                <div key={id} className={stylesCustom.grid_kategori_benda}>
+                  {kategoriArray[id]}
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
+      </main>
     </div>
   );
 }

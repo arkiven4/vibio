@@ -14,7 +14,7 @@ const QuestionNumber = 10;
 
 export const getServerSideProps = async (context) => {
   //console.log(context.query.kategori);
-  var kategori_data = getJSONFlash(context.query.kategori);
+  var kategori_data = getJSONFlash(context.query.category);
 
   return {
     props: { kategori_data: kategori_data },
@@ -83,7 +83,7 @@ export default function PlayStart(props) {
     }
 
     setQuizData(tempQuizData);
-    setKategori(router.query.kategori);
+    setKategori(router.query.category);
     setUserdata({
       username: "Apa iya",
     });
@@ -94,10 +94,10 @@ export default function PlayStart(props) {
   useEffect(() => {
     if (quizData.length != 0) {
       setQuizOptionImage([
-        "/assets/items" + kategori + "/image/" + quizData[indexQuestion]?.options[0]?.name + "_" + quizData[indexQuestion]?.options[0]?.imageNum + ".png",
-        "/assets/items" + kategori + "/image/" + quizData[indexQuestion]?.options[1]?.name + "_" + quizData[indexQuestion]?.options[1]?.imageNum + ".png",
-        "/assets/items" + kategori + "/image/" + quizData[indexQuestion]?.options[2]?.name + "_" + quizData[indexQuestion]?.options[2]?.imageNum + ".png",
-        "/assets/items" + kategori + "/image/" + quizData[indexQuestion]?.options[3]?.name + "_" + quizData[indexQuestion]?.options[3]?.imageNum + ".png",
+        "/assets/items/" + kategori + "/image/" + quizData[indexQuestion]?.options[0]?.name + "_" + quizData[indexQuestion]?.options[0]?.imageNum + ".png",
+        "/assets/items/" + kategori + "/image/" + quizData[indexQuestion]?.options[1]?.name + "_" + quizData[indexQuestion]?.options[1]?.imageNum + ".png",
+        "/assets/items/" + kategori + "/image/" + quizData[indexQuestion]?.options[2]?.name + "_" + quizData[indexQuestion]?.options[2]?.imageNum + ".png",
+        "/assets/items/" + kategori + "/image/" + quizData[indexQuestion]?.options[3]?.name + "_" + quizData[indexQuestion]?.options[3]?.imageNum + ".png",
       ]);
     }
     console.log(indexQuestion);
@@ -188,7 +188,7 @@ export default function PlayStart(props) {
           <h4 className={`${stylesCustom.mini_card} ${showOption ? stylesCustom.fade_in : stylesCustom.fade_out}`}>Pilih jawaban sesuai suara yang muncul</h4>
 
           {/* <h1 className={styles.title}>Buah: {quizData[indexQuestion]?.name}</h1> */}
-          <audio ref={AudioSoundRef} controls src={"/assets/" + kategori + "/sound/" + quizData[indexQuestion]?.name + ".mp3"} style={{ display: "none" }} onEnded={stopSound()}>
+          <audio ref={AudioSoundRef} controls src={"/assets/items/" + kategori + "/sound/" + quizData[indexQuestion]?.name + ".mp3"} style={{ display: "none" }} onEnded={stopSound()}>
             Your browser does not support the
             <code>audio</code> element.
           </audio>
