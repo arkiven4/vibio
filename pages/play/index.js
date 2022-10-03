@@ -28,10 +28,15 @@ export default function HomePlay(props) {
         <h4>{localeGeneral.play_subtitle}</h4>
         <br></br>
 
-        <div className={styles.grid}>
+        <div className={stylesCustom.grid}>
           {Object.keys(kategoriObj).map((key, id) => (
-            <div key={id} onClick={() => router.push({ pathname: "/play/start", query: { kategori: "buah" } })} className={stylesCustom.card_menu}>
-              <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={400} height={400} alt="PlayButton"></Image> <h2>{kategoriObj[key].show_name} &rarr;</h2>
+            <div
+              key={id}
+              onClick={() => router.push({ pathname: "/play/start", query: { category: key } })}
+              className={stylesCustom.card_menu}
+              style={{ marginRight: "15px", padding: "10px 10px 5px", height: '100%' }}
+            >
+              <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={400} height={400} alt="PlayButton"></Image> <h2 style={{textAlign: 'center'}}>{kategoriObj[key].show_name} &rarr;</h2>
             </div>
           ))}
         </div>

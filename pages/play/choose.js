@@ -5,8 +5,9 @@ import stylesCustom from "../../styles/custom.module.css";
 
 import { useRouter } from "next/router";
 
-export default function Home() {
+export default function Home(props) {
   const router = useRouter();
+  console.log(props)
 
   return (
     <div className={(styles.container, stylesCustom.backgound_image)} style={{ backgroundImage: "url('/bg2.jpg')" }}>

@@ -6,7 +6,7 @@ import stylesCustom from "../../styles/custom.module.css";
 import { useRouter } from "next/router";
 import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../../context/state";
-import { getJSONFlash } from "../../utils/getFlash";
+import { getJSONFlash } from "../../utils/getLocalJSON";
 
 import { motion } from "framer-motion";
 
@@ -89,6 +89,7 @@ export default function PlayStart(props) {
     });
 
     console.log(window.localStorage.getItem("userSession"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

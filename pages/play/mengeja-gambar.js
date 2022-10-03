@@ -89,6 +89,7 @@ export default function PlayStart(props) {
     });
 
     console.log(window.localStorage.getItem("userSession"));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
