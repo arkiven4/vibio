@@ -3,23 +3,16 @@ import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 import stylesCustom from "../../styles/custom.module.css";
 
+import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import React, { useState, useEffect, useRef } from "react";
+
 import { useAppContext } from "../../context/state";
 import { getJSONFlash } from "../../utils/getLocalJSON";
+import { GenTebakGambarData } from "../../utils/genQuizData";
 
-import { motion } from "framer-motion";
 
 const QuestionNumber = 10;
-
-export const getServerSideProps = async (context) => {
-  //console.log(context.query.kategori);
-  var kategori_data = getJSONFlash(context.query.category);
-
-  return {
-    props: { kategori_data: kategori_data },
-  };
-};
 
 export default function PlayStart(props) {
   const router = useRouter();
@@ -39,48 +32,7 @@ export default function PlayStart(props) {
 
   useEffect(() => {
     console.log(userdata);
-    var rawKategoriData = props.kategori_data;
-    var keysKategori = Object.keys(rawKategoriData);
-    var randomizedKeysKategori = [];
-
-    for (let index = keysKategori.length - 1; index >= 0; index--) {
-      var randIndex = Math.floor(Math.random() * (index + 1));
-      randomizedKeysKategori.push(keysKategori[randIndex]);
-      keysKategori.splice(randIndex, 1);
-    }
-
-    var tempQuizData = [];
-    var jumlahOption = 4;
-    for (let index = 0; index < QuestionNumber; index++) {
-      var randIndexAnswer = Math.floor(Math.random() * jumlahOption);
-      var arrayOption = [];
-      for (let j = 0; j < 10; j++) {
-        if (arrayOption.length == 4) break;
-        if (arrayOption.length == randIndexAnswer) {
-          arrayOption.push(randomizedKeysKategori[index]);
-        } else {
-          var randomAnswer = randomizedKeysKategori[Math.floor(Math.random() * randomizedKeysKategori.length)];
-          if (!arrayOption.includes(randomAnswer) && randomAnswer != randomizedKeysKategori[index]) {
-            arrayOption.push(randomAnswer);
-          } else {
-            j--;
-          }
-        }
-      }
-
-      var finalArrayOption = [];
-      for (let index = 0; index < arrayOption.length; index++) {
-        finalArrayOption[index] = {
-          name: arrayOption[index],
-          imageNum: Math.floor(Math.random() * 2) + 1,
-        };
-      }
-
-      tempQuizData.push({
-        name: randomizedKeysKategori[index],
-        options: finalArrayOption,
-      });
-    }
+    var tempQuizData = GenTebakGambarData(props.kategori_data, QuestionNumber);
 
     setQuizData(tempQuizData);
     setKategori(router.query.category);
@@ -280,4 +232,22 @@ const Modal = (props) => {
       </motion.div>
     </motion.div>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  console.log(context.query.categor)
+  if (context.query.category !== undefined) {
+    var kategori_data = getJSONFlash(context.query.category);
+
+    return {
+      props: { kategori_data: kategori_data },
+    };
+  } else {
+    return {
+      redirect: {
+        destination: '/play',
+        permanent: false,
+      },
+    };
+  }
 };
