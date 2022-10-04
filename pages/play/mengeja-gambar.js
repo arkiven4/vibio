@@ -45,7 +45,7 @@ export default function PlayStart(props) {
     setIsPlay(true);
     if (!isPlay) {
       AudioSoundRef.current.play();
-      setShowOption(true);
+      //setShowOption(true);
       // OptionsRef.current.scrollIntoView({
       //   behavior: "smooth",
       //   block: "start",
@@ -160,9 +160,10 @@ export default function PlayStart(props) {
                 style={{ cursor: "pointer" }}
               />
               <h4 style={{ marginBottom: "0px" }}>benar</h4>
+              <rect x="126" y="103" rx="3" ry="3" width="15" height="15" transform="rotate(45, 128, 103)" />
             </div>
           </div>
-
+          
           {/* <div id="PlayButton" ref={PlayButtonRef} className={`${showOption ? stylesCustom.fade_out : stylesCustom.fade_in}`}>
             <div className={isPlay ? stylesCustom.overlay : null} style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
               <h3 className={stylesCustom.mini_card}>Tekan Tombol diatas untuk memutar suara</h3>

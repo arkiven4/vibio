@@ -11,6 +11,7 @@ import { useAppContext } from "../../context/state";
 import { getJSONFlash } from "../../utils/getLocalJSON";
 import { GenTebakGambarData } from "../../utils/genQuizData";
 
+//TODO : Show all image Option, so it will pre rendered, make it menarik, like "Loading All Image"... -> then show 4x4 image
 
 const QuestionNumber = 10;
 
@@ -151,18 +152,18 @@ export default function PlayStart(props) {
                 <br></br>
                 <div className={styles.grid}>
                   <div onClick={() => selectOption(quizData[indexQuestion]?.options[0]?.name)} className={stylesCustom.card_option}>
-                    <Image src={quizOptionImage[0]} width={400} height={400} alt="Option1" />
+                    <Image src={quizOptionImage[0]} width={400} height={400} alt="Option1" placeholder="blur" loading="lazy" />
                   </div>
                   <div onClick={() => selectOption(quizData[indexQuestion]?.options[1]?.name)} className={stylesCustom.card_option}>
-                    <Image src={quizOptionImage[1]} width={400} height={400} alt="Option2" />
+                    <Image src={quizOptionImage[1]} width={400} height={400} alt="Option2" placeholder="blur" loading="lazy" />
                   </div>
                 </div>
                 <div className={styles.grid}>
                   <div onClick={() => selectOption(quizData[indexQuestion]?.options[2]?.name)} className={stylesCustom.card_option}>
-                    <Image src={quizOptionImage[2]} width={400} height={400} alt="Option3" />
+                    <Image src={quizOptionImage[2]} width={400} height={400} alt="Option3" placeholder="blur" loading="lazy" />
                   </div>
                   <div onClick={() => selectOption(quizData[indexQuestion]?.options[3]?.name)} className={stylesCustom.card_option}>
-                    <Image src={quizOptionImage[3]} width={400} height={400} alt="Option4" />
+                    <Image src={quizOptionImage[3]} width={400} height={400} alt="Option4" placeholder="blur" loading="lazy" />
                   </div>
                 </div>
               </div>
@@ -235,7 +236,7 @@ const Modal = (props) => {
 };
 
 export const getServerSideProps = async (context) => {
-  console.log(context.query.categor)
+  console.log(context.query.categor);
   if (context.query.category !== undefined) {
     var kategori_data = getJSONFlash(context.query.category);
 
@@ -245,7 +246,7 @@ export const getServerSideProps = async (context) => {
   } else {
     return {
       redirect: {
-        destination: '/play',
+        destination: "/play",
         permanent: false,
       },
     };
