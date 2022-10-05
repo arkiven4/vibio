@@ -39,7 +39,7 @@ export default function Home({ localeData }) {
         <h3 className={styles.title}>{localeGeneral.mainmenu_subtitle}</h3>
         <br></br>
         <div className={stylesCustom.container_card_row}>
-          <div href="#" className={stylesCustom.card_menu}>
+          <div onClick={() => alert("Belum Tersedia")} className={stylesCustom.card_menu_disabled}>
             <h2>{localeGeneral.menu1_title} &rarr;</h2>
             <p>{localeGeneral.menu1_subtitle}</p>
           </div>
@@ -49,12 +49,12 @@ export default function Home({ localeData }) {
             <p>{localeGeneral.menu2_subtitle}</p>
           </div>
 
-          <div href="#" className={stylesCustom.card_menu}>
+          <div onClick={() => alert("Belum Tersedia")} className={stylesCustom.card_menu_disabled}>
             <h2>{localeGeneral.menu3_title} &rarr;</h2>
             <p>{localeGeneral.menu3_subtitle}</p>
           </div>
 
-          <div href="#" className={stylesCustom.card_menu}>
+          <div onClick={() => alert("Belum Tersedia")} className={stylesCustom.card_menu_disabled}>
             <h2>{localeGeneral.menu3_title} &rarr;</h2>
             <p>{localeGeneral.menu3_subtitle}</p>
           </div>

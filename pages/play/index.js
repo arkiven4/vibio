@@ -24,11 +24,15 @@ export default function HomePlay(props) {
   var tempArray = [];
 
   Object.keys(kategoriObj).map((key, id) => {
+    var classTemp = stylesCustom.card_menu_disabled;
+    if (key === "buah") {
+      classTemp = stylesCustom.card_menu;
+    }
     tempArray.push(
       <div
         key={id}
-        onClick={() => router.push({ pathname: "/play/" + gameType, query: { category: key } })}
-        className={stylesCustom.card_menu}
+        onClick={() => (key == "buah") ? router.push({ pathname: "/play/" + gameType, query: { category: key } }) : alert("Belum Tersedia")}
+        className={classTemp}
         style={{ marginRight: "15px", padding: "10px 10px 5px", display: "block", overflow: "auto" }}
       >
         <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={400} height={400} alt="PlayButton"></Image>
@@ -46,8 +50,8 @@ export default function HomePlay(props) {
   });
 
   function setGame(type) {
-    setGameType(type)
-    setPickGame(true)
+    setGameType(type);
+    setPickGame(true);
   }
 
   return (

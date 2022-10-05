@@ -8,6 +8,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../../context/state";
 import { getJSONFlash } from "../../utils/getLocalJSON";
 import { GenMengejaGambarData } from "../../utils/genQuizData";
+import { getLocale } from "../../utils/getLocaleText";
 
 import { motion } from "framer-motion";
 
@@ -22,11 +23,18 @@ export default function PlayStart(props) {
   const [rightQuestion, setRightQuestion] = useState(0);
   const [kategori, setKategori] = useState("");
   const [isPlay, setIsPlay] = useState(false);
+  const [isFinishQuiz, setIsFinishQuiz] = useState(false);
+  const [showModalData, setShowModalData] = useState({
+    isCorrect: false,
+    showModal: false,
+  });
+
+  const localeGeneral = props.localeData.general;
 
   const AudioSoundRef = useRef();
 
   useEffect(() => {
-    console.log(userdata);
+    //console.log(userdata);
     var finalQuestionData = GenMengejaGambarData(props.kategori_data, QuestionNumber);
 
     setQuizData(finalQuestionData);
@@ -61,15 +69,24 @@ export default function PlayStart(props) {
   }
 
   function selectOption(choosed) {
-    if (choosed) {
-      console.log("Betul");
-      setRightQuestion(rightQuestion + 1);
-    } else {
-      console.log("Salah");
-    }
+    setShowModalData({
+      isCorrect: choosed,
+      showModal: true,
+    });
 
+    if (choosed) {
+      setRightQuestion(rightQuestion + 1);
+    }
+  }
+
+  const nextQuestion = () => {
+    setShowModalData({
+      isCorrect: false,
+      showModal: false,
+    });
     if (QuestionNumber == indexQuestion + 1) {
-      //Done
+      console.log(indexQuestion);
+      setIsFinishQuiz(true);
     } else {
       setIndexQuestion(indexQuestion + 1);
       // setShowOption(false);
@@ -79,7 +96,7 @@ export default function PlayStart(props) {
       //   inline: "nearest",
       // });
     }
-  }
+  };
 
   return (
     <div className={(styles.container, stylesCustom.backgound_image)} style={{ backgroundImage: "url('/bg2.jpg')" }}>
@@ -89,119 +106,153 @@ export default function PlayStart(props) {
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-
-      {quizData.length != 0 ? (
+      {isFinishQuiz ? (
         <main className={styles.main}>
-          <div className="container" style={{ width: "50%", justifyContent: "center", marginBottom: "10vh" }}>
-            <div className={stylesCustom.status_bar}>
-              <div className={stylesCustom.mini_card}>
-                <h4 style={{ marginBottom: "0px" }}>
-                  Soal: {indexQuestion + 1} / {QuestionNumber}
-                </h4>
-              </div>
-              <div className={stylesCustom.mini_card}>
-                <h4 style={{ marginBottom: "0px", color: "green" }}>
-                  Benar: {rightQuestion} / {QuestionNumber}
-                </h4>
-              </div>
-            </div>
-          </div>
-          <div
-            className={styles.grid}
+          <h2>{localeGeneral.play_finish}</h2>
+          <h4>{localeGeneral.play_finish_subtitle}</h4>
+          <motion.div
+            initial={{
+              scale: 1,
+              rotate: 0,
+            }}
             animate={{
-              rotate: [0, -2, 2, -2, 0],
-              scale: [1, 1, 1.01, 0.99, 1],
+              rotate: [-2, 2, -2, 2, -2],
+              scale: [1.01, 0.99, 1.01, 0.99, 1.01],
             }}
             transition={{
-              duration: 2.5,
-              ease: "easeInOut",
-              times: [0, 0.4, 0.8, 1.1, 1.5],
+              duration: 1.5,
+              times: [0.3, 0.6, 0.9, 1.2, 1.5],
               repeat: Infinity,
-              repeatDelay: 1,
             }}
           >
-            <div className={stylesCustom.card_option}>
-              <Image
-                onClick={() => {
-                  playSound();
-                }}
-                src={`/assets/items/${kategori}/image/${quizData[indexQuestion].name}_${quizData[indexQuestion].imageNum}.png`}
-                width={200}
-                height={200}
-                alt="BendaImage"
-                style={{ cursor: "pointer" }}
-              />
+            <Image src={"/assets/emoji_good.png"} width={150} height={150} alt="PlayButton" style={{ cursor: "pointer" }} />
+          </motion.div>
+          <div className={stylesCustom.finish_play_container}>
+            <div className={stylesCustom.mini_card_vertical}>
+              <h4 style={{ marginBottom: "0px", color: "green" }}>
+                Benar: {rightQuestion} / {QuestionNumber}
+              </h4>
+            </div>
+            <div className={stylesCustom.mini_card_vertical}>
+              <h4 style={{ marginBottom: "0px", color: "red" }}>
+                Salah: {QuestionNumber - rightQuestion} / {QuestionNumber}
+              </h4>
             </div>
           </div>
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              router.push("/play");
+            }}
+          >
+            Kembali Ke menu Permainan
+          </button>
+        </main>
+      ) : (
+        <>
+          {quizData.length != 0 ? (
+            <main className={styles.main}>
+              <div className="container" style={{ width: "50%", justifyContent: "center", marginBottom: "10vh" }}>
+                <div className={stylesCustom.status_bar}>
+                  <div className={stylesCustom.mini_card}>
+                    <h4 style={{ marginBottom: "0px" }}>
+                      Soal: {indexQuestion + 1} / {QuestionNumber}
+                    </h4>
+                  </div>
+                  <div className={stylesCustom.mini_card}>
+                    <h4 style={{ marginBottom: "0px", color: "green" }}>
+                      Benar: {rightQuestion} / {QuestionNumber}
+                    </h4>
+                  </div>
+                </div>
+              </div>
+              <div
+                className={styles.grid}
+                animate={{
+                  rotate: [0, -2, 2, -2, 0],
+                  scale: [1, 1, 1.01, 0.99, 1],
+                }}
+                transition={{
+                  duration: 2.5,
+                  ease: "easeInOut",
+                  times: [0, 0.4, 0.8, 1.1, 1.5],
+                  repeat: Infinity,
+                  repeatDelay: 1,
+                }}
+              >
+                <div className={stylesCustom.card_option}>
+                  <Image
+                    onClick={() => {
+                      playSound();
+                    }}
+                    src={`/assets/items/${kategori}/image/${quizData[indexQuestion].name}_${quizData[indexQuestion].imageNum}.png`}
+                    width={200}
+                    height={200}
+                    alt="BendaImage"
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+              </div>
 
-          <div className={stylesCustom.button_container} onClick={() => selectOption(false)}>
-            <div className={stylesCustom.button_image_subtitle}>
-              <Image
-                onClick={() => {
-                  playSound();
-                }}
-                src={`/assets/button_no.png`}
-                width={"100%"}
-                height={"100%"}
-                alt="ButtonNo"
-                style={{ cursor: "pointer" }}
-              />
-              <h4 style={{ marginBottom: "0px" }}>Salah</h4>
-            </div>
-            <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(true)}>
-              <Image
-                onClick={() => {
-                  playSound();
-                }}
-                src={`/assets/button_ok.png`}
-                width={"100%"}
-                height={"100%"}
-                alt="ButtonOK"
-                style={{ cursor: "pointer" }}
-              />
-              <h4 style={{ marginBottom: "0px" }}>benar</h4>
-              <rect x="126" y="103" rx="3" ry="3" width="15" height="15" transform="rotate(45, 128, 103)" />
-            </div>
-          </div>
-          
-          {/* <div id="PlayButton" ref={PlayButtonRef} className={`${showOption ? stylesCustom.fade_out : stylesCustom.fade_in}`}>
+              <div className={stylesCustom.button_container}>
+                <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(false)}>
+                  <Image src={`/assets/button_no.png`} width={"100%"} height={"100%"} alt="ButtonNo" style={{ cursor: "pointer" }} />
+                  <h4 style={{ marginBottom: "0px" }}>Salah</h4>
+                </div>
+                <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(true)}>
+                  <Image src={`/assets/button_ok.png`} width={"100%"} height={"100%"} alt="ButtonOK" style={{ cursor: "pointer" }} />
+                  <h4 style={{ marginBottom: "0px" }}>Benar</h4>
+                </div>
+              </div>
+
+              {/* <div id="PlayButton" ref={PlayButtonRef} className={`${showOption ? stylesCustom.fade_out : stylesCustom.fade_in}`}>
             <div className={isPlay ? stylesCustom.overlay : null} style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
               <h3 className={stylesCustom.mini_card}>Tekan Tombol diatas untuk memutar suara</h3>
             </div>
           </div> */}
 
-          <audio ref={AudioSoundRef} controls src={"/assets/items/" + kategori + "/sound/" + quizData[indexQuestion]?.name + ".mp3"} style={{ display: "none" }} onEnded={stopSound()}>
-            Your browser does not support the
-            <code>audio</code> element.
-          </audio>
-          {/* <Modal></Modal> */}
-        </main>
-      ) : (
-        <main className={styles.main}>
-          <h1 className={styles.title}>Memuat Permainan...</h1>
-        </main>
+              <audio ref={AudioSoundRef} controls src={"/assets/items/" + kategori + "/sound/" + quizData[indexQuestion]?.name + ".mp3"} style={{ display: "none" }} onEnded={stopSound()}>
+                Your browser does not support the
+                <code>audio</code> element.
+              </audio>
+              <Modal isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></Modal>
+            </main>
+          ) : (
+            <main className={styles.main}>
+              <h1 className={styles.title}>Memuat Permainan...</h1>
+            </main>
+          )}
+        </>
       )}
     </div>
   );
 }
 
 const Modal = (props) => {
+  var imageShowsrc = props.isCorrect ? "/assets/emoji_good.png" : "/assets/emoji_bad.png";
   return (
     <motion.div
       initial={{
         opacity: 0,
         scale: 0,
       }}
-      animate={{
-        opacity: 1,
-        scale: 1,
+      animate={props.isShow ? "open" : "closed"}
+      variants={{
+        open: { opacity: 1, scale: 1 },
+        closed: { opacity: 0, scale: 0 },
       }}
       className={stylesCustom.popup_backdrop}
     >
       <motion.div className={stylesCustom.popup}>
-        <motion.h3 className={`${stylesCustom.mini_card_popupRW}`} style={{ color: "green" }}>
-          Benar
-        </motion.h3>
+        {props.isCorrect ? (
+          <motion.h3 className={`${stylesCustom.mini_card_popupRW}`} style={{ color: "green" }}>
+            Benar
+          </motion.h3>
+        ) : (
+          <motion.h3 className={`${stylesCustom.mini_card_popupRW}`} style={{ color: "red" }}>
+            Salah
+          </motion.h3>
+        )}
         <motion.div className={stylesCustom.pu_content_container}>
           <motion.div
             initial={{
@@ -218,22 +269,37 @@ const Modal = (props) => {
             }}
             style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}
           >
-            <Image
-              onClick={() => {
-                playSound();
-              }}
-              src={"/assets/button_play.png"}
-              width={200}
-              height={200}
-              alt="PlayButton"
-              style={{ cursor: "pointer" }}
-            />
-            {/* <h3 className={stylesCustom.mini_card}>Tekan Tombol diatas untuk memutar suara</h3> */}
+            <motion.div className={stylesCustom.popup_card}>
+              <motion.div
+                initial={{
+                  scale: 1,
+                  rotate: 0,
+                }}
+                animate={{
+                  rotate: [-2, 2, -2, 2, -2],
+                  scale: [1.01, 0.99, 1.01, 0.99, 1.01],
+                }}
+                transition={{
+                  duration: 1.5,
+                  times: [0.3, 0.6, 0.9, 1.2, 1.5],
+                  repeat: Infinity,
+                }}
+              >
+                <Image src={imageShowsrc} width={300} height={300} alt="PlayButton" style={{ cursor: "pointer" }} />
+              </motion.div>
+            </motion.div>
           </motion.div>
         </motion.div>
         {/* button controls */}
         <motion.div style={{ marginTop: "10px" }}>
-          <motion.button className="btn btn-primary">Soal Selanjutnya</motion.button>
+          <motion.button
+            className="btn btn-primary"
+            onClick={() => {
+              props.clickFunction();
+            }}
+          >
+            Soal Selanjutnya
+          </motion.button>
         </motion.div>
       </motion.div>
     </motion.div>
@@ -241,12 +307,16 @@ const Modal = (props) => {
 };
 
 export const getServerSideProps = async (context) => {
-  console.log(context.query.categor);
   if (context.query.category !== undefined) {
     var kategori_data = getJSONFlash(context.query.category);
-
+    var localeDataGeneral = getLocale("id", "general");
     return {
-      props: { kategori_data: kategori_data },
+      props: {
+        kategori_data: kategori_data,
+        localeData: {
+          general: localeDataGeneral,
+        },
+      },
     };
   } else {
     return {
