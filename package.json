@@ -7,7 +7,7 @@
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
-    "build": "nextron build",
+    "build": "nextron build -wl --arm64",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
