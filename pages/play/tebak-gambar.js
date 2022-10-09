@@ -44,7 +44,7 @@ export default function PlayStart(props) {
     var tempQuizData = GenTebakGambarData(props.kategori_data, QuestionNumber);
 
     setQuizData(tempQuizData);
-    setKategori(router.query.category);
+    setKategori(props.category);
     setUserdata({
       username: "Apa iya",
     });
@@ -328,24 +328,27 @@ const Modal = (props) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  if (context.query.category !== undefined) {
-    var kategori_data = getJSONFlash(context.query.category);
-    var localeDataGeneral = getLocale("id", "general");
-    return {
-      props: {
-        kategori_data: kategori_data,
-        localeData: {
-          general: localeDataGeneral,
-        },
+export const getStaticProps = async (context) => {
+  var category = "buah";
+  var kategori_data = getJSONFlash(category);
+  var localeDataGeneral = getLocale("id", "general");
+  return {
+    props: {
+      category: category,
+      kategori_data: kategori_data,
+      localeData: {
+        general: localeDataGeneral,
       },
-    };
-  } else {
-    return {
-      redirect: {
-        destination: "/play",
-        permanent: false,
-      },
-    };
-  }
+    },
+  };
+  // if (context.query.category !== undefined) {
+
+  // } else {
+  //   return {
+  //     redirect: {
+  //       destination: "/play",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 };
