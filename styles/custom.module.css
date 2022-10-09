@@ -2,6 +2,7 @@
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: auto auto;
+  background-size: cover;
 }
 
 .container_card_row {
