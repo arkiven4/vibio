@@ -1,23 +1,32 @@
 {
-  "name": "vibio",
-  "version": "0.1.0",
   "private": true,
+  "name": "my-nextron-app",
+  "description": "My application description",
+  "version": "1.0.0",
+  "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
+  "main": "app/background.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "nextron",
+    "build": "nextron build",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "electron-serve": "^1.1.0",
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "eslint": "8.23.1",
+    "eslint-config-next": "12.3.0",
+    "electron": "^20.1.0",
+    "electron-builder": "^23.3.3",
+    "nextron": "^8.2.0",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.1",
     "framer-motion": "^7.3.6",
     "next": "12.3.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
-  },
-  "devDependencies": {
-    "eslint": "8.23.1",
-    "eslint-config-next": "12.3.0"
+    "react-dom": "18.2.0",
+    "electron-serve": "^1.1.0",
+    "electron-store": "^8.1.0"
   }
 }

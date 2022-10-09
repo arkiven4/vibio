@@ -126,6 +126,7 @@ export default function HomePlay(props) {
 // }
 
 export const getStaticProps = async (context) => {
+  console.log(context)
   var kategori_data = getJSONCategory();
   var localeDataGeneral = getLocale("id", "general");
   return {

@@ -37,3 +37,10 @@ next-env.d.ts
 
 .env
 isReady.txt
+
+#Electron
+node_modules
+*.log
+.next
+app
+dist
