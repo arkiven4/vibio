@@ -1,0 +1,52 @@
+{
+    "ayam": {
+        "show_name": "Ayam",
+        "image_file": ["ayam_1.png", "ayam_2.png"],
+        "sound_file": ["ayam.mp3"]
+    },
+    "cacing": {
+        "show_name": "Cacing",
+        "image_file": ["cacing_1.png", "cacing_2.png"],
+        "sound_file": ["cacing.mp3"]
+    },
+    "capung": {
+        "show_name": "Capung",
+        "image_file": ["capung_1.png", "capung_2.png"],
+        "sound_file": ["capung.mp3"]
+    },
+    "cicak": {
+        "show_name": "Cicak",
+        "image_file": ["cicak_1.png", "cicak_2.png"],
+        "sound_file": ["cicak.mp3"]
+    },
+    "ikan": {
+        "show_name": "Ikan",
+        "image_file": ["ikan_1.png", "ikan_2.png"],
+        "sound_file": ["ikan.mp3"]
+    },
+    "kucing": {
+        "show_name": "Kucing",
+        "image_file": ["kucing_1.png", "kucing_2.png"],
+        "sound_file": ["kucing.mp3"]
+    },
+    "lalat": {
+        "show_name": "Lalat",
+        "image_file": ["lalat_1.png", "lalat_2.png"],
+        "sound_file": ["lalat.mp3"]
+    },
+    "nyamuk": {
+        "show_name": "Nyamuk",
+        "image_file": ["nyamuk_1.png", "nyamuk_2.png"],
+        "sound_file": ["nyamuk.mp3"]
+    },
+    "semut": {
+        "show_name": "Semut",
+        "image_file": ["semut_1.png", "semut_2.png"],
+        "sound_file": ["semut.mp3"]
+    },
+    "tikus": {
+        "show_name": "Tikus",
+        "image_file": ["tikus_1.png", "tikus_2.png"],
+        "sound_file": ["tikus.mp3"]
+    }
+}

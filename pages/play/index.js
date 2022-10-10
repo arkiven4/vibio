@@ -25,13 +25,13 @@ export default function HomePlay(props) {
 
   Object.keys(kategoriObj).map((key, id) => {
     var classTemp = stylesCustom.card_menu_disabled;
-    if (key === "buah") {
+    if (key === "buah" || key === "hewan") {
       classTemp = stylesCustom.card_menu;
     }
     tempArray.push(
       <div
         key={id}
-        onClick={() => (key == "buah") ? router.push({ pathname: "/play/" + gameType, query: { category: key } }) : alert("Belum Tersedia")}
+        onClick={() => ((key === "buah" || key === "hewan") ? router.push({ pathname: "/play/" + gameType + "/" + key }) : alert("Belum Tersedia"))}
         className={classTemp}
         style={{ marginRight: "15px", padding: "10px 10px 5px", display: "block", overflow: "auto" }}
       >
