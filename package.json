@@ -7,7 +7,7 @@
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
-    "build": "nextron build -wl --arm64",
+    "build": "nextron build -wl",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
@@ -28,5 +28,13 @@
     "react-dom": "18.2.0",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0"
+  },
+  "build": {
+    "appId": "com.vibrastic.vibio",
+    "win": {
+      "target": [
+        "zip"
+      ]
+    }
   }
 }
