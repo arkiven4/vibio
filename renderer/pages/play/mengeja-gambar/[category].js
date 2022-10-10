@@ -1,20 +1,22 @@
 import Head from "next/head";
 import Image from "next/image";
-import styles from "../../styles/Home.module.css";
-import stylesCustom from "../../styles/custom.module.css";
+import styles from "../../../styles/Home.module.css";
+import stylesCustom from "../../../styles/custom.module.css";
 
 import { useRouter } from "next/router";
 import React, { useState, useEffect, useRef } from "react";
-import { useAppContext } from "../../context/state";
-import { getJSONFlash } from "../../utils/getLocalJSON";
-import { GenMengejaGambarData } from "../../utils/genQuizData";
-import { getLocale } from "../../utils/getLocaleText";
+
+import { useAppContext } from "../../../context/state";
+import { getJSONFlash, getJSONCategory } from "../../../utils/getLocalJSON";
+import { GenMengejaGambarData } from "../../../utils/genQuizData";
+import { getLocale } from "../../../utils/getLocaleText";
+import { ModalReactionQuiz } from "../../../components/modal";
 
 import { motion } from "framer-motion";
 
 const QuestionNumber = 10;
 
-export default function PlayStart(props) {
+export default function MengejaGambar(props) {
   const router = useRouter();
   const { userdata, setUserdata } = useAppContext();
 
@@ -38,7 +40,7 @@ export default function PlayStart(props) {
     var finalQuestionData = GenMengejaGambarData(props.kategori_data, QuestionNumber);
 
     setQuizData(finalQuestionData);
-    setKategori(props.category);
+    setKategori(router.query.category);
 
     setUserdata({
       username: "Apa iya",
@@ -53,12 +55,6 @@ export default function PlayStart(props) {
     setIsPlay(true);
     if (!isPlay) {
       AudioSoundRef.current.play();
-      //setShowOption(true);
-      // OptionsRef.current.scrollIntoView({
-      //   behavior: "smooth",
-      //   block: "start",
-      //   inline: "nearest",
-      // });
     }
   }
 
@@ -89,12 +85,6 @@ export default function PlayStart(props) {
       setIsFinishQuiz(true);
     } else {
       setIndexQuestion(indexQuestion + 1);
-      // setShowOption(false);
-      // PlayButtonRef.current.scrollIntoView({
-      //   behavior: "smooth",
-      //   block: "start",
-      //   inline: "nearest",
-      // });
     }
   };
 
@@ -215,7 +205,7 @@ export default function PlayStart(props) {
                 Your browser does not support the
                 <code>audio</code> element.
               </audio>
-              <Modal isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></Modal>
+              <ModalReactionQuiz isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></ModalReactionQuiz>
             </main>
           ) : (
             <main className={styles.main}>
@@ -228,105 +218,69 @@ export default function PlayStart(props) {
   );
 }
 
-const Modal = (props) => {
-  var imageShowsrc = props.isCorrect ? "/assets/emoji_good.png" : "/assets/emoji_bad.png";
-  return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        scale: 0,
-      }}
-      animate={props.isShow ? "open" : "closed"}
-      variants={{
-        open: { opacity: 1, scale: 1 },
-        closed: { opacity: 0, scale: 0 },
-      }}
-      className={stylesCustom.popup_backdrop}
-    >
-      <motion.div className={stylesCustom.popup}>
-        {props.isCorrect ? (
-          <motion.h3 className={`${stylesCustom.mini_card_popupRW}`} style={{ color: "green" }}>
-            Benar
-          </motion.h3>
-        ) : (
-          <motion.h3 className={`${stylesCustom.mini_card_popupRW}`} style={{ color: "red" }}>
-            Salah
-          </motion.h3>
-        )}
-        <motion.div className={stylesCustom.pu_content_container}>
-          <motion.div
-            initial={{
-              scale: 0,
-              rotate: 0,
-            }}
-            animate={{
-              scale: 1,
-              rotate: 360,
-              transition: {
-                delay: 0.3,
-                duration: 0.5,
-              },
-            }}
-            style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}
-          >
-            <motion.div className={stylesCustom.popup_card}>
-              <motion.div
-                initial={{
-                  scale: 1,
-                  rotate: 0,
-                }}
-                animate={{
-                  rotate: [-2, 2, -2, 2, -2],
-                  scale: [1.01, 0.99, 1.01, 0.99, 1.01],
-                }}
-                transition={{
-                  duration: 1.5,
-                  times: [0.3, 0.6, 0.9, 1.2, 1.5],
-                  repeat: Infinity,
-                }}
-              >
-                <Image src={imageShowsrc} width={300} height={300} alt="PlayButton" style={{ cursor: "pointer" }} />
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        </motion.div>
-        {/* button controls */}
-        <motion.div style={{ marginTop: "10px" }}>
-          <motion.button
-            className="btn btn-primary"
-            onClick={() => {
-              props.clickFunction();
-            }}
-          >
-            Soal Selanjutnya
-          </motion.button>
-        </motion.div>
-      </motion.div>
-    </motion.div>
-  );
-};
-
-export const getStaticProps = async (context) => {
-  var category = "buah";
+export const getStaticProps = async ({ params: { category } }) => {
   var kategori_data = getJSONFlash(category);
   var localeDataGeneral = getLocale("id", "general");
   return {
     props: {
-      category: category,
       kategori_data: kategori_data,
       localeData: {
         general: localeDataGeneral,
       },
     },
   };
-  // if (context.query.category !== undefined) {
-
-  // } else {
-  //   return {
-  //     redirect: {
-  //       destination: "/play",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
 };
+
+
+export async function getStaticPaths() {
+  var arrayPath = [];
+  var kategoriObj = getJSONCategory();
+  Object.keys(kategoriObj).map((key, id) => {
+    arrayPath.push({ params: { category: key } });
+  });
+  return {
+    paths: arrayPath,
+    fallback: true,
+  };
+}
+
+// export async function getStaticProps({ params: { category } }) {
+
+//   console.log(category);
+//   return { props: { category } };
+// }
+
+// export async function getStaticPaths() {
+//   const [posts] = await Promise.all([getAllBlogPostEntries()]);
+
+//   const paths = posts.entries.map((c) => {
+//     return { params: { post: c.route } }; // Route is something like "this-is-my-post"
+//   });
+
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// }
+
+// export const getServerSideProps = async (context) => {
+//   if (context.query.category !== undefined) {
+//     var kategori_data = getJSONFlash(context.query.category);
+//     var localeDataGeneral = getLocale("id", "general");
+//     return {
+//       props: {
+//         kategori_data: kategori_data,
+//         localeData: {
+//           general: localeDataGeneral,
+//         },
+//       },
+//     };
+//   } else {
+//     return {
+//       redirect: {
+//         destination: "/play",
+//         permanent: false,
+//       },
+//     };
+//   }
+// };
