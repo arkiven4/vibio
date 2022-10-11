@@ -31,7 +31,7 @@ export default function MengejaGambar(props) {
     showModal: false,
   });
 
-  const localeGeneral = props.localeData.general;
+  const localeGeneral = props.localeData?.general;
 
   const AudioSoundRef = useRef();
 
@@ -236,7 +236,10 @@ export async function getStaticPaths() {
   var arrayPath = [];
   var kategoriObj = getJSONCategory();
   Object.keys(kategoriObj).map((key, id) => {
-    arrayPath.push({ params: { category: key } });
+    if ((key === "buah" || key === "hewan")) {
+      arrayPath.push({ params: { category: key } });
+    }
+    
   });
   return {
     paths: arrayPath,
