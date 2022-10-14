@@ -57,8 +57,8 @@ export default function Home({ localeData }) {
           </div>
 
           <div onClick={() => alert("Belum Tersedia")} className={stylesCustom.card_menu_home_disabled}>
-            <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu3_title} &rarr;</h2>
-            <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu3_subtitle}</p>
+            <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu4_title} &rarr;</h2>
+            <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu4_subtitle}</p>
           </div>
         </div>
         <FooterLogo></FooterLogo>
