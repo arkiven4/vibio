@@ -66,10 +66,10 @@ export default function PlayStart(props) {
   }, [quizData, kategori, indexQuestion]);
 
   function playSound() {
-    setIsPlay(true);
     if (!isPlay) {
       AudioSoundRef.current.play();
       setShowOption(true);
+      setIsPlay(true);
     }
   }
 
