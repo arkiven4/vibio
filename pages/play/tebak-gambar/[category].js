@@ -69,12 +69,12 @@ export default function PlayStart(props) {
     setIsPlay(true);
     if (!isPlay) {
       AudioSoundRef.current.play();
-      setShowOption(true);
     }
   }
 
   function stopSound() {
     if (isPlay == true) {
+      setShowOption(true);
       setIsPlay(false);
     }
   }
