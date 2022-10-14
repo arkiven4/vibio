@@ -1,7 +1,7 @@
 {
     "loading-vibio": "Memuat Vibio....",
     "mainmenu_title" : "Selamat Datang di Vibio",
-    "mainmenu_subtitle" : "",
+    "mainmenu_subtitle" : "Speech Digital Therapist",
     "menu1_title":"Demo",
     "menu1_subtitle":"menu1_subtitle",
     "menu2_title":"Mulai Terapi",
@@ -10,7 +10,7 @@
     "menu3_subtitle":"menu3_subtitle",
     "menu4_title":"Evaluasi",
     "menu4_subtitle":"menu4_subtitle",
-    "play_title1":"Pilih Jenis Permainan",
+    "play_title1":"Pilih Jenis Terapi Wicara",
     "play_subtitle1":"",
     "play_title2":"Pilih Kategori Benda",
     "play_subtitle2":"",
