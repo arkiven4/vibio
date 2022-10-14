@@ -8,6 +8,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 import { getJSONCategory } from "../../utils/getLocalJSON";
 import { getLocale } from "../../utils/getLocaleText";
+import {FooterLogo} from '../../components/general'
 
 //TODO : Atur Category Card agar kalau jumlah itemnya 6, bagus keliatanya
 //TODO : Fit Screen No Scroll untuk pad dan Laptop
@@ -87,6 +88,7 @@ export default function HomePlay(props) {
               <p style={{textAlign: 'center', wordWrap: 'break-word'}}>{localeGeneral.play_choose_subtitle2}</p>
             </div>
           </div>
+          <FooterLogo></FooterLogo>
         </motion.div>
         <motion.div
           className={styles.main}
@@ -110,6 +112,7 @@ export default function HomePlay(props) {
               );
             })}
           </div>
+          <FooterLogo></FooterLogo>
         </motion.div>
       </main>
     </div>

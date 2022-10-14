@@ -7,6 +7,7 @@ import { useAppContext } from "../context/state";
 import { useEffect } from "react";
 
 import { getLocale } from "../utils/getLocaleText";
+import {FooterLogo} from '../components/general'
 
 export default function Home({ localeData }) {
   const router = useRouter();
@@ -37,13 +38,13 @@ export default function Home({ localeData }) {
       <main className={styles.main}>
         {/* <button type="button" className="btn btn-primary">Warning</button> */}
         <h1 className={stylesCustom.menu_title_font}>{localeGeneral.mainmenu_title}</h1>
-        <h3 className={styles.title}>{localeGeneral.mainmenu_subtitle}</h3>
+        <h3 className={stylesCustom.menu_subtitle_font}>{localeGeneral.mainmenu_subtitle}</h3>
         <br></br>
         <div className={stylesCustom.container_card_row}>
           <div onClick={() => alert("Belum Tersedia")} className={stylesCustom.card_menu_home_disabled}>
             <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu1_title} &rarr;</h2>
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu1_subtitle}</p>
-          </div> 
+          </div>
 
           <div onClick={() => router.push("/play")} className={stylesCustom.card_menu_home}>
             <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu2_title} &rarr;</h2>
@@ -60,16 +61,8 @@ export default function Home({ localeData }) {
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu3_subtitle}</p>
           </div>
         </div>
+        <FooterLogo></FooterLogo>
       </main>
-
-      <footer className={styles.footer}>
-        <a href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app" target="_blank" rel="noopener noreferrer">
-          Powered by{" "}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   );
 }

@@ -174,7 +174,7 @@ export default function PlayStart(props) {
               router.push("/play");
             }}
           >
-            Kembali Ke menu Permainan
+            Kembali Ke Menu Terapi Wicara
           </button>
         </main>
       ) : (
