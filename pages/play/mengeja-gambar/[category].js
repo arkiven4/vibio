@@ -98,8 +98,8 @@ export default function MengejaGambar(props) {
       </Head>
       {isFinishQuiz ? (
         <main className={styles.main}>
-          <h2>{localeGeneral.play_finish}</h2>
-          <h4>{localeGeneral.play_finish_subtitle}</h4>
+          <h2 className={stylesCustom.menu_title_font}>{localeGeneral.play_finish}</h2>
+          <h4 className={stylesCustom.menu_subtitle_font}>{localeGeneral.play_finish_subtitle}</h4>
           <motion.div
             initial={{
               scale: 1,
@@ -120,12 +120,12 @@ export default function MengejaGambar(props) {
           <div className={stylesCustom.finish_play_container}>
             <div className={stylesCustom.mini_card_vertical}>
               <h4 style={{ marginBottom: "0px", color: "green" }}>
-                Benar: {rightQuestion} / {QuestionNumber}
+                Menjawab Benar: {rightQuestion} / {QuestionNumber}
               </h4>
             </div>
             <div className={stylesCustom.mini_card_vertical}>
               <h4 style={{ marginBottom: "0px", color: "red" }}>
-                Salah: {QuestionNumber - rightQuestion} / {QuestionNumber}
+                Menjawab Salah: {QuestionNumber - rightQuestion} / {QuestionNumber}
               </h4>
             </div>
           </div>
