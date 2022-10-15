@@ -63,6 +63,7 @@ export default function Home({ localeData }) {
         </div>
         <FooterLogo></FooterLogo>
       </main>
+      <audio controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
     </div>
   );
 }

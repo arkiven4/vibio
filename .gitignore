@@ -42,5 +42,7 @@ isReady.txt
 node_modules
 *.log
 .next
-app
-dist
+/app
+/dist
+/android
+/out

@@ -114,6 +114,7 @@ export default function HomePlay(props) {
           </div>
           <FooterLogo></FooterLogo>
         </motion.div>
+        <audio controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
       </main>
     </div>
   );
