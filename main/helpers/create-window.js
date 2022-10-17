@@ -74,8 +74,10 @@ export default function createWindow(windowName, options) {
       contextIsolation: false,
       ...options.webPreferences,
     },
+    autoHideMenuBar: true,
   });
 
+  win.maximize();
   win.on('close', saveState);
 
   return win;
