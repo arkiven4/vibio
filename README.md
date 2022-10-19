@@ -3,35 +3,30 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 
 ## Build Apps
-first, run install dependency:
 
-```bash
+First, install necessary npm modules using command:
+
+```sh
 npm install
 ```
 
-Second, build the apps:
+**TIPS:** In case if command failed, you can run that command again:
 
-```bash
-npm run build
+By default, the build target is x64 (x86_64) CPUs.
+You can switch target using command (example for ARM32 chips):
 
+```sh
+sed -i 's#"nextron build -l"#"nextron build -l --armv7l"#g' package.json
 ```
 
-check `dist` folder
+Second, build the apps using command:
 
-change `package.json`.scripts.build to add custom build
-```code
---help,    -h  shows this help message
---version, -v  displays the current version of nextron
---all          builds for Windows, macOS and Linux
---win,     -w  builds for Windows, accepts target list (see https://goo.gl/jYsTEJ)
---mac,     -m  builds for macOS, accepts target list (see https://goo.gl/5uHuzj)
---linux,   -l  builds for Linux, accepts target list (see https://goo.gl/4vwQad) 
---x64          builds for x64
---ia32         builds for ia32
---armv7l       builds for armv7l
---arm64        builds for arm64
---universal    builds for mac universal binary
---no-pack      skip electron-builder pack command
---publish  -p  Publish artifacts (see https://goo.gl/tSFycD)
-                [choices: "onTag", "onTagOrDraft", "always", "never", undefined]
+```sh
+npm run build
+```
+
+**TIPS:** In case nextron main scripts is not executable, you can run this command: 
+
+```sh
+chmod a+x /home/developments/Projects/vibio/node_modules/nextron/bin/nextron.js
 ```
