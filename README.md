@@ -30,3 +30,30 @@ npm run build
 ```sh
 chmod a+x node_modules/nextron/bin/nextron.js
 ```
+
+If successfully build, you can check the image result using command:
+
+```sh
+ls -l dist/*.AppImage
+```
+
+## Run on Target Device
+
+First, you need libfuse.so.2 to run the image.
+On Arch-Linux you install using command:
+
+```sh
+sudo pacman -S fuse2
+```
+
+then add executable to the image:
+
+```sh
+chmod a+x *.AppImage
+```
+
+Finally, you can run using command:
+
+```sh
+./*.AppImage
+```
