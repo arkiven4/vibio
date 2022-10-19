@@ -16,7 +16,7 @@ By default, the build target is x64 (x86_64) CPUs.
 You can switch target using command (example for ARM32 chips):
 
 ```sh
-sed -i 's#"nextron build -l "#"nextron build -l --armv7l"#g' package.json
+sed -i 's#"nextron build -l"#"nextron build -l --armv7l"#g' package.json
 ```
 
 Second, build the apps using command:
@@ -40,7 +40,7 @@ ls -l dist/*.AppImage
 ## Run on Target Device
 
 First, you need libfuse.so.2 to run the image.
-On Arch-Linux you install using command:
+On Arch-Linux you can install using command:
 
 ```sh
 sudo pacman -S fuse2
@@ -56,4 +56,14 @@ Finally, you can run using command:
 
 ```sh
 ./*.AppImage
+```
+
+### Cleaning Builds
+
+To clean current build and modules, you can run command:
+
+```sh
+npm ci
+rm -rf dist/
+rm -rf node_modules/
 ```
