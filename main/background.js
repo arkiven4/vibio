@@ -1,6 +1,19 @@
 import { app } from 'electron';
 import serve from 'electron-serve';
+import {autoUpdater} from 'electron-updater';
 import { createWindow } from './helpers';
+
+//-------------------------------------------------------------------
+// Logging
+//
+// THIS SECTION IS NOT REQUIRED
+//
+// This logging setup is not required for auto-updates to work,
+// but it sure makes debugging easier :)
+//-------------------------------------------------------------------
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
 
 const isProd = process.env.NODE_ENV === 'production';
 
