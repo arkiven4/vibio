@@ -10,7 +10,7 @@ First, install necessary npm modules using command:
 npm install
 ```
 
-**TIPS:** In case if command failed, you can run that command again:
+**TIPS:** In case if command failed, you can run that command again.
 
 By default, the build target is x64 (x86_64) CPUs.
 You can switch target using command (example for ARM32 chips):
@@ -25,8 +25,8 @@ Second, build the apps using command:
 npm run build
 ```
 
-**TIPS:** In case nextron main scripts is not executable, you can run this command: 
+**TIPS:** In case nextron main scripts is not executable, you can run this command:
 
 ```sh
-chmod a+x /home/developments/Projects/vibio/node_modules/nextron/bin/nextron.js
+chmod a+x node_modules/nextron/bin/nextron.js
 ```
