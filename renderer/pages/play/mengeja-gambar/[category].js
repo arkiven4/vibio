@@ -98,7 +98,7 @@ export default function MengejaGambar(props) {
       </Head>
       {isFinishQuiz ? (
         <main className={styles.main}>
-        <h2 className={stylesCustom.menu_title_font}>{localeGeneral.play_finish}</h2>
+          <h2 className={stylesCustom.menu_title_font}>{localeGeneral.play_finish}</h2>
           <h4 className={stylesCustom.menu_subtitle_font}>{localeGeneral.play_finish_subtitle}</h4>
           <motion.div
             initial={{
@@ -176,8 +176,8 @@ export default function MengejaGambar(props) {
                       playSound();
                     }}
                     src={`/assets/items/${kategori}/image/${quizData[indexQuestion].name}_${quizData[indexQuestion].imageNum}.png`}
-                    width={200}
-                    height={200}
+                    width={"200wh"}
+                    height={"200vh"}
                     alt="BendaImage"
                     style={{ cursor: "pointer" }}
                   />
@@ -231,15 +231,13 @@ export const getStaticProps = async ({ params: { category } }) => {
   };
 };
 
-
 export async function getStaticPaths() {
   var arrayPath = [];
   var kategoriObj = getJSONCategory();
   Object.keys(kategoriObj).map((key, id) => {
-    if ((key === "buah" || key === "hewan")) {
+    if (key === "buah" || key === "hewan") {
       arrayPath.push({ params: { category: key } });
     }
-    
   });
   return {
     paths: arrayPath,

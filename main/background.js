@@ -30,7 +30,7 @@ if (isProd) {
   await app.whenReady();
 
   mainWindow = createWindow('main', {
-    width: 1000,
+    width: 1024,
     height: 600,
   });
 
