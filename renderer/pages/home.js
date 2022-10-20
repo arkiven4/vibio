@@ -1,5 +1,8 @@
 import Head from "next/head";
 import Image from "next/image";
+
+const { ipcRenderer } = require("electron");
+
 import styles from "../styles/Home.module.css";
 import stylesCustom from "../styles/custom.module.css";
 import { useRouter } from "next/router";
@@ -7,12 +10,16 @@ import { useAppContext } from "../context/state";
 import { useEffect } from "react";
 
 import { getLocale } from "../utils/getLocaleText";
-import {FooterLogo} from '../components/general'
+import { FooterLogo } from "../components/general";
+
+import React, { useRef } from 'react';
 
 export default function Home({ localeData }) {
   const router = useRouter();
   const { userdata, setUserdata } = useAppContext();
   const localeGeneral = localeData.general;
+
+  const inputRef = React.useRef(null)
 
   useEffect(() => {
     console.log(userdata);
@@ -24,6 +31,11 @@ export default function Home({ localeData }) {
       console.log(window.localStorage.getItem("userSession"));
       window.localStorage.setItem("userSession", "Loheee");
     }
+
+    ipcRenderer.on("asynchronous-message", function (evt, message) {
+      console.log(message); // Returns: {'SAVED': 'File Saved'}
+      inputRef.current.click();
+    });
   }, []);
 
   return (
@@ -46,7 +58,7 @@ export default function Home({ localeData }) {
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu1_subtitle}</p>
           </div>
 
-          <div onClick={() => router.push("/play")} className={stylesCustom.card_menu_home}>
+          <div ref={inputRef} onClick={() => router.push("/play")} className={stylesCustom.card_menu_home}>
             <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu2_title} &rarr;</h2>
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu2_subtitle}</p>
           </div>
@@ -60,6 +72,14 @@ export default function Home({ localeData }) {
             <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu3_title} &rarr;</h2>
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu3_subtitle}</p>
           </div>
+
+          <button
+            onClick={() => {
+              ipcRenderer.send("asynchronous-message", "ping");
+            }}
+          >
+            Com
+          </button>
         </div>
         <FooterLogo></FooterLogo>
       </main>
