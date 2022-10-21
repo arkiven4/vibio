@@ -36,15 +36,15 @@ export default function Home({ localeData }) {
       window.localStorage.setItem("userSession", "Loheee");
     }
 
-    const closeModal = () => {
-      setShowModal(false);
-    };
-
     ipcRenderer.on("asynchronous-message", function (evt, message) {
       console.log(message); // Returns: {'SAVED': 'File Saved'}
       inputRef.current.click();
     });
   }, []);
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <div className={(styles.container, stylesCustom.backgound_image)} style={{ backgroundImage: "url('/bg2-uncom.jpg')" }}>
