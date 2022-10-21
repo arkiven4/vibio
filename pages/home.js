@@ -4,17 +4,23 @@ import styles from "../styles/Home.module.css";
 import stylesCustom from "../styles/custom.module.css";
 import { useRouter } from "next/router";
 import { useAppContext } from "../context/state";
-import { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { getLocale } from "../utils/getLocaleText";
 import {FooterLogo} from '../components/general'
+
+import {ModalAnnaouncement} from '../components/modal'
 
 export default function Home({ localeData }) {
   const router = useRouter();
   const { userdata, setUserdata } = useAppContext();
   const localeGeneral = localeData.general;
 
+  const AudioSoundRef = useRef();
+  const [showModal, setShowModal] = useState(true);
+
   useEffect(() => {
+    AudioSoundRef.current.play();
     console.log(userdata);
     setUserdata({
       username: "hola",
@@ -25,6 +31,10 @@ export default function Home({ localeData }) {
       window.localStorage.setItem("userSession", "Loheee");
     }
   }, []);
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <div className={(styles.container, stylesCustom.backgound_image)} style={{ backgroundImage: "url('/bg2-uncom.jpg')" }}>
@@ -62,8 +72,9 @@ export default function Home({ localeData }) {
           </div>
         </div>
         <FooterLogo></FooterLogo>
+        <ModalAnnaouncement isShow={showModal} clickFunction={closeModal}></ModalAnnaouncement>
       </main>
-      <audio controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
+      <audio ref={AudioSoundRef} controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
     </div>
   );
 }

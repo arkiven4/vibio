@@ -121,7 +121,7 @@ export default function PlayStart(props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <div className="container" style={{ width: "50%", justifyContent: "center" }}>
+      {/* <div className="container" style={{ width: "50%", justifyContent: "center" }}>
         <div className={stylesCustom.status_bar}>
           <div className={stylesCustom.mini_card}>
             <h4 style={{ marginBottom: "0px" }}>
@@ -134,7 +134,7 @@ export default function PlayStart(props) {
             </h4>
           </div>
         </div>
-      </div>
+      </div> */}
       {isFinishQuiz ? (
         <main className={styles.main}>
           <h2>{localeGeneral.play_finish}</h2>
@@ -181,6 +181,20 @@ export default function PlayStart(props) {
         <>
           {quizData.length != 0 ? (
             <main className={styles.main}>
+              <div className="container" style={{ width: "50%", justifyContent: "center", marginBottom: "5vh" }}>
+                <div className={stylesCustom.status_bar}>
+                  <div className={stylesCustom.mini_card}>
+                    <h4 style={{ marginBottom: "0px" }}>
+                      Soal: {indexQuestion + 1} / {QuestionNumber}
+                    </h4>
+                  </div>
+                  <div className={stylesCustom.mini_card}>
+                    <h4 style={{ marginBottom: "0px", color: "green" }}>
+                      Benar: {rightQuestion} / {QuestionNumber}
+                    </h4>
+                  </div>
+                </div>
+              </div>
               <div id="PlayButton" ref={PlayButtonRef} className={`${showOption ? stylesCustom.fade_out : stylesCustom.fade_in}`}>
                 <div className={isPlay ? stylesCustom.overlay : null} style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
                   <Image
@@ -188,8 +202,8 @@ export default function PlayStart(props) {
                       playSound();
                     }}
                     src={"/assets/button_play.png"}
-                    width={400}
-                    height={400}
+                    width={window.innerHeight < window.innerWidth ? window.innerHeight * 0.7 : window.innerHeight * 0.4}
+                    height={window.innerHeight < window.innerWidth ? window.innerHeight * 0.7 : window.innerHeight * 0.4}
                     alt="PlayButton"
                     style={{ cursor: "pointer" }}
                   />
@@ -207,7 +221,7 @@ export default function PlayStart(props) {
               {quizOptionImage.length != 0 ? (
                 <div>
                   <div id="Options" ref={OptionsRef} className={showOption ? stylesCustom.fade_in : stylesCustom.fade_out}>
-                    <br></br> 
+                    <br></br>
                     <div className={stylesCustom.tebak_gambar_grid}>
                       <div onClick={() => selectOption(quizData[indexQuestion]?.options[0]?.name)} className={stylesCustom.card_option_tebak_gambar}>
                         <Image src={quizOptionImage[0]} width={"400vw"} height={"400vw"} alt="Option1" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
@@ -253,12 +267,11 @@ export const getStaticProps = async ({ params: { category } }) => {
   };
 };
 
-
 export async function getStaticPaths() {
   var arrayPath = [];
   var kategoriObj = getJSONCategory();
   Object.keys(kategoriObj).map((key, id) => {
-    if ((key === "buah" || key === "hewan")) {
+    if (key === "buah" || key === "hewan") {
       arrayPath.push({ params: { category: key } });
     }
   });
