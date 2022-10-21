@@ -160,14 +160,14 @@ export default function PlayStart(props) {
               router.push("/play");
             }}
           >
-            Kembali Ke menu Permainan
+            Kembali Ke Menu Terapi Wicara
           </button>
         </main>
       ) : (
         <>
           {quizData.length != 0 ? (
             <main className={styles.main}>
-              <div className="container" style={{ width: "50%", justifyContent: "center" }}>
+            <div className="container" style={{ width: "50%", justifyContent: "center", marginBottom: "5vh" }}>
                 <div className={stylesCustom.status_bar}>
                   <div className={stylesCustom.mini_card}>
                     <h4 style={{ marginBottom: "0px" }}>
@@ -208,19 +208,19 @@ export default function PlayStart(props) {
                 <div>
                   <div id="Options" ref={OptionsRef} className={showOption ? stylesCustom.fade_in : stylesCustom.fade_out}>
                     <br></br>
-                    <div className={styles.grid}>
-                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[0]?.name)} className={stylesCustom.card_option}>
-                        <Image src={quizOptionImage[0]} width={400} height={400} alt="Option1" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
+                    <div className={stylesCustom.tebak_gambar_grid}>
+                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[0]?.name)} className={stylesCustom.card_option_tebak_gambar}>
+                        <Image src={quizOptionImage[0]} width={"400vw"} height={"400vw"} alt="Option1" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
                       </div>
-                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[1]?.name)} className={stylesCustom.card_option}>
+                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[1]?.name)} className={stylesCustom.card_option_tebak_gambar}>
                         <Image src={quizOptionImage[1]} width={400} height={400} alt="Option2" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
                       </div>
                     </div>
-                    <div className={styles.grid}>
-                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[2]?.name)} className={stylesCustom.card_option}>
+                    <div className={stylesCustom.tebak_gambar_grid}>
+                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[2]?.name)} className={stylesCustom.card_option_tebak_gambar}>
                         <Image src={quizOptionImage[2]} width={400} height={400} alt="Option3" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
                       </div>
-                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[3]?.name)} className={stylesCustom.card_option}>
+                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[3]?.name)} className={stylesCustom.card_option_tebak_gambar}>
                         <Image src={quizOptionImage[3]} width={400} height={400} alt="Option4" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
                       </div>
                     </div>
