@@ -45,7 +45,7 @@ if (isProd) {
       }
     });
 
-    process.env.APPIMAGE = path.join("/run/media/arkiven4/Project/Lab/Vibio/Gen1/dist_old/vibio-1.0.4.AppImage")
+    process.env.APPIMAGE = path.join("/run/media/arkiven4/Project/Lab/Vibio/Gen1/vibio-1.0.5.AppImage")
     autoUpdater.updateConfigPath = path.join(__dirname, "../", "dev-app-update.yml");
     
     const port = process.argv[2];
@@ -70,6 +70,8 @@ ipcMain.on("accept-update", (event, arg) => {
 });
 
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
+  console.log("update-available");
+  console.log({ releaseNotes: releaseNotes, releaseName: releaseName })
   mainWindow.webContents.send("update-available", { releaseNotes: releaseNotes, releaseName: releaseName });
 });
 
@@ -79,12 +81,14 @@ autoUpdater.on("update-not-available", (_event, releaseNotes, releaseName) => {
 });
 
 autoUpdater.on("download-progress", (progressObj) => {
-  mainWindow.webContents.send("download-progress", { percent: progressObj.percent, downloadspd: progressObj.bytesPerSecond, progressMB: progressObj.transferred + "/" + progressObj.total });
+  mainWindow.webContents.send("download-progress", { percent: progressObj.percent, downloadspd: progressObj.bytesPerSecond, progressMB: { now: progressObj.transferred, total: progressObj.total }});
   // let log_message = "Download speed: " + progressObj.bytesPerSecond;
   // log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
   // log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  // log.info(log_message)
   // sendStatusToWindow(log_message);
 });
+
 
 autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
   const dialogOpts = {

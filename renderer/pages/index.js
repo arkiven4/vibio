@@ -17,7 +17,7 @@ export default function Index() {
   const [isModalUpdate, setIsModalUpdate] = useState(false);
   const [isModalUpdateOk, setIsModalUpdateOk] = useState(false);
   const [updateInfo, setUpdateInfo] = useState({ releaseNotes: "", releaseName: "" });
-  const [updateObj, setUpdateObj] = useState({ percent: 0, downloadspd: 0, progressMB: "0/0" });
+  const [updateObj, setUpdateObj] = useState({ percent: 0, downloadspd: 0, progressMB: { now: 0, total: 0 } });
   const AudioSoundRef = useRef();
 
   useEffect(() => {
@@ -48,16 +48,17 @@ export default function Index() {
     ipcRenderer.on("download-progress", function (evt, message) {
       setUpdateObj(message);
     });
-    
+
     ipcRenderer.on("update-available", function (evt, message) {
-      setUpdateInfo(message)
-      isModalUpdate(true);
+      console.log(message);
+      setUpdateInfo(message);
+      setIsModalUpdate(true);
     });
 
     ipcRenderer.on("update-not-available", function (evt, message) {
       router.push("/home");
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updateApp = () => {
@@ -71,7 +72,7 @@ export default function Index() {
   };
 
   const updateAppClose = () => {
-    console.log("Noting")
+    console.log("Noting");
   };
 
   return (
@@ -164,7 +165,17 @@ const ModalUpdateAccept = (props) => {
                   {props.valueNow}%
                 </div>
               </div>
-              <motion.p style={{ textAlign: "center" }}> Terdownload : {props.progressMB}</motion.p>
+              {props.progressMB.total == 0 ? (
+                <motion.div>
+                  <motion.p style={{ textAlign: "center", marginBottom: 5, marginTop: 0 }}> Pengecekan Instalasi.....</motion.p>
+                </motion.div>
+              ) : (
+                <motion.div>
+                  <motion.p style={{ textAlign: "center", marginBottom: 5, marginTop: 0 }}> Terdownload : {formatBytes(props.progressMB.now) + "/" + formatBytes(props.progressMB.total)}</motion.p>
+                  <motion.p style={{ textAlign: "center", marginBottom: 5 }}> Kecepatan Download : {formatBytes(props.valueSPDNow)}</motion.p>
+                </motion.div>
+              )}
+
               <motion.h5 style={{ textAlign: "center" }}>
                 Untuk Sementara Aplikasi Tidak bisa Digunakan
                 <br />
@@ -275,3 +286,15 @@ const ModalUpdateAnnaouncement = (props) => {
     </motion.div>
   );
 };
+
+function formatBytes(bytes, decimals = 2) {
+  if (!+bytes) return "0 Bytes";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+}
