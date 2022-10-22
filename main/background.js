@@ -45,7 +45,7 @@ if (isProd) {
       }
     });
 
-    process.env.APPIMAGE = path.join("/run/media/arkiven4/Project/Lab/Vibio/Gen1/vibio-1.0.5.AppImage")
+    process.env.APPIMAGE = path.join("/run/media/arkiven4/Project/Lab/Vibio/Gen1/vibio-1.0.8.AppImage")
     autoUpdater.updateConfigPath = path.join(__dirname, "../", "dev-app-update.yml");
     
     const port = process.argv[2];
@@ -99,7 +99,11 @@ autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
     detail: "A new version has been downloaded. Restart the application to apply the updates.",
   };
   dialog.showMessageBox(dialogOpts).then((returnValue) => {
-    if (returnValue.response === 0) autoUpdater.quitAndInstall();
+    if (returnValue.response === 0) {
+      autoUpdater.quitAndInstall();
+    } else {
+      mainWindow.webContents.send("update-not-available", true);
+    }
   });
 });
 

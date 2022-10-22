@@ -161,8 +161,8 @@ const ModalUpdateAccept = (props) => {
                 <Image src={"/assets/emoji_good.png"} width={150} height={150} alt="PlayButton" style={{ cursor: "pointer" }} />
               </motion.div>
               <div className="progress" style={{ width: "75%", margin: "20px 0" }}>
-                <div className="progress-bar progress-bar-animated" role="progressbar" aria-valuenow={props.valueNow} aria-valuemin={0} aria-valuemax={100} style={{ width: props.valueNow + "%" }}>
-                  {props.valueNow}%
+                <div className="progress-bar progress-bar-animated" role="progressbar" aria-valuenow={(props.valueNow).toFixed(1)} aria-valuemin={0} aria-valuemax={100} style={{ width: (props.valueNow).toFixed(1) + "%" }}>
+                  {(props.valueNow).toFixed(1)}%
                 </div>
               </div>
               {props.progressMB.total == 0 ? (
@@ -172,7 +172,7 @@ const ModalUpdateAccept = (props) => {
               ) : (
                 <motion.div>
                   <motion.p style={{ textAlign: "center", marginBottom: 5, marginTop: 0 }}> Terdownload : {formatBytes(props.progressMB.now) + "/" + formatBytes(props.progressMB.total)}</motion.p>
-                  <motion.p style={{ textAlign: "center", marginBottom: 5 }}> Kecepatan Download : {formatBytes(props.valueSPDNow)}</motion.p>
+                  <motion.p style={{ textAlign: "center", marginBottom: 5 }}> Kecepatan Download : {formatBytes(props.valueSPDNow)}/s</motion.p>
                 </motion.div>
               )}
 
