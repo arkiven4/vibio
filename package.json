@@ -2,12 +2,13 @@
   "private": true,
   "name": "vibio",
   "description": "My application description",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "author_string",
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
     "build": "nextron build -l",
+    "publish": "nextron build -l --publish always",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {

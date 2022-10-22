@@ -81,13 +81,13 @@ export default function Home({ localeData }) {
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu3_subtitle}</p>
           </div>
 
-          <button
+          {/* <button
             onClick={() => {
               ipcRenderer.send("asynchronous-message", "ping");
             }}
           >
             Com
-          </button>
+          </button> */}
         </div>
         <FooterLogo></FooterLogo>
         <ModalAnnaouncement isShow={showModal} clickFunction={closeModal}></ModalAnnaouncement>
