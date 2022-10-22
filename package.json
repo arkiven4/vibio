@@ -2,7 +2,7 @@
   "private": true,
   "name": "vibio",
   "description": "My application description",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "author_string",
   "main": "app/background.js",
   "scripts": {
