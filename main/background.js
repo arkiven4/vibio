@@ -4,6 +4,7 @@ import { autoUpdater } from "electron-updater";
 import { createWindow } from "./helpers";
 const log = require("electron-log");
 const fs = require("fs");
+import path from 'path'
 
 //-------------------------------------------------------------------
 // Logging
@@ -28,9 +29,7 @@ if (isProd) {
 }
 
 (async () => {
-  await app.whenReady().then(() => {
-    autoUpdater.checkForUpdates();
-  });
+  await app.whenReady();
 
   mainWindow = createWindow("main", {
     width: 1024,
@@ -40,8 +39,17 @@ if (isProd) {
   if (isProd) {
     await mainWindow.loadURL("app://./index.html");
   } else {
+    Object.defineProperty(app, 'isPackaged', {
+      get() {
+        return true;
+      }
+    });
+
+    process.env.APPIMAGE = path.join("/run/media/arkiven4/Project/Lab/Vibio/Gen1/dist_old/vibio-1.0.4.AppImage")
+    autoUpdater.updateConfigPath = path.join(__dirname, "../", "dev-app-update.yml");
+    
     const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/home`);
+    await mainWindow.loadURL(`http://localhost:${port}/`);
     mainWindow.webContents.openDevTools();
   }
 })();
@@ -105,3 +113,7 @@ ipcMain.on("asynchronous-message", (event, arg) => {
     }
   });
 });
+
+setTimeout(() => {
+  autoUpdater.checkForUpdates();
+}, 1000);
