@@ -40,6 +40,7 @@ export default function Home({ localeData }) {
       console.log(message); // Returns: {'SAVED': 'File Saved'}
       inputRef.current.click();
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const closeModal = () => {

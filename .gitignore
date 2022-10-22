@@ -47,3 +47,4 @@ node_modules
 /dist_linux
 /android
 /out
+/dist_old

@@ -57,6 +57,7 @@ export default function Index() {
     ipcRenderer.on("update-not-available", function (evt, message) {
       router.push("/home");
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updateApp = () => {
