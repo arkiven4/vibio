@@ -2,7 +2,7 @@
   "private": true,
   "name": "vibio",
   "description": "My application description",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "author_string",
   "main": "app/background.js",
   "scripts": {
@@ -12,6 +12,7 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "electron-log": "^4.4.8",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
     "electron-updater": "^5.3.0"
@@ -30,5 +31,22 @@
     "nextron": "^8.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
+  },
+  "build": {
+    "win": {
+      "publish": [
+        "github"
+      ]
+    },
+    "linux": {
+      "publish": [
+        "github"
+      ]
+    },
+    "snap": {
+      "publish": [
+        "github"
+      ]
+    }
   }
 }

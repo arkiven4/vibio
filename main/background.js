@@ -2,6 +2,7 @@ import { app, ipcMain, dialog } from "electron";
 import serve from "electron-serve";
 import { autoUpdater } from "electron-updater";
 import { createWindow } from "./helpers";
+const log = require("electron-log");
 const fs = require("fs");
 
 //-------------------------------------------------------------------
@@ -12,9 +13,9 @@ const fs = require("fs");
 // This logging setup is not required for auto-updates to work,
 // but it sure makes debugging easier :)
 //-------------------------------------------------------------------
-// autoUpdater.logger = log;
-// autoUpdater.logger.transports.file.level = "info";
-// log.info("App starting...");
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = "info";
+log.info("App starting...");
 autoUpdater.autoDownload = false;
 
 const isProd = process.env.NODE_ENV === "production";
@@ -28,7 +29,7 @@ if (isProd) {
 
 (async () => {
   await app.whenReady().then(() => {
-    autoUpdater.checkForUpdates()
+    autoUpdater.checkForUpdates();
   });
 
   mainWindow = createWindow("main", {
@@ -40,7 +41,7 @@ if (isProd) {
     await mainWindow.loadURL("app://./index.html");
   } else {
     const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/`);
+    await mainWindow.loadURL(`http://localhost:${port}/home`);
     mainWindow.webContents.openDevTools();
   }
 })();
@@ -54,17 +55,18 @@ ipcMain.on("app_version", (event) => {
 });
 
 ipcMain.on("accept-update", (event, arg) => {
-  console.log(arg)
+  console.log(arg);
   if (arg) {
     autoUpdater.downloadUpdate();
   }
 });
 
 autoUpdater.on("update-available", (_event, releaseNotes, releaseName) => {
-  mainWindow.webContents.send("update-available", { releaseNotes: releaseNotes, releaseName: releaseName});
+  mainWindow.webContents.send("update-available", { releaseNotes: releaseNotes, releaseName: releaseName });
 });
 
 autoUpdater.on("update-not-available", (_event, releaseNotes, releaseName) => {
+  console.log("update-not-available");
   mainWindow.webContents.send("update-not-available", true);
 });
 
@@ -88,6 +90,11 @@ autoUpdater.on("update-downloaded", (_event, releaseNotes, releaseName) => {
     if (returnValue.response === 0) autoUpdater.quitAndInstall();
   });
 });
+
+autoUpdater.on('error', (ev, err) => {
+  log.info('err', err);
+  log.info('arguments', arguments);
+})
 
 ipcMain.on("asynchronous-message", (event, arg) => {
   console.log("heyyyy", arg); // prints "heyyyy ping"
