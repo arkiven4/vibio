@@ -206,6 +206,11 @@ export default function MengejaGambar(props) {
                 <code>audio</code> element.
               </audio>
               <ModalReactionQuiz isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></ModalReactionQuiz>
+              <div style={{ position: "absolute", top: "5vh", left: "5vh", cursor: "pointer" }} onClick={() => router.push("/home")}>
+                <div className={stylesCustom.button_card}>
+                  <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
+                </div>
+              </div>
             </main>
           ) : (
             <main className={styles.main}>
