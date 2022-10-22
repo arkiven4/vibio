@@ -1,7 +1,5 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-
-
 ## Build Apps
 
 First, install necessary npm modules using command:
@@ -67,3 +65,25 @@ npm ci
 rm -rf dist/
 rm -rf node_modules/
 ```
+
+### GPIO Dev
+
+Set Folder for GPIO file dump
+
+```sh
+export FILEDMP=/run/media/arkiven4/Project/Lab/Vibio/gpio
+```
+
+Then Start App. 
+
+After app enter Home Page, in the `$FILEDMP` folder, there are `gpio.txt` file. it contain code that readed by app to simulate click by button.
+
+```sh
+0 -> Idle
+1 -> Button 1
+2 -> Button 2
+3 -> Button 3
+Etc...
+```
+
+For Example, When Button 1 is pressed, change value in `gpio.txt` to 1, so the app will read it and simulate click fist button / card in the app

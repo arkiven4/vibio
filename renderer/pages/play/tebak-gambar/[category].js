@@ -167,7 +167,7 @@ export default function PlayStart(props) {
         <>
           {quizData.length != 0 ? (
             <main className={styles.main}>
-            <div className="container" style={{ width: "50%", justifyContent: "center", marginBottom: "5vh" }}>
+              <div className="container" style={{ width: "50%", justifyContent: "center", marginBottom: "5vh" }}>
                 <div className={stylesCustom.status_bar}>
                   <div className={stylesCustom.mini_card}>
                     <h4 style={{ marginBottom: "0px" }}>
@@ -183,7 +183,7 @@ export default function PlayStart(props) {
               </div>
               <div id="PlayButton" ref={PlayButtonRef} className={`${showOption ? stylesCustom.fade_out : stylesCustom.fade_in}`}>
                 <div className={isPlay ? stylesCustom.overlay : null} style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <Image
+                  <Image
                     onClick={() => {
                       playSound();
                     }}
@@ -228,6 +228,11 @@ export default function PlayStart(props) {
                 </div>
               ) : null}
               <ModalReactionQuiz isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></ModalReactionQuiz>
+              <div style={{ position: "absolute", top: "5vh", left: "5vh", cursor: "pointer" }} onClick={() => router.push("/home")}>
+                <div className={stylesCustom.button_card}>
+                  <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
+                </div>
+              </div>
             </main>
           ) : (
             <main className={styles.main}>

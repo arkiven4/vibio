@@ -12,7 +12,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { getLocale } from "../utils/getLocaleText";
 import { FooterLogo } from "../components/general";
 
-import {ModalAnnaouncement} from '../components/modal'
+import { ModalAnnaouncement } from "../components/modal";
 
 export default function Home({ localeData }) {
   const router = useRouter();
@@ -22,7 +22,9 @@ export default function Home({ localeData }) {
   const AudioSoundRef = useRef();
   const [showModal, setShowModal] = useState(true);
 
-  const inputRef = React.useRef(null)
+  const menu2ref = useRef();
+
+  const clickButtonArray = [null, null, menu2ref];
 
   useEffect(() => {
     AudioSoundRef.current.play();
@@ -40,7 +42,24 @@ export default function Home({ localeData }) {
       console.log(message); // Returns: {'SAVED': 'File Saved'}
       inputRef.current.click();
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    ipcRenderer.send("gpio-file-init", "ping");
+
+    ipcRenderer.on("gpio-file-read", function (evt, index) {
+      if (index !== "0") {
+        clickButtonArray[parseInt(index)]?.current?.click();
+        ipcRenderer.send("gpio-file-init", "ping");
+      }
+    });
+
+    var gpioTimer1 = setInterval(function () {
+      ipcRenderer.send("gpio-file-read", "ping");
+    }, 500);
+
+    return () => {
+      clearInterval(gpioTimer1);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const closeModal = () => {
@@ -67,7 +86,7 @@ export default function Home({ localeData }) {
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu1_subtitle}</p>
           </div>
 
-          <div ref={inputRef} onClick={() => router.push("/play")} className={stylesCustom.card_menu_home}>
+          <div ref={menu2ref} onClick={() => router.push("/play")} className={stylesCustom.card_menu_home}>
             <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu2_title} &rarr;</h2>
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu2_subtitle}</p>
           </div>
