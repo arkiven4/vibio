@@ -37,6 +37,7 @@ export default function Index() {
       })
       .catch((e) => {
         console.log(e.message);
+        router.push("/home");
         setOnline(false);
       })
       .finally(() => {
