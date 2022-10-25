@@ -1,0 +1,13 @@
+*.aux
+*.log
+*.out
+*.pdf
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*Notes.bib
+_minted*
+images/original

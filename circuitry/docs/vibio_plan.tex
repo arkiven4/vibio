@@ -1,0 +1,182 @@
+\documentclass{article} % Definisi jenis dokumen
+
+%%%%% Definisi paket-paket yang seharusnya digunakan %%%%%
+\usepackage[utf8]{inputenc} % paket encoding input utf8
+\usepackage[T1]{fontenc} % paket encoding huruf latin
+
+%%%%% Definisi paket-paket yang digunakan sesuai kebutuhan %%%%%
+\usepackage[yyyymmdd,hhmmss]{datetime} % paket tanggal-waktu
+\usepackage{graphicx} % paket grafik/gambar
+\usepackage[english]{babel} % paket modifikasi label/caption pada bahasa tertentu
+\usepackage{geometry} % paket ukuran kertas dan margin
+\usepackage{tikz} % paket menggambar di latex
+
+%%%%% Pengaturan ukuran kertas dan margin %%%%%
+\geometry{
+	a4paper,
+	left=10mm,
+	right=10mm,
+	top=15mm,
+	bottom=15mm,
+}
+
+%%%%% Pengaturan perintah informasi perangkat lunak (hanya untuk GNU/Linux) %%%%%
+\newcommand{\ShowOsVersion}{
+	\immediate\write18{\unexpanded{foo=`uname -sro` && echo "${foo}" > tmp.tex}}
+	\input{tmp}\immediate\write18{rm tmp.tex}
+}
+
+\newcommand{\ShowTexVersion}{
+	\immediate\write18{\unexpanded{foo=`pdflatex -version | head -n1 | cut -d' ' -f1,2` && echo "${foo}" > tmp.tex}}
+	\input{tmp}\immediate\write18{rm tmp.tex}
+}
+
+\usetikzlibrary{positioning}
+\newdimen\nodeDist
+\nodeDist=35mm
+
+\begin{document}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	\begin{titlepage}
+		
+		\centering % untuk membuat tengah teks
+		
+		{
+			\LARGE % pakai font besar
+			\bf % pakai font BOLD
+			VIBIO Design Plan 
+		}
+		
+		\bigskip
+		{\Large \bf Achmadi ST MT}
+		\vfill % menambahkan ruang kosong vertikal
+		
+		\raggedright
+		\noindent Buku ini ditulis dengan:\\ % tanda \\ menambahkan garis baru
+		OS : \ShowOsVersion \\
+		TeX : \ShowTexVersion \\
+		Update: {\today} at \currenttime\\
+	\end{titlepage}
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	\section{Considerations}
+	
+	Here below a summary of things to considered while chosing this design plan:
+	
+	\begin{itemize}
+		\item Physical interface requirement, e.g: Buttons, LEDs, Knobs, etc
+		
+		\item Speech Recognition implementation, the choice is either None, Offline, or Online
+		
+		\item Custom built prototype requirement, either can be custom built or just by prebuilt tablet or similar
+		
+		\item Terapist's interaction requirement, either as guided thereapist or none
+	\end{itemize}
+
+	\section{Planning Diagram}
+	
+	\begin{tikzpicture}[
+		node/.style={%
+			draw,
+			rectangle,
+		},
+		]
+		
+		\node [node] (A) {VIBIO Hardware};
+		\path (A) ++(-135:\nodeDist) node [node] (B) {Tablet};
+		\path (A) ++(-45:\nodeDist) node [node] (C) {RaspberryPi};
+		\path (C) ++(-135:\nodeDist) node [node] (D) {LCD Only};
+		\path (C) ++(-45:\nodeDist) node [node] (E) {ButtonLeds PCB};
+		
+		\draw (A) -- (B) node [left,pos=0.25] {Prebuilt}(A);
+		\draw (A) -- (C) node [right,pos=0.25] {Custom}(A);
+		\draw (C) -- (D) node [left,pos=0.25] {Touch Only}(A);
+		\draw (C) -- (E) node [right,pos=0.25] {Physical Iface}(A);
+	\end{tikzpicture}
+
+	\vfill % menambahkan ruang kosong vertikal
+
+	\begin{tikzpicture}[
+		node/.style={%
+			draw,
+			rectangle,
+		},
+		]
+		
+		\node [node] (A) {VIBIO SpeecRecognition};
+		\path (A) ++(-135:\nodeDist) node [node] (B) {Terapist};
+		\path (A) ++(-90:\nodeDist) node [node] (C) {Python/C/C++};
+		\path (A) ++(-45:\nodeDist) node [node] (D) {Webserver};
+		\path (B) ++(-135:\nodeDist) node [node] (E) {Parents};
+		\path (B) ++(-90:\nodeDist) node [node] (F) {Expert};
+		\path (C) ++(-90:\nodeDist) node [node] (G) {HTK/HMM ?};
+		\path (D) ++(-45:\nodeDist) node [node] (H) {Tanya Pak Bagus};
+		
+		\draw (A) -- (B) node [left,pos=0.25] {None}(A);
+		\draw (A) -- (C) node [below,pos=0.25] {Offline}(A);
+		\draw (A) -- (D) node [right,pos=0.25] {Online}(A);
+		\draw (B) -- (E) node [left,pos=0.25] {Guided}(B);
+		\draw (B) -- (F) node [below,pos=0.25] {Trained}(B);
+		\draw (C) -- (G) node [below,pos=0.25] {Precompiled}(C);
+		\draw (D) -- (H) node [right,pos=0.25] {Decent-Internet}(D);
+	\end{tikzpicture}
+
+	\vfill % menambahkan ruang kosong vertikal
+
+	\begin{tikzpicture}[
+		node/.style={%
+			draw,
+			rectangle,
+		},
+		]
+		
+		\node [node] (A) {VIBIO Operation};
+		\path (A) ++(-135:\nodeDist) node [node] (B) {Solo};
+		\path (A) ++(-45:\nodeDist) node [node] (C) {Terapist};
+		\path (C) ++(-135:\nodeDist) node [node] (D) {Parents};
+		\path (C) ++(-45:\nodeDist) node [node] (E) {Expert};
+		\path (B) ++(-135:\nodeDist) node [node] (F) {How?};
+		
+		\draw (A) -- (B) node [left,pos=0.25] {Full Auto}(A);
+		\draw (A) -- (C) node [right,pos=0.25] {Interactions}(A);
+		\draw (C) -- (D) node [left,pos=0.25] {Guided}(A);
+		\draw (C) -- (E) node [right,pos=0.25] {Trained}(A);
+		\draw (B) -- (F) node [right,pos=0.25] {Used by Toddler}(B);
+	\end{tikzpicture}
+	
+	\newpage
+	\section{Current Stage of Development}
+	
+	\subsection{Main Program}
+	
+	This main program written as a web interface packed in Electron (Nextron) and ready to be deployed on any capable computer (either x86 or armv7).
+	
+	Below is the example of the program running on top of Xorg in a Arch Linux operating system.
+	
+	\begin{figure}[!ht]                                  % [!ht] sebagai floatifier really here-top
+		\centering                                       % Menengahkan gambar
+		
+		% Tampilkan dalam ukuran lebar 200pt gambar image/organik_bro
+		% Pastikan berkas gambar atau foldernya di folder yang sama dengan berkas tex nya.
+		\includegraphics[width=350pt]{images/vibio}
+		
+		\caption{Main Program}                         % Label gambar
+	\end{figure}
+
+	\subsection{ARM Porting}
+	
+	As Arch Linux also available for ARM devices such as RaspberryPi, the main program already tested in a RaspberryPi 3B unit
+	to fulfill the demand of custom built hardware if required
+	
+	\begin{figure}[!ht]                                  % [!ht] sebagai floatifier really here-top
+		\centering                                       % Menengahkan gambar
+		
+		% Tampilkan dalam ukuran lebar 200pt gambar image/organik_bro
+		% Pastikan berkas gambar atau foldernya di folder yang sama dengan berkas tex nya.
+		\includegraphics[width=350pt]{images/on_raspi}
+		
+		\caption{Run on Raspi-3B}                         % Label gambar
+	\end{figure}
+\end{document}
