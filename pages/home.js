@@ -73,6 +73,11 @@ export default function Home({ localeData }) {
         <FooterLogo></FooterLogo>
         <ModalAnnaouncement isShow={showModal} clickFunction={closeModal}></ModalAnnaouncement>
       </main>
+      <div style={{ position: "absolute", top: "5vh", left: "5vh", cursor: "pointer" }} onClick={() => router.push("/pengaturan")}>
+        <div className={stylesCustom.button_card}>
+          <h4 style={{ marginBottom: "0px", color: "green" }}>S</h4>
+        </div>
+      </div>
       <audio ref={AudioSoundRef} controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
     </div>
   );
