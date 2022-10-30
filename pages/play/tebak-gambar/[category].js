@@ -66,15 +66,15 @@ export default function PlayStart(props) {
   }, [quizData, kategori, indexQuestion]);
 
   function playSound() {
+    setIsPlay(true);
     if (!isPlay) {
       AudioSoundRef.current.play();
-      setShowOption(true);
-      setIsPlay(true);
     }
   }
 
   function stopSound() {
     if (isPlay == true) {
+      setShowOption(true);
       setIsPlay(false);
     }
   }
@@ -121,7 +121,7 @@ export default function PlayStart(props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <div className="container" style={{ width: "50%", justifyContent: "center" }}>
+      {/* <div className="container" style={{ width: "50%", justifyContent: "center" }}>
         <div className={stylesCustom.status_bar}>
           <div className={stylesCustom.mini_card}>
             <h4 style={{ marginBottom: "0px" }}>
@@ -134,7 +134,7 @@ export default function PlayStart(props) {
             </h4>
           </div>
         </div>
-      </div>
+      </div> */}
       {isFinishQuiz ? (
         <main className={styles.main}>
           <h2>{localeGeneral.play_finish}</h2>
@@ -181,6 +181,20 @@ export default function PlayStart(props) {
         <>
           {quizData.length != 0 ? (
             <main className={styles.main}>
+            <div className="container" style={{ width: "50%", justifyContent: "center", marginBottom: "5vh" }}>
+                <div className={stylesCustom.status_bar}>
+                  <div className={stylesCustom.mini_card}>
+                    <h4 style={{ marginBottom: "0px" }}>
+                      Soal: {indexQuestion + 1} / {QuestionNumber}
+                    </h4>
+                  </div>
+                  <div className={stylesCustom.mini_card}>
+                    <h4 style={{ marginBottom: "0px", color: "green" }}>
+                      Benar: {rightQuestion} / {QuestionNumber}
+                    </h4>
+                  </div>
+                </div>
+              </div>
               <div id="PlayButton" ref={PlayButtonRef} className={`${showOption ? stylesCustom.fade_out : stylesCustom.fade_in}`}>
                 <div className={isPlay ? stylesCustom.overlay : null} style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
                   <Image
@@ -188,8 +202,8 @@ export default function PlayStart(props) {
                       playSound();
                     }}
                     src={"/assets/button_play.png"}
-                    width={400}
-                    height={400}
+                    width={window.innerHeight < window.innerWidth ? window.innerHeight * 0.7 : window.innerHeight * 0.4}
+                    height={window.innerHeight < window.innerWidth ? window.innerHeight * 0.7 : window.innerHeight * 0.4}
                     alt="PlayButton"
                     style={{ cursor: "pointer" }}
                   />
@@ -228,6 +242,11 @@ export default function PlayStart(props) {
                 </div>
               ) : null}
               <ModalReactionQuiz isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></ModalReactionQuiz>
+              <div style={{ position: "absolute", top: "5vh", left: "5vh", cursor: "pointer" }} onClick={() => router.push("/home")}>
+          <div className={stylesCustom.button_card}>
+            <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
+          </div>
+        </div>
             </main>
           ) : (
             <main className={styles.main}>
@@ -258,7 +277,7 @@ export async function getStaticPaths() {
   var arrayPath = [];
   var kategoriObj = getJSONCategory();
   Object.keys(kategoriObj).map((key, id) => {
-    if ((key === "buah" || key === "hewan")) {
+    if (key === "buah" || key === "hewan") {
       arrayPath.push({ params: { category: key } });
     }
   });

@@ -142,7 +142,7 @@ export default function MengejaGambar(props) {
         <>
           {quizData.length != 0 ? (
             <main className={styles.main}>
-              <div className="container" style={{ width: "50%", justifyContent: "center", marginBottom: "10vh" }}>
+              <div className="container" style={{ width: "50%", justifyContent: "center" }}>
                 <div className={stylesCustom.status_bar}>
                   <div className={stylesCustom.mini_card}>
                     <h4 style={{ marginBottom: "0px" }}>
@@ -176,8 +176,8 @@ export default function MengejaGambar(props) {
                       playSound();
                     }}
                     src={`/assets/items/${kategori}/image/${quizData[indexQuestion].name}_${quizData[indexQuestion].imageNum}.png`}
-                    width={200}
-                    height={200}
+                    width={window.innerHeight * 0.4}
+                    height={window.innerHeight * 0.4}
                     alt="BendaImage"
                     style={{ cursor: "pointer" }}
                   />
@@ -186,11 +186,11 @@ export default function MengejaGambar(props) {
 
               <div className={stylesCustom.button_container}>
                 <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(false)}>
-                  <Image src={`/assets/button_no.png`} width={"100%"} height={"100%"} alt="ButtonNo" style={{ cursor: "pointer" }} />
+                  <Image src={`/assets/button_no.png`} width={window.innerHeight * 0.15} height={window.innerHeight * 0.15} alt="ButtonNo" style={{ cursor: "pointer" }} />
                   <h4 style={{ marginBottom: "0px" }}>Salah</h4>
                 </div>
                 <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(true)}>
-                  <Image src={`/assets/button_ok.png`} width={"100%"} height={"100%"} alt="ButtonOK" style={{ cursor: "pointer" }} />
+                  <Image src={`/assets/button_ok.png`} width={window.innerHeight * 0.15} height={window.innerHeight * 0.15} alt="ButtonOK" style={{ cursor: "pointer" }} />
                   <h4 style={{ marginBottom: "0px" }}>Benar</h4>
                 </div>
               </div>
@@ -206,6 +206,11 @@ export default function MengejaGambar(props) {
                 <code>audio</code> element.
               </audio>
               <ModalReactionQuiz isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></ModalReactionQuiz>
+              <div style={{ position: "absolute", top: "5vh", left: "5vh", cursor: "pointer" }} onClick={() => router.push("/home")}>
+                <div className={stylesCustom.button_card}>
+                  <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
+                </div>
+              </div>
             </main>
           ) : (
             <main className={styles.main}>
@@ -231,15 +236,13 @@ export const getStaticProps = async ({ params: { category } }) => {
   };
 };
 
-
 export async function getStaticPaths() {
   var arrayPath = [];
   var kategoriObj = getJSONCategory();
   Object.keys(kategoriObj).map((key, id) => {
-    if ((key === "buah" || key === "hewan")) {
+    if (key === "buah" || key === "hewan") {
       arrayPath.push({ params: { category: key } });
     }
-    
   });
   return {
     paths: arrayPath,

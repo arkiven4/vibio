@@ -3,6 +3,77 @@ import { motion } from "framer-motion";
 
 import stylesCustom from "../styles/custom.module.css";
 
+const ModalAnnaouncement = (props) => {
+  return (
+    <motion.div
+      initial={{
+        opacity: 0,
+        scale: 0,
+      }}
+      animate={props.isShow ? "open" : "closed"}
+      variants={{
+        open: { opacity: 1, scale: 1 },
+        closed: { opacity: 0, scale: 0 },
+      }}
+      className={stylesCustom.popup_backdrop}
+    >
+      <motion.div className={stylesCustom.popup}>
+        <motion.h3 className={`${stylesCustom.mini_card_popupRW}`} style={{ color: "black" }}>
+          Pengumuman
+        </motion.h3>
+        <motion.div className={stylesCustom.pu_content_container}>
+          <motion.div
+            initial={{
+              scale: 0,
+              rotate: 0,
+            }}
+            animate={{
+              scale: 1,
+              rotate: 360,
+              transition: {
+                delay: 0.3,
+                duration: 0.5,
+              },
+            }}
+            style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}
+          >
+            <motion.div className={stylesCustom.popup_card}>
+              <motion.div
+                initial={{
+                  scale: 1,
+                  rotate: 0,
+                }}
+                animate={{
+                  rotate: [-2, 2, -2, 2, -2],
+                  scale: [1.01, 0.99, 1.01, 0.99, 1.01],
+                }}
+                transition={{
+                  duration: 1.5,
+                  times: [0.3, 0.6, 0.9, 1.2, 1.5],
+                  repeat: Infinity,
+                }}
+              >
+                <Image src={"/assets/emoji_good.png"} width={100} height={100} alt="PlayButton" style={{ cursor: "pointer" }} />
+              </motion.div>
+              <motion.h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</motion.h3>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+        {/* button controls */}
+        <motion.div style={{ marginTop: "10px" }}>
+          <motion.button
+            className="btn btn-primary"
+            onClick={() => {
+              props.clickFunction();
+            }}
+          >
+            Tutup
+          </motion.button>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const ModalReactionQuiz = (props) => {
   var imageShowsrc = props.isCorrect ? "/assets/emoji_good.png" : "/assets/emoji_bad.png";
@@ -84,4 +155,5 @@ const ModalReactionQuiz = (props) => {
 
 module.exports = {
   ModalReactionQuiz,
+  ModalAnnaouncement
 };

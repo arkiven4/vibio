@@ -3,7 +3,7 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import stylesCustom from "../styles/custom.module.css";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 //TODO : Check is localStorage available in browser, Make User Allow speaker
 
@@ -13,7 +13,10 @@ export default function Index() {
   const [isOnline, setOnline] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
+  const AudioSoundRef = useRef();
+
   useEffect(() => {
+    AudioSoundRef.current.play();
     setLoading(true);
     fetch("https://www.google.com/", {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -50,7 +53,7 @@ export default function Index() {
       <main className={styles.main}>
         <div className={stylesCustom.card}>
           {/* <button type="button" className="btn btn-primary">Warning</button> */}
-          <h1 className={styles.title}>Memuat Vibio.....</h1>
+          <h1 className={styles.title} style={{textAlign: 'center'}}>Memuat Vibio.....</h1>
           <br></br>
 
           <div className="progress" style={{ width: "75%" }}>
@@ -61,6 +64,7 @@ export default function Index() {
           <br></br>
           {isOnline ? <h3 style={{ color: "green" }}>Online</h3> : <h3 style={{ color: "red" }}>Offline Mode</h3>}
         </div>
+        <audio ref={AudioSoundRef} controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
       </main>
     </div>
   );

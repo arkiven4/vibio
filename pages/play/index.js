@@ -8,7 +8,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 import { getJSONCategory } from "../../utils/getLocalJSON";
 import { getLocale } from "../../utils/getLocaleText";
-import {FooterLogo} from '../../components/general'
+import { FooterLogo } from "../../components/general";
 
 //TODO : Atur Category Card agar kalau jumlah itemnya 6, bagus keliatanya
 //TODO : Fit Screen No Scroll untuk pad dan Laptop
@@ -34,7 +34,7 @@ export default function HomePlay(props) {
         key={id}
         onClick={() => (key === "buah" || key === "hewan" ? router.push({ pathname: "/play/" + gameType + "/" + key }) : alert("Belum Tersedia"))}
         className={classTemp}
-        style={{ marginRight: "15px", padding: "10px 10px 5px", display: "block", overflow: "auto"}}
+        style={{ marginRight: "15px", padding: "10px 10px 5px", display: "block", overflow: "auto" }}
       >
         <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={"600vw"} height={"600vw"} alt="PlayButton"></Image>
         <h2 style={{ textAlign: "center", fontSize: "2vw" }}>{kategoriObj[key].show_name} &rarr;</h2>
@@ -76,16 +76,16 @@ export default function HomePlay(props) {
           <h2 className={stylesCustom.menu_title_font}>{localeGeneral.play_title1}</h2>
           <h4>{localeGeneral.play_subtitle2}</h4>
           <br></br>
-          <div className={(stylesCustom.container_card_jenis_permainan)}>
+          <div className={stylesCustom.container_card_jenis_permainan}>
             <div onClick={() => setGame("mengeja-gambar")} className={stylesCustom.card_menu_wImage}>
               <Image style={{ borderRadius: "30px" }} src={`/assets/vector/mengeja-image.jpg`} width={300} height={300} alt="mengejaGambar"></Image>
-              <h2 style={{textAlign: 'center', wordWrap: 'break-word'}}>{localeGeneral.play_choose_title1} &rarr;</h2>
-              <p style={{textAlign: 'center', wordWrap: 'break-word'}}>{localeGeneral.play_choose_subtitle1}</p>
+              <h2 style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_title1} &rarr;</h2>
+              <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle1}</p>
             </div>
             <div onClick={() => setGame("tebak-gambar")} className={stylesCustom.card_menu_wImage}>
               <Image style={{ borderRadius: "30px" }} src={`/assets/vector/tebak-image.jpg`} width={300} height={300} alt="tebakGambar"></Image>
-              <h2 style={{textAlign: 'center', wordWrap: 'break-word'}}>{localeGeneral.play_choose_title2} &rarr;</h2>
-              <p style={{textAlign: 'center', wordWrap: 'break-word'}}>{localeGeneral.play_choose_subtitle2}</p>
+              <h2 style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_title2} &rarr;</h2>
+              <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle2}</p>
             </div>
           </div>
           <FooterLogo></FooterLogo>
@@ -115,6 +115,12 @@ export default function HomePlay(props) {
           <FooterLogo></FooterLogo>
         </motion.div>
       </main>
+      <div style={{ position: "absolute", top: "5vh", left: "5vh", cursor: "pointer" }} onClick={() => router.push("/home")}>
+        <div className={stylesCustom.button_card}>
+          <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
+        </div>
+      </div>
+      <audio controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
     </div>
   );
 }
