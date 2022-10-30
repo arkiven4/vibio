@@ -18,6 +18,9 @@ export default function Index() {
   useEffect(() => {
     AudioSoundRef.current.play();
     setLoading(true);
+    if (window.localStorage) {
+      window.localStorage.setItem("recognitionServer", "http://127.0.0.1:3003/recognition");
+    }
     fetch("https://www.google.com/", {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       mode: "no-cors", // no-cors, *cors, same-origin

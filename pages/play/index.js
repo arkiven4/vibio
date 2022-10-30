@@ -49,6 +49,7 @@ export default function HomePlay(props) {
       tempArray = [];
     }
   });
+  
 
   function setGame(type) {
     setGameType(type);

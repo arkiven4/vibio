@@ -11,15 +11,24 @@ import { getJSONFlash, getJSONCategory } from "../../../utils/getLocalJSON";
 import { GenMengejaGambarData } from "../../../utils/genQuizData";
 import { getLocale } from "../../../utils/getLocaleText";
 import { ModalReactionQuiz } from "../../../components/modal";
+import axios, { post } from "axios";
 
 import { motion } from "framer-motion";
 
 const QuestionNumber = 10;
+var chunks = [];
 
 export default function MengejaGambar(props) {
   const router = useRouter();
   const { userdata, setUserdata } = useAppContext();
 
+  const [isRecordAvailable, SetIsRecordAvailable] = useState(false);
+  const [mediaRecorder, SetImediaRecorder] = useState(null);
+  const [recognizedData, SetrecognizedData] = useState({ prediction: "Empty, Start Recording", time_exec: 0 });
+
+  const [recordIcon, setRecordIcon] = useState("/assets/button_record.png");
+  const [enableRecog, setEnableRecog] = useState(false);
+  const [RecogServer, setRecogServer] = useState("");
   const [quizData, setQuizData] = useState([]);
   const [indexQuestion, setIndexQuestion] = useState(0);
   const [rightQuestion, setRightQuestion] = useState(0);
@@ -33,10 +42,23 @@ export default function MengejaGambar(props) {
 
   const localeGeneral = props.localeData?.general;
 
+  const recordButtonRef = useRef();
   const AudioSoundRef = useRef();
 
   useEffect(() => {
     //console.log(userdata);
+    if (navigator.mediaDevices.getUserMedia) {
+      SetIsRecordAvailable(true);
+
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: true,
+        })
+        .then(onSuccess, onError);
+    } else {
+      SetIsRecordAvailable(false);
+    }
+
     var finalQuestionData = GenMengejaGambarData(props.kategori_data, QuestionNumber);
 
     setQuizData(finalQuestionData);
@@ -50,6 +72,63 @@ export default function MengejaGambar(props) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (mediaRecorder !== null) {
+      mediaRecorder.ondataavailable = function (e) {
+        chunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = ({ e }) => {
+        console.log("data available after MediaRecorder.stop() called.");
+        const blob = new Blob(chunks, {
+          type: "audio/wav; codecs=MS_PCM",
+        });
+        chunks = [];
+        let file = new File([blob], "Lohe" + ".wav", {
+          type: "audio/wav",
+          lastModified: new Date().getTime(),
+        });
+        const formData = new FormData();
+        formData.append("file_audio", file);
+        post(RecogServer, formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
+          .then((response) => {
+            console.log(response.data);
+            SetrecognizedData(response.data);
+          })
+          .catch((error) => {
+            console.log("Error ========>", error);
+          });
+      };
+    }
+  }, [mediaRecorder]);
+
+  let onSuccess = function (stream) {
+    SetImediaRecorder(new MediaRecorder(stream));
+    if (window.localStorage) {
+      setRecogServer(window.localStorage.getItem("recognitionServer"));
+      setEnableRecog(window.localStorage.getItem("enableRecog") == "true");
+    }
+  };
+
+  let onError = function (err) {
+    console.log("The following error occured: " + err);
+  };
+
+  const start_record = () => {
+    setRecordIcon("/assets/button_onrecord.png");
+    console.log("recorder started");
+    mediaRecorder.start();
+
+    setTimeout(() => {
+      setRecordIcon("/assets/button_record.png");
+      mediaRecorder.stop();
+    }, 3000);
+  };
 
   function playSound() {
     setIsPlay(true);
@@ -74,6 +153,27 @@ export default function MengejaGambar(props) {
       setRightQuestion(rightQuestion + 1);
     }
   }
+
+  const didMountRef = useRef(false);
+  useEffect(() => {
+    if (didMountRef.current) { 
+      console.log("Hola");
+      checkAnswer(recognizedData.prediction)
+    }
+    didMountRef.current = true;
+  }, [recognizedData]);
+
+  const checkAnswer = (prediction) => {
+    var sp_prediction = prediction;
+    var nowIndex = indexQuestion;
+    var now_jawaban = quizData[nowIndex].name;
+    var similarityWord = wordSimilarity(sp_prediction, now_jawaban);
+    if (similarityWord > 0.7) {
+      selectOption(true);
+    } else {
+      selectOption(false);
+    }
+  };
 
   const nextQuestion = () => {
     setShowModalData({
@@ -184,16 +284,24 @@ export default function MengejaGambar(props) {
                 </div>
               </div>
 
-              <div className={stylesCustom.button_container}>
-                <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(false)}>
-                  <Image src={`/assets/button_no.png`} width={window.innerHeight * 0.15} height={window.innerHeight * 0.15} alt="ButtonNo" style={{ cursor: "pointer" }} />
-                  <h4 style={{ marginBottom: "0px" }}>Salah</h4>
+              {enableRecog ? (
+                <div className={stylesCustom.button_container}>
+                  <div className={stylesCustom.button_image_subtitle} onClick={() => start_record()}>
+                    <Image ref={recordButtonRef} src={recordIcon} width={window.innerHeight * 0.2} height={window.innerHeight * 0.2} alt="ButtonNo" style={{ cursor: "pointer" }} />
+                  </div>
                 </div>
-                <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(true)}>
-                  <Image src={`/assets/button_ok.png`} width={window.innerHeight * 0.15} height={window.innerHeight * 0.15} alt="ButtonOK" style={{ cursor: "pointer" }} />
-                  <h4 style={{ marginBottom: "0px" }}>Benar</h4>
+              ) : (
+                <div className={stylesCustom.button_container}>
+                  <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(false)}>
+                    <Image src={`/assets/button_no.png`} width={window.innerHeight * 0.15} height={window.innerHeight * 0.15} alt="ButtonNo" style={{ cursor: "pointer" }} />
+                    <h4 style={{ marginBottom: "0px" }}>Salah</h4>
+                  </div>
+                  <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(true)}>
+                    <Image src={`/assets/button_ok.png`} width={window.innerHeight * 0.15} height={window.innerHeight * 0.15} alt="ButtonOK" style={{ cursor: "pointer" }} />
+                    <h4 style={{ marginBottom: "0px" }}>Benar</h4>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* <div id="PlayButton" ref={PlayButtonRef} className={`${showOption ? stylesCustom.fade_out : stylesCustom.fade_in}`}>
             <div className={isPlay ? stylesCustom.overlay : null} style={{ justifyContent: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -248,6 +356,43 @@ export async function getStaticPaths() {
     paths: arrayPath,
     fallback: true,
   };
+}
+
+function wordSimilarity(s1, s2) {
+  var longer = s1;
+  var shorter = s2;
+  if (s1.length < s2.length) {
+    longer = s2;
+    shorter = s1;
+  }
+  var longerLength = longer.length;
+  if (longerLength == 0) {
+    return 1.0;
+  }
+  return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+}
+
+function editDistance(s1, s2) {
+  s1 = s1.toLowerCase();
+  s2 = s2.toLowerCase();
+
+  var costs = new Array();
+  for (var i = 0; i <= s1.length; i++) {
+    var lastValue = i;
+    for (var j = 0; j <= s2.length; j++) {
+      if (i == 0) costs[j] = j;
+      else {
+        if (j > 0) {
+          var newValue = costs[j - 1];
+          if (s1.charAt(i - 1) != s2.charAt(j - 1)) newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
+        }
+      }
+    }
+    if (i > 0) costs[s2.length] = lastValue;
+  }
+  return costs[s2.length];
 }
 
 // export async function getStaticProps({ params: { category } }) {

@@ -7,9 +7,9 @@ import { useAppContext } from "../context/state";
 import React, { useState, useEffect, useRef } from "react";
 
 import { getLocale } from "../utils/getLocaleText";
-import {FooterLogo} from '../components/general'
+import { FooterLogo } from "../components/general";
 
-import {ModalAnnaouncement} from '../components/modal'
+import { ModalAnnaouncement } from "../components/modal";
 
 export default function Home({ localeData }) {
   const router = useRouter();
@@ -67,14 +67,19 @@ export default function Home({ localeData }) {
           </div>
 
           <div onClick={() => alert("Belum Tersedia")} className={stylesCustom.card_menu_home_disabled}>
-            <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu3_title} &rarr;</h2>
-            <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu3_subtitle}</p>
+            <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu4_title} &rarr;</h2>
+            <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu4_subtitle}</p>
           </div>
         </div>
         <FooterLogo></FooterLogo>
         <ModalAnnaouncement isShow={showModal} clickFunction={closeModal}></ModalAnnaouncement>
       </main>
       <audio ref={AudioSoundRef} controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
+      <div style={{ position: "absolute", top: "5vh", left: "5vh", cursor: "pointer" }} onClick={() => router.push("/pengaturan")}>
+        <div className={stylesCustom.button_card}>
+          <p>Gears</p>
+        </div>
+      </div>
     </div>
   );
 }
