@@ -16,9 +16,18 @@ export default function Home({ localeData }) {
   const { userdata, setUserdata } = useAppContext();
   const localeGeneral = localeData.general;
   const AudioSoundRef = useRef();
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
+    // if (navigator.mediaDevices.getUserMedia) {
+    //   navigator.mediaDevices
+    //     .getUserMedia({
+    //       audio: true,
+    //     })
+    // } else {
+    //   alert("Media Tidak tersedia");
+    // }
+
     AudioSoundRef.current.play();
     console.log(userdata);
     setUserdata({

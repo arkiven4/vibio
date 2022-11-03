@@ -8,14 +8,17 @@
     "start": "next start",
     "lint": "next lint",
     "static": "next build && next export",
-    "build-mobile":"next build && next export && npx cap sync"
+    "build-mobile": "next build && next export && npx cap sync",
+    "android": "next build && next export && npx cap sync && npx capacitor run android --livereload --external --open"
   },
   "dependencies": {
     "@capacitor/android": "^4.3.0",
     "@capacitor/core": "^4.3.0",
     "@capacitor/ios": "^4.3.0",
+    "@capacitor/preferences": "^4.0.1",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.1",
+    "capacitor-voice-recorder": "^4.0.0",
     "framer-motion": "^7.3.6",
     "next": "12.3.0",
     "react": "18.2.0",

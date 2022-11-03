@@ -5,9 +5,11 @@ import stylesCustom from "../styles/custom.module.css";
 import { useRouter } from "next/router";
 import { useAppContext } from "../context/state";
 import React, { useState, useEffect, useRef } from "react";
+import { Preferences } from '@capacitor/preferences';
 
 import { getLocale } from "../utils/getLocaleText";
 import { FooterLogo } from "../components/general";
+
 
 import { ModalAnnaouncement } from "../components/modal";
 
@@ -25,18 +27,28 @@ export default function Pengaturan({ localeData }) {
       username: "hola",
     });
 
-    if (window.localStorage) {
-      console.log(window.localStorage.getItem("userSession"));
-      window.localStorage.setItem("userSession", "Loheee");
-      inputServerRecog.current.value = window.localStorage.getItem("recognitionServer");
-      enableServerRecog.current.checked = (window.localStorage.getItem("enableRecog") == "true");
-    }
+    Preferences.get({ key: "recognitionServer" }).then((ret) => {
+      inputServerRecog.current.value = ret.value;
+    });
+
+    Preferences.get({ key: "enableRecog" }).then((ret) => {
+      enableServerRecog.current.value = ret.value;
+      alert( ret.value == "true");
+    });
   }, []);
 
   function savePengaturan() {
-    window.localStorage.setItem("recognitionServer", inputServerRecog.current.value);
-    window.localStorage.setItem("enableRecog", enableServerRecog.current.checked);
-    router.push("/home")
+    Preferences.set({
+      key: "recognitionServer",
+      value: inputServerRecog.current.value,
+    });
+    Preferences.set({
+      key: "enableRecog",
+      value: enableServerRecog.current.value,
+    });
+
+   
+    router.push("/home");
     //
     //setGameType(type);
     //setPickGame(true);
@@ -59,7 +71,7 @@ export default function Pengaturan({ localeData }) {
           <div className={stylesCustom.card_menu_home_disabled} style={{ paddingBottom: "10px" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <h2 className={stylesCustom.card_menu_title_font}>Enable Recog</h2>
-              <input ref={enableServerRecog} type="checkbox" style={{ transform: "scale(3)" }} />
+              <input ref={enableServerRecog} type="text"/>
             </div>
           </div>
           <div className={stylesCustom.card_menu_home_disabled} style={{ paddingBottom: "10px" }}>
