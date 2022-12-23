@@ -99,7 +99,11 @@ export default function MengejaGambar(props) {
         const formData = new FormData();
         formData.append("file_audio", file);
 
-        fetch("https://vibio.elbicare.my.id/recognition", {
+        // SetrecognizedData({
+        //   prediction: "apple"
+        // })
+        //fetch("https://vibio.elbicare.my.id/recognition", {
+        fetch("http://127.0.0.1:5000/recognition", {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
           body: formData,
@@ -222,6 +226,8 @@ export default function MengejaGambar(props) {
       setRecordIcon("/assets/button_record.png");
       mediaRecorder.stop();
     }, 3000);
+
+
   };
 
   function playSound() {
@@ -258,9 +264,10 @@ export default function MengejaGambar(props) {
   }, [recognizedData]);
 
   const checkAnswer = (prediction) => {
-    var sp_prediction = prediction;
     var nowIndex = indexQuestion;
     var now_jawaban = quizData[nowIndex].name;
+    var sp_prediction = prediction;
+    //var sp_prediction = now_jawaban;
     var similarityWord = wordSimilarity(sp_prediction, now_jawaban);
     if (similarityWord > 0.7) {
       selectOption(true);
@@ -380,7 +387,9 @@ export default function MengejaGambar(props) {
 
               {enableRecog ? (
                 <div className={stylesCustom.button_container}>
-                  <div className={stylesCustom.button_image_subtitle} onClick={() => start_record()}>
+                  <div className={stylesCustom.button_image_subtitle} onClick={() => {
+                    start_record()
+                    }}>
                     <Image ref={recordButtonRef} src={recordIcon} width={window.innerHeight * 0.2} height={window.innerHeight * 0.2} alt="ButtonNo" style={{ cursor: "pointer" }} />
                   </div>
                 </div>

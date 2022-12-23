@@ -27,29 +27,33 @@ export default function Index() {
       key: "recognitionServer",
       value: "https://vibio.elbicare.my.id/recognition",
     });
-    fetch("https://vibio.elbicare.my.id/", {
-      method: "GET", // *GET, POST, PUT, DELETE, etc.
-      mode: "no-cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        alert(JSON.stringify(res));
-        setOnline(true);
-      })
-      .catch((e) => {
-        console.log(e.message);
-        alert(e.message);
-        setOnline(false);
-      })
-      .finally(() => {
-        setTimeout(() => {
-          router.push("/home");
-        }, 2000);
-      });
+    //fetch("https://vibio.elbicare.my.id/", {
+
+
+      setTimeout(() => {
+        router.push("/home");
+      }, 2000);
+    // fetch("https://google.com/", {
+    //   method: "GET", // *GET, POST, PUT, DELETE, etc.
+    //   mode: "no-cors", // no-cors, *cors, same-origin
+    //   cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((res) => {
+    //     console.log(res);
+    //     //alert(JSON.stringify(res));
+    //     setOnline(true);
+    //   })
+    //   .catch((e) => {
+    //     console.log(e.message);
+    //     alert(e.message);
+    //     setOnline(false);
+    //   })
+    //   .finally(() => {
+
+    //   });
   }, []);
 
   return (
