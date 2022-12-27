@@ -73,7 +73,6 @@ export default function Petunjuk(props) {
           <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
         </div>
       </div>
-      <audio controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
     </div>
   );
 }
