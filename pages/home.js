@@ -51,7 +51,7 @@ export default function Home({ localeData }) {
         <h3 className={stylesCustom.menu_subtitle_font}>{localeGeneral.mainmenu_subtitle}</h3>
         <br></br>
         <div className={stylesCustom.container_card_row}>
-          <div onClick={() => alert("Belum Tersedia")} className={stylesCustom.card_menu_home_disabled}>
+          <div onClick={() => router.push("/demo")} className={stylesCustom.card_menu_home}>
             <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu1_title} &rarr;</h2>
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu1_subtitle}</p>
           </div>
@@ -61,7 +61,7 @@ export default function Home({ localeData }) {
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu2_subtitle}</p>
           </div>
 
-          <div onClick={() => alert("Belum Tersedia")} className={stylesCustom.card_menu_home_disabled}>
+          <div onClick={() => router.push("/petunjuk-terapi/1")} className={stylesCustom.card_menu_home}>
             <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu3_title} &rarr;</h2>
             <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu3_subtitle}</p>
           </div>
