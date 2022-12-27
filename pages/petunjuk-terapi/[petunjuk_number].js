@@ -35,8 +35,8 @@ export default function Petunjuk(props) {
             closed: { opacity: 0, x: "-100%" },
           }}
         >
-          <h2 className={stylesCustom.menu_subtitle_font}>{localeGeneral.petunjuk_title1}</h2>
-          <h4>{localeGeneral.play_subtitle2}</h4>
+          <h2 className={stylesCustom.menu_subtitle_font}>{localeGeneral?.petunjuk_title1}</h2>
+          <h4>{localeGeneral?.play_subtitle2}</h4>
           <br></br>
           <div className={stylesCustom.container_card_jenis_permainan}>
             <div className={stylesCustom.card_menu_wImage}>
@@ -99,6 +99,7 @@ export async function getStaticPaths() {
     fallback: true,
   };
 }
+
 export const getStaticProps = async (context) => {
   var localeDataGeneral = getLocale("id", "general");
   return {
