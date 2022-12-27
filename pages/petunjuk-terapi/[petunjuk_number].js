@@ -14,7 +14,7 @@ import { FooterLogo } from "../../components/general";
 
 export default function Petunjuk(props) {
   const router = useRouter();
-  const localeGeneral = props.localeData.general;
+  const localeGeneral = props.localeData?.general;
   const pentunjuk_now = parseInt(router.query.petunjuk_number);
 
   return (
