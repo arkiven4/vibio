@@ -25,14 +25,14 @@ export default function HomePlay(props) {
   var tempArray = [];
 
   Object.keys(kategoriObj).map((key, id) => {
-    var classTemp = stylesCustom.card_menu_disabled;
-    if (key === "buah" || key === "hewan") {
-      classTemp = stylesCustom.card_menu;
-    }
+    var classTemp = stylesCustom.card_menu;
+    // if (key === "buah" || key === "hewan") {
+    //   classTemp = stylesCustom.card_menu;
+    // }
     tempArray.push(
       <div
         key={id}
-        onClick={() => (key === "buah" || key === "hewan" ? router.push({ pathname: "/play/" + gameType + "/" + key }) : alert("Belum Tersedia"))}
+        onClick={() => (router.push({ pathname: "/play/" + gameType + "/" + key }))}
         className={classTemp}
         style={{ marginRight: "15px", padding: "10px 10px 5px", display: "block", overflow: "auto" }}
       >
