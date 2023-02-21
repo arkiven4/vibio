@@ -78,6 +78,11 @@ export default function HomePlay(props) {
           <h4>{localeGeneral.play_subtitle2}</h4>
           <br></br>
           <div className={(stylesCustom.container_card_jenis_permainan)}>
+          <div onClick={() => setGame("dengarkan-gambar")} className={stylesCustom.card_menu_wImage}>
+              <Image style={{ borderRadius: "30px" }} src={`/assets/vector/dengarkan-image.jpg`} width={300} height={300} alt="dengarGambar"></Image>
+              <h2 style={{textAlign: 'center', wordWrap: 'break-word'}}>{localeGeneral.play_choose_title0} &rarr;</h2>
+              <p style={{textAlign: 'center', wordWrap: 'break-word'}}>{localeGeneral.play_choose_subtitle0}</p>
+            </div>
             <div onClick={() => setGame("mengeja-gambar")} className={stylesCustom.card_menu_wImage}>
               <Image style={{ borderRadius: "30px" }} src={`/assets/vector/mengeja-image.jpg`} width={300} height={300} alt="mengejaGambar"></Image>
               <h2 style={{textAlign: 'center', wordWrap: 'break-word'}}>{localeGeneral.play_choose_title1} &rarr;</h2>

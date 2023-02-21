@@ -9,3 +9,5 @@ Vibrastic Lab, TF, ITS, Unair, Sutomo
 https://capacitorjs.com/docs/guides/storage
 
 git fetch --tags -f
+
+https://texttospeech.responsivevoice.org/v1/text:synthesize?text=Mari%20Tirukan%20Suaraku&lang=id&engine=g1&name=&pitch=0.5&rate=0.5&volume=1&key=kvfbSITh&gender=female

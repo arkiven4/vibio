@@ -348,9 +348,7 @@ export async function getStaticPaths() {
   var arrayPath = [];
   var kategoriObj = getJSONCategory();
   Object.keys(kategoriObj).map((key, id) => {
-    if (key === "buah" || key === "hewan") {
-      arrayPath.push({ params: { category: key } });
-    }
+    arrayPath.push({ params: { category: key } });
   });
   return {
     paths: arrayPath,
