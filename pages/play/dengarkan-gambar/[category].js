@@ -36,11 +36,13 @@ export default function MengejaGambar(props) {
   const [indexImage, setIndexImage] = useState(0);
   const [lengthImageArray, setLengthImageArray] = useState(0);
   const [indexQuestion, setIndexQuestion] = useState(0);
+  const [indexBenda, setIndexBenda] = useState(0);
   const [kategori, setKategori] = useState("");
   const [isPlay, setIsPlay] = useState(false);
   const [isFinishQuiz, setIsFinishQuiz] = useState(false);
   const [isStartQuiz, setIsStartQuiz] = useState(false);
   const [isDoneSubmitData, setDoneSubmitData] = useState(false);
+  const [finalQuestionDataState, setfinalQuestionDataState] = useState([]);
   const [showModalData, setShowModalData] = useState({
     isCorrect: false,
     showModal: false,
@@ -54,10 +56,10 @@ export default function MengejaGambar(props) {
 
   useEffect(() => {
     var finalQuestionData = GenDengarkanGambarData(props.kategori_data, RepeatedTimes);
-    console.log(finalQuestionData);
-    setQuizData(finalQuestionData);
+    setfinalQuestionDataState(finalQuestionData);
+    setQuizData(finalQuestionData[indexBenda]);
     setKategori(router.query.category);
-    setLengthImageArray(finalQuestionData?.image_file?.length);
+    setLengthImageArray(finalQuestionData[indexBenda]?.image_file?.length);
 
     setUserdata({
       username: "Apa iya",
@@ -138,6 +140,11 @@ export default function MengejaGambar(props) {
       showModal: false,
     });
     if (RepeatedTimes == indexQuestion) {
+      if (indexBenda + 1 < 3) {
+        setQuizData(finalQuestionDataState[indexBenda + 1]);
+        setLengthImageArray(finalQuestionDataState[indexBenda + 1]?.image_file?.length);
+      }
+
       try {
         Preferences.get({ key: "user_uuid" }).then((ret) => {
           let formData = new FormData();
@@ -145,6 +152,7 @@ export default function MengejaGambar(props) {
             "json_data",
             JSON.stringify({
               kategori: router.query.category,
+              jenis_benda: finalQuestionDataState[indexBenda]?.show_name,
               jumlah_dengar: indexQuestion,
               timestamp: Date.now(),
             })
@@ -158,8 +166,13 @@ export default function MengejaGambar(props) {
           })
             .then((response) => {
               console.log(response.data);
-              setDoneSubmitData(true);
-              setIsFinishQuiz(true);
+              if (indexBenda + 1 == 3) {
+                setDoneSubmitData(true);
+                setIsFinishQuiz(true);
+              } else {
+                setIndexBenda(indexBenda + 1);
+                setIndexQuestion(0);
+              }
             })
             .catch((error) => {
               alert(error);
@@ -227,6 +240,12 @@ export default function MengejaGambar(props) {
                 {indexQuestion} / {RepeatedTimes}
               </h4>
             </div>
+            <div className={stylesCustom.mini_card_vertical}>
+              <h4 style={{ marginBottom: "0px", color: "green", textAlign: "center" }}>
+                Jenis Benda<br></br>
+                {indexBenda + 1} / 3
+              </h4>
+            </div>
           </div>
 
           {isDoneSubmitData ? (
@@ -253,6 +272,12 @@ export default function MengejaGambar(props) {
                       <h4 style={{ marginBottom: "0px", color: "green", textAlign: "center" }}>
                         Perulangan<br></br>
                         {indexQuestion} / {RepeatedTimes}
+                      </h4>
+                    </div>
+                    <div className={stylesCustom.mini_card}>
+                      <h4 style={{ marginBottom: "0px", color: "green", textAlign: "center" }}>
+                        Jenis Benda<br></br>
+                        {indexBenda} / 3
                       </h4>
                     </div>
                   </div>

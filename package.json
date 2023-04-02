@@ -21,6 +21,7 @@
     "axios": "^0.27.2",
     "bootstrap": "^5.2.1",
     "capacitor-voice-recorder": "^4.0.0",
+    "electron-virtual-keyboard": "^1.0.7",
     "framer-motion": "^7.3.6",
     "next": "12.3.0",
     "react": "18.2.0",

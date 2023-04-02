@@ -8,7 +8,10 @@ function GenDengarkanGambarData(rawKategoriData, QuestionNumber) {
     keysKategori.splice(randIndex, 1);
   }
   
-  var randomed_items = rawKategoriData[randomizedKeysKategori[Math.floor(Math.random() * randomizedKeysKategori.length) + 1]];
+  var randomed_items = [];
+  randomed_items.push(rawKategoriData[randomizedKeysKategori[0]]);
+  randomed_items.push(rawKategoriData[randomizedKeysKategori[1]]);
+  randomed_items.push(rawKategoriData[randomizedKeysKategori[2]]);
 
   return randomed_items;
 }
