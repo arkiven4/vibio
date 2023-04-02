@@ -20,6 +20,9 @@ export default function Home({ localeData }) {
   const AudioSoundRef = useRef();
   const [showModal, setShowModal] = useState(false);
 
+  const inputUserUUID = useRef();
+  const enableServerRecog = useRef();
+
   useEffect(() => {
     // if (navigator.mediaDevices.getUserMedia) {
     //   navigator.mediaDevices
@@ -30,8 +33,8 @@ export default function Home({ localeData }) {
     //   alert("Media Tidak tersedia");
     // }
 
-    Preferences.get({ key: "user_uuid" }).then((ret) => {
-      console.log(ret)
+    Preferences.get({ key: "recognitionServer" }).then((ret) => {
+      console.log(ret);
     });
 
     AudioSoundRef.current.play();
@@ -45,6 +48,18 @@ export default function Home({ localeData }) {
       window.localStorage.setItem("userSession", "Loheee");
     }
   }, []);
+
+  function doLogin() {
+    Preferences.set({
+      key: "user_uuid",
+      value: inputUserUUID.current.value,
+    });
+
+    router.push("/home");
+    //
+    //setGameType(type);
+    //setPickGame(true);
+  }
 
   const closeModal = () => {
     setShowModal(false);
@@ -63,45 +78,28 @@ export default function Home({ localeData }) {
         <div className="container">
           {/* <button type="button" className="btn btn-primary">Warning</button> */}
           <div className="d-flex align-items-center justify-content-center">
-            <h1 className="display-2" style={{ color: "white", textShadow: "-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000", textAlign: 'center' }}>
+            <h1 className="display-2" style={{ color: "white", textShadow: "-2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000", textAlign: "center" }}>
               {localeGeneral.mainmenu_title}
             </h1>
           </div>
           <div className="d-flex align-items-center justify-content-center">
-            <h4 className="display-8" style={{ color: "white", textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000", textAlign: 'center'  }}>
+            <h4 className="display-8" style={{ color: "white", textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000", textAlign: "center" }}>
               {localeGeneral.mainmenu_subtitle}
             </h4>
           </div>
           <br></br>
           <div className="row">
             <div className="col-8 col-sm-8 col-md-6 mb-4 h-10 mx-auto">
-              <div onClick={() => alert("Belum Tersedia")} className="card text-white bg-secondary" style={{ textAlign: "center" }}>
-                <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu1_title} &rarr;</h2>
-                <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu1_subtitle}</p>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-8 col-sm-8 col-md-6 mb-4 h-10 mx-auto">
-              <div onClick={() => router.push("/play")} className="card" style={{ textAlign: "center" }}>
-                <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu2_title} &rarr;</h2>
-                <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu2_subtitle}</p>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-8 col-sm-8 col-md-6 mb-4 h-10 mx-auto">
-              <div onClick={() => alert("Belum Tersedia")} className="card  text-white bg-secondary" style={{ textAlign: "center" }}>
-                <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu3_title} &rarr;</h2>
-                <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu3_subtitle}</p>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-8 col-sm-8 col-md-6 mb-4 h-10 mx-auto">
-              <div onClick={() => alert("Belum Tersedia")} className="card text-white bg-secondary" style={{ textAlign: "center" }}>
-                <h2 className={stylesCustom.card_menu_title_font}>{localeGeneral.menu4_title} &rarr;</h2>
-                <p className={stylesCustom.card_menu_subtitle_font}>{localeGeneral.menu4_subtitle}</p>
+              <div className="card  text-center">
+                <div className="card-header">Masukan Nomer HP</div>
+                <div className="card-body">
+                  <input type="text" ref={inputUserUUID} />
+                </div>
+                <div className="card-footer">
+                  <button className="btn btn-primary" onClick={() => doLogin()}>
+                    Login
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -114,11 +112,6 @@ export default function Home({ localeData }) {
 
         <ModalAnnaouncement isShow={showModal} clickFunction={closeModal}></ModalAnnaouncement>
       </main>
-      <div className={stylesCustom.home_button} onClick={() => router.push("/pengaturan")}>
-        <div className={stylesCustom.button_card}>
-          <h4 style={{ marginBottom: "0px", color: "green" }}>S</h4>
-        </div>
-      </div>
       <audio ref={AudioSoundRef} controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
     </div>
   );

@@ -39,6 +39,7 @@ export default function MengejaGambar(props) {
   const [kategori, setKategori] = useState("");
   const [isPlay, setIsPlay] = useState(false);
   const [isFinishQuiz, setIsFinishQuiz] = useState(false);
+  const [isDoneSubmitData, setDoneSubmitData] = useState(false);
   const [showModalData, setShowModalData] = useState({
     isCorrect: false,
     showModal: false,
@@ -85,11 +86,11 @@ export default function MengejaGambar(props) {
 
       mediaRecorder.onstop = ({ e }) => {
         console.log("data available after MediaRecorder.stop() called.");
-        
+
         const blob = new Blob(chunks, {
           type: "audio/wav;",
         });
-        chunks = []
+        chunks = [];
 
         let file = new File([blob], "Lohe" + ".wav", {
           type: "audio/wav",
@@ -226,8 +227,6 @@ export default function MengejaGambar(props) {
       setRecordIcon("/assets/button_record.png");
       mediaRecorder.stop();
     }, 3000);
-
-
   };
 
   function playSound() {
@@ -282,8 +281,39 @@ export default function MengejaGambar(props) {
       showModal: false,
     });
     if (QuestionNumber == indexQuestion + 1) {
+      try {
+        Preferences.get({ key: "user_uuid" }).then((ret) => {
+          let formData = new FormData();
+          formData.append(
+            "json_data",
+            JSON.stringify({
+              kategori: router.query.category,
+              jumlah_benar: rightQuestion,
+              jumlah_salah: QuestionNumber - rightQuestion,
+              timestamp: Date.now(),
+            })
+          );
+          formData.append("tipe_terapi", 1);
+
+          post("https://elbicare.my.id/api/vibio/insert_terapi/" + ret.value, formData, {
+            headers: {
+              "content-type": "multipart/form-data",
+            },
+          })
+            .then((response) => {
+              console.log(response.data);
+              setDoneSubmitData(true);
+              setIsFinishQuiz(true);
+            })
+            .catch((error) => {
+              alert(error);
+              console.log("Error ========>", error);
+            });
+        });
+      } catch (error) {
+        alert(error);
+      }
       console.log(indexQuestion);
-      setIsFinishQuiz(true);
     } else {
       setIndexQuestion(indexQuestion + 1);
     }
@@ -322,7 +352,7 @@ export default function MengejaGambar(props) {
             <div className={stylesCustom.mini_card_vertical}>
               <h4 style={{ marginBottom: "0px", color: "green" }}>
                 Menjawab Benar: {rightQuestion} / {QuestionNumber}
-              </h4>
+              </h4> 
             </div>
             <div className={stylesCustom.mini_card_vertical}>
               <h4 style={{ marginBottom: "0px", color: "red" }}>
@@ -330,30 +360,38 @@ export default function MengejaGambar(props) {
               </h4>
             </div>
           </div>
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              router.push("/play");
-            }}
-          >
-            Kembali Ke Menu Terapi Wicara
-          </button>
+          {isDoneSubmitData ? (
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                router.push("/play");
+              }}
+            >
+              Kembali Ke Menu Terapi Wicara
+            </button>
+          ) : (
+            <h4 className={stylesCustom.menu_subtitle_font}>Sedang Mengupload Data ke Server</h4>
+          )}
         </main>
       ) : (
         <>
           {quizData.length != 0 ? (
             <main className={styles.main}>
-              <div className="container" style={{ width: "50%", justifyContent: "center" }}>
-                <div className={stylesCustom.status_bar}>
-                  <div className={stylesCustom.mini_card}>
-                    <h4 style={{ marginBottom: "0px" }}>
-                      Soal: {indexQuestion + 1} / {QuestionNumber}
-                    </h4>
+              <div className="container">
+                <div className="row mt-5">
+                  <div className="col-6 col-sm-6 col-md-4 mx-auto">
+                    <div className={stylesCustom.mini_card}>
+                      <h4 style={{ marginBottom: "0px" }}>
+                        Soal: {indexQuestion + 1} / {QuestionNumber}
+                      </h4>
+                    </div>
                   </div>
-                  <div className={stylesCustom.mini_card}>
-                    <h4 style={{ marginBottom: "0px", color: "green" }}>
-                      Benar: {rightQuestion} / {QuestionNumber}
-                    </h4>
+                  <div className="col-6 col-sm-6 col-md-4 mx-auto">
+                    <div className={stylesCustom.mini_card}>
+                      <h4 style={{ marginBottom: "0px", color: "green" }}>
+                        Benar: {rightQuestion} / {QuestionNumber}
+                      </h4>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -387,9 +425,12 @@ export default function MengejaGambar(props) {
 
               {enableRecog ? (
                 <div className={stylesCustom.button_container}>
-                  <div className={stylesCustom.button_image_subtitle} onClick={() => {
-                    start_record()
-                    }}>
+                  <div
+                    className={stylesCustom.button_image_subtitle}
+                    onClick={() => {
+                      start_record();
+                    }}
+                  >
                     <Image ref={recordButtonRef} src={recordIcon} width={window.innerHeight * 0.2} height={window.innerHeight * 0.2} alt="ButtonNo" style={{ cursor: "pointer" }} />
                   </div>
                 </div>
@@ -417,7 +458,7 @@ export default function MengejaGambar(props) {
                 <code>audio</code> element.
               </audio>
               <ModalReactionQuiz isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></ModalReactionQuiz>
-              <div style={{ position: "absolute", top: "5vh", left: "5vh", cursor: "pointer" }} onClick={() => router.push("/home")}>
+              <div className={stylesCustom.home_button} onClick={() => router.push("/home")}>
                 <div className={stylesCustom.button_card}>
                   <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
                 </div>
@@ -451,9 +492,7 @@ export async function getStaticPaths() {
   var arrayPath = [];
   var kategoriObj = getJSONCategory();
   Object.keys(kategoriObj).map((key, id) => {
-    if (key === "buah" || key === "hewan") {
-      arrayPath.push({ params: { category: key } });
-    }
+    arrayPath.push({ params: { category: key } });
   });
   return {
     paths: arrayPath,

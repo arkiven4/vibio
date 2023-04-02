@@ -1,4 +1,4 @@
-function GenMengejaGambarData(rawKategoriData, QuestionNumber) {
+function GenDengarkanGambarData(rawKategoriData, QuestionNumber) {
   var keysKategori = Object.keys(rawKategoriData);
   var randomizedKeysKategori = [];
 
@@ -7,15 +7,36 @@ function GenMengejaGambarData(rawKategoriData, QuestionNumber) {
     randomizedKeysKategori.push(keysKategori[randIndex]);
     keysKategori.splice(randIndex, 1);
   }
+  
+  var randomed_items = rawKategoriData[randomizedKeysKategori[Math.floor(Math.random() * randomizedKeysKategori.length) + 1]];
 
-  var finalQuestionData = [];
-  for (let index = 0; index < QuestionNumber; index++) {
-    finalQuestionData[index] = {
-      name: randomizedKeysKategori[index],
-      imageNum: Math.floor(Math.random() * 2) + 1,
-    };
+  return randomed_items;
+}
+
+function GenMengejaGambarData(rawKategoriData, QuestionNumber) {
+  try {
+    var keysKategori = Object.keys(rawKategoriData);
+    var randomizedKeysKategori = [];
+  
+    for (let index = keysKategori.length - 1; index >= 0; index--) {
+      var randIndex = Math.floor(Math.random() * (index + 1));
+      randomizedKeysKategori.push(keysKategori[randIndex]);
+      keysKategori.splice(randIndex, 1);
+    }
+  
+    var finalQuestionData = [];
+    for (let index = 0; index < QuestionNumber; index++) {
+      finalQuestionData[index] = {
+        name: randomizedKeysKategori[index],
+        imageNum: Math.floor(Math.random() * rawKategoriData[randomizedKeysKategori[index]].image_file.length) + 1,
+      };
+    }
+    return finalQuestionData;
+  } catch (error) {
+    console.log(error)
+    return []
   }
-  return finalQuestionData;
+
 }
 
 function GenTebakGambarData(rawKategoriData, QuestionNumber) {
@@ -66,4 +87,5 @@ function GenTebakGambarData(rawKategoriData, QuestionNumber) {
 module.exports = {
   GenMengejaGambarData,
   GenTebakGambarData,
+  GenDengarkanGambarData
 };

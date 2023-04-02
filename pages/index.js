@@ -21,7 +21,7 @@ export default function Index() {
     setLoading(true);
     Preferences.set({
       key: "enableRecog",
-      value: "true",
+      value: "false",
     });
     Preferences.set({
       key: "recognitionServer",
@@ -29,10 +29,16 @@ export default function Index() {
     });
     //fetch("https://vibio.elbicare.my.id/", {
 
+    Preferences.get({ key: "user_uuid" }).then((ret) => {
+      if (ret.value == null) {
+        router.push("/login");
+      } else {
+        setTimeout(() => {
+          router.push("/home");
+        }, 2000);
+      }
+    });
 
-      setTimeout(() => {
-        router.push("/home");
-      }, 2000);
     // fetch("https://google.com/", {
     //   method: "GET", // *GET, POST, PUT, DELETE, etc.
     //   mode: "no-cors", // no-cors, *cors, same-origin

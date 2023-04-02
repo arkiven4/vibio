@@ -13,6 +13,9 @@ import { GenTebakGambarData } from "../../../utils/genQuizData";
 import { getLocale } from "../../../utils/getLocaleText";
 import { ModalReactionQuiz } from "../../../components/modal";
 
+import axios, { post } from "axios";
+import { Preferences } from "@capacitor/preferences";
+
 //TODO : Show all image Option, so it will pre rendered, make it menarik, like "Loading All Image"... -> then show 4x4 image
 
 const QuestionNumber = 10;
@@ -29,6 +32,7 @@ export default function PlayStart(props) {
   const [isPlay, setIsPlay] = useState(false);
   const [showOption, setShowOption] = useState(false);
   const [isFinishQuiz, setIsFinishQuiz] = useState(false);
+  const [isDoneSubmitData, setDoneSubmitData] = useState(false);
   const [showModalData, setShowModalData] = useState({
     isCorrect: false,
     showModal: false,
@@ -103,7 +107,38 @@ export default function PlayStart(props) {
     });
     if (QuestionNumber == indexQuestion + 1) {
       console.log(indexQuestion);
-      setIsFinishQuiz(true);
+      try {
+        Preferences.get({ key: "user_uuid" }).then((ret) => {
+          let formData = new FormData();
+          formData.append(
+            "json_data",
+            JSON.stringify({
+              kategori: router.query.category,
+              jumlah_benar: rightQuestion,
+              jumlah_salah: QuestionNumber - rightQuestion,
+              timestamp: Date.now(),
+            })
+          );
+          formData.append("tipe_terapi", 2);
+
+          post("https://elbicare.my.id/api/vibio/insert_terapi/" + ret.value, formData, {
+            headers: {
+              "content-type": "multipart/form-data",
+            },
+          })
+            .then((response) => {
+              console.log(response.data);
+              setDoneSubmitData(true);
+              setIsFinishQuiz(true);
+            })
+            .catch((error) => {
+              alert(error);
+              console.log("Error ========>", error);
+            });
+        });
+      } catch (error) {
+        alert(error);
+      }
     } else {
       setIndexQuestion(indexQuestion + 1);
       setShowOption(false);
@@ -168,30 +203,38 @@ export default function PlayStart(props) {
               </h4>
             </div>
           </div>
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              router.push("/play");
-            }}
-          >
-            Kembali Ke Menu Terapi Wicara
-          </button>
+          {isDoneSubmitData ? (
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                router.push("/play");
+              }}
+            >
+              Kembali Ke Menu Terapi Wicara
+            </button>
+          ) : (
+            <h4 className={stylesCustom.menu_subtitle_font}>Sedang Mengupload Data ke Server</h4>
+          )}
         </main>
       ) : (
         <>
           {quizData.length != 0 ? (
             <main className={styles.main}>
-            <div className="container" style={{ width: "50%", justifyContent: "center", marginBottom: "5vh" }}>
-                <div className={stylesCustom.status_bar}>
-                  <div className={stylesCustom.mini_card}>
-                    <h4 style={{ marginBottom: "0px" }}>
-                      Soal: {indexQuestion + 1} / {QuestionNumber}
-                    </h4>
+              <div className="container">
+                <div className="row mt-3 mb-3">
+                  <div className="col-6 col-sm-6 col-md-4 mx-auto">
+                    <div className={stylesCustom.mini_card}>
+                      <h4 style={{ marginBottom: "0px" }}>
+                        Soal: {indexQuestion + 1} / {QuestionNumber}
+                      </h4>
+                    </div>
                   </div>
-                  <div className={stylesCustom.mini_card}>
-                    <h4 style={{ marginBottom: "0px", color: "green" }}>
-                      Benar: {rightQuestion} / {QuestionNumber}
-                    </h4>
+                  <div className="col-6 col-sm-6 col-md-4 mx-auto">
+                    <div className={stylesCustom.mini_card}>
+                      <h4 style={{ marginBottom: "0px", color: "green" }}>
+                        Benar: {rightQuestion} / {QuestionNumber}
+                      </h4>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -221,32 +264,38 @@ export default function PlayStart(props) {
               {quizOptionImage.length != 0 ? (
                 <div>
                   <div id="Options" ref={OptionsRef} className={showOption ? stylesCustom.fade_in : stylesCustom.fade_out}>
-                    <br></br> 
-                    <div className={stylesCustom.tebak_gambar_grid}>
-                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[0]?.name)} className={stylesCustom.card_option_tebak_gambar}>
-                        <Image src={quizOptionImage[0]} width={"400vw"} height={"400vw"} alt="Option1" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
+                    <br></br>
+                    <div className="row mx-auto">
+                      <div className="col-6 col-sm-6 col-md-3 d-flex align-items-center justify-content-center my-2">
+                        <div onClick={() => selectOption(quizData[indexQuestion]?.options[0]?.name)} className="card border border-dark rounded p-3" style={{ border: "10px solid #000000" }}>
+                          <Image src={quizOptionImage[0]} width={"400vw"} height={"400vw"} alt="Option1" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
+                        </div>
                       </div>
-                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[1]?.name)} className={stylesCustom.card_option_tebak_gambar}>
-                        <Image src={quizOptionImage[1]} width={400} height={400} alt="Option2" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
+                      <div className="col-6 col-sm-6 col-md-3 d-flex align-items-center justify-content-center my-2">
+                        <div onClick={() => selectOption(quizData[indexQuestion]?.options[1]?.name)} className="card border border-dark rounded" >
+                          <Image src={quizOptionImage[1]} width={400} height={400} alt="Option2" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
+                        </div>
                       </div>
-                    </div>
-                    <div className={stylesCustom.tebak_gambar_grid}>
-                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[2]?.name)} className={stylesCustom.card_option_tebak_gambar}>
-                        <Image src={quizOptionImage[2]} width={400} height={400} alt="Option3" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
+                      <div className="col-6 col-sm-6 col-md-3 d-flex align-items-center justify-content-center my-2">
+                        <div onClick={() => selectOption(quizData[indexQuestion]?.options[2]?.name)} className="card border border-dark rounded" >
+                          <Image src={quizOptionImage[2]} width={400} height={400} alt="Option3" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
+                        </div>
                       </div>
-                      <div onClick={() => selectOption(quizData[indexQuestion]?.options[3]?.name)} className={stylesCustom.card_option_tebak_gambar}>
-                        <Image src={quizOptionImage[3]} width={400} height={400} alt="Option4" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
+                      <div className="col-6 col-sm-6 col-md-3 d-flex align-items-center justify-content-center my-2">
+                        <div onClick={() => selectOption(quizData[indexQuestion]?.options[3]?.name)} className="card border border-dark rounded" >
+                          <Image src={quizOptionImage[3]} width={400} height={400} alt="Option4" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               ) : null}
               <ModalReactionQuiz isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></ModalReactionQuiz>
-              <div style={{ position: "absolute", top: "5vh", left: "5vh", cursor: "pointer" }} onClick={() => router.push("/home")}>
-          <div className={stylesCustom.button_card}>
-            <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
-          </div>
-        </div>
+              <div className={stylesCustom.home_button} onClick={() => router.push("/home")}>
+                <div className={stylesCustom.button_card}>
+                  <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
+                </div>
+              </div>
             </main>
           ) : (
             <main className={styles.main}>
@@ -272,14 +321,11 @@ export const getStaticProps = async ({ params: { category } }) => {
   };
 };
 
-
 export async function getStaticPaths() {
   var arrayPath = [];
   var kategoriObj = getJSONCategory();
   Object.keys(kategoriObj).map((key, id) => {
-    if (key === "buah" || key === "hewan") {
-      arrayPath.push({ params: { category: key } });
-    }
+    arrayPath.push({ params: { category: key } });
   });
   return {
     paths: arrayPath,

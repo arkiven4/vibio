@@ -33,7 +33,6 @@ export default function Pengaturan({ localeData }) {
 
     Preferences.get({ key: "enableRecog" }).then((ret) => {
       enableServerRecog.current.value = ret.value;
-      alert( ret.value == "true");
     });
   }, []);
 

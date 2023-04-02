@@ -32,12 +32,13 @@ export default function HomePlay(props) {
     tempArray.push(
       <div
         key={id}
-        onClick={() => (router.push({ pathname: "/play/" + gameType + "/" + key }))}
-        className={classTemp}
-        style={{ marginRight: "15px", padding: "10px 10px 5px", display: "block", overflow: "auto" }}
+        onClick={() => router.push({ pathname: "/play/" + gameType + "/" + key })}
+        className="col-6 col-sm-6 col-md-3 mb-4"
       >
-        <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={"600vw"} height={"600vw"} alt="PlayButton"></Image>
-        <h2 style={{ textAlign: "center", fontSize: "2vw" }}>{kategoriObj[key].show_name} &rarr;</h2>
+        <div className="card">
+          <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={"600vw"} height={"600vw"} alt="PlayButton"></Image>
+          <h2 style={{ textAlign: "center", fontSize: "3vw" }}>{kategoriObj[key].show_name} &rarr;</h2>
+        </div>
       </div>
     );
     if ((id + 1) % 4 == 0 && id != 0) {
@@ -64,7 +65,7 @@ export default function HomePlay(props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <main>
+      <main className="container">
         <motion.div
           className={styles.main}
           animate={pickGame ? "closed" : "open"}
@@ -73,19 +74,34 @@ export default function HomePlay(props) {
             closed: { opacity: 0, x: "-100%" },
           }}
         >
-          <h2 className={stylesCustom.menu_title_font}>{localeGeneral.play_title1}</h2>
+        <div className="mt-5">
+        <h2 className={stylesCustom.menu_title_font}>{localeGeneral.play_title1}</h2>
           <h4>{localeGeneral.play_subtitle2}</h4>
           <br></br>
-          <div className={stylesCustom.container_card_jenis_permainan}>
-            <div onClick={() => setGame("mengeja-gambar")} className={stylesCustom.card_menu_wImage}>
-              <Image style={{ borderRadius: "30px" }} src={`/assets/vector/mengeja-image.jpg`} width={300} height={300} alt="mengejaGambar"></Image>
-              <h2 style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_title1} &rarr;</h2>
-              <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle1}</p>
+        </div>
+          
+
+          <div className="row mb-3">
+            <div onClick={() => setGame("dengarkan-gambar")} className="col-6 col-sm-6 col-md-4 mt-2">
+              <div className="card">
+                <Image className="card-img-top" style={{ borderRadius: "30px" }} src={`/assets/vector/dengarkan-image.jpg`} width={300} height={300} alt="dengarGambar"></Image>
+                <h2 style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_title0} &rarr;</h2>
+                <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle0}</p>
+              </div>
             </div>
-            <div onClick={() => setGame("tebak-gambar")} className={stylesCustom.card_menu_wImage}>
-              <Image style={{ borderRadius: "30px" }} src={`/assets/vector/tebak-image.jpg`} width={300} height={300} alt="tebakGambar"></Image>
-              <h2 style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_title2} &rarr;</h2>
-              <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle2}</p>
+            <div onClick={() => setGame("mengeja-gambar")} className="col-6 col-sm-6 col-md-4 mt-2">
+              <div className="card">
+                <Image style={{ borderRadius: "30px" }} src={`/assets/vector/mengeja-image.jpg`} width={300} height={300} alt="mengejaGambar"></Image>
+                <h2 style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_title1} &rarr;</h2>
+                <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle1}</p>
+              </div>
+            </div>
+            <div onClick={() => setGame("tebak-gambar")} className="col-6 col-sm-6 col-md-4 mt-2">
+              <div className="card">
+                <Image style={{ borderRadius: "30px" }} src={`/assets/vector/tebak-image.jpg`} width={300} height={300} alt="tebakGambar"></Image>
+                <h2 style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_title2} &rarr;</h2>
+                <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle2}</p>
+              </div>
             </div>
           </div>
           <FooterLogo></FooterLogo>
@@ -103,10 +119,10 @@ export default function HomePlay(props) {
           <h4>{localeGeneral.play_subtitle2}</h4>
           <br></br>
 
-          <div className={stylesCustom.grid_kategori_benda_container}>
+          <div className="mx-4">
             {kategoriArray.map((value, id) => {
               return (
-                <div key={id} className={stylesCustom.grid_kategori_benda}>
+                <div key={id} className="row">
                   {kategoriArray[id]}
                 </div>
               );
@@ -115,7 +131,7 @@ export default function HomePlay(props) {
           <FooterLogo></FooterLogo>
         </motion.div>
       </main>
-      <div style={{ position: "absolute", top: "5vh", left: "5vh", cursor: "pointer" }} onClick={() => router.push("/home")}>
+      <div className={stylesCustom.home_button} onClick={() => router.push("/home")}>
         <div className={stylesCustom.button_card}>
           <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
         </div>
