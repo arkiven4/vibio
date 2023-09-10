@@ -16,9 +16,10 @@ import axios, { post } from "axios";
 import { Preferences } from "@capacitor/preferences";
 
 import { motion } from "framer-motion";
+import { Walktour, CardinalOrientation, WalktourLogic } from "walktour";
 
-const QuestionNumber = 10;
-const RepeatedTimes = 10;
+const QuestionNumber = 3;
+const RepeatedTimes = 3;
 var chunks = [];
 
 export default function MengejaGambar(props) {
@@ -47,6 +48,8 @@ export default function MengejaGambar(props) {
     isCorrect: false,
     showModal: false,
   });
+
+  const [isTutorial, setIsTutorial] = useState(false);
 
   const localeGeneral = props.localeData?.general;
 
@@ -128,6 +131,11 @@ export default function MengejaGambar(props) {
       showModal: false,
     });
     setIsStartQuiz(true);
+    setIsTutorial(true);
+  };
+
+  const PlaySoundAfterTour = () => {
+    setIsTutorial(false);
 
     setTimeout(() => {
       playActorSound();
@@ -140,48 +148,51 @@ export default function MengejaGambar(props) {
       showModal: false,
     });
     if (RepeatedTimes == indexQuestion) {
-      if (indexBenda + 1 < 3) {
+      if (indexBenda + 1 < 2) {
         setQuizData(finalQuestionDataState[indexBenda + 1]);
         setLengthImageArray(finalQuestionDataState[indexBenda + 1]?.image_file?.length);
       }
 
-      try {
-        Preferences.get({ key: "user_uuid" }).then((ret) => {
-          let formData = new FormData();
-          formData.append(
-            "json_data",
-            JSON.stringify({
-              kategori: router.query.category,
-              jenis_benda: finalQuestionDataState[indexBenda]?.show_name,
-              jumlah_dengar: indexQuestion,
-              timestamp: Date.now(),
-            })
-          );
-          formData.append("tipe_terapi", 0);
+      setDoneSubmitData(true);
+      setIsFinishQuiz(true);
 
-          post("https://elbicare.my.id/api/vibio/insert_terapi/" + ret.value, formData, {
-            headers: {
-              "content-type": "multipart/form-data",
-            },
-          })
-            .then((response) => {
-              console.log(response.data);
-              if (indexBenda + 1 == 3) {
-                setDoneSubmitData(true);
-                setIsFinishQuiz(true);
-              } else {
-                setIndexBenda(indexBenda + 1);
-                setIndexQuestion(0);
-              }
-            })
-            .catch((error) => {
-              alert(error);
-              console.log("Error ========>", error);
-            });
-        });
-      } catch (error) {
-        alert(error);
-      }
+      // try {
+      //   Preferences.get({ key: "user_uuid" }).then((ret) => {
+      //     let formData = new FormData();
+      //     formData.append(
+      //       "json_data",
+      //       JSON.stringify({
+      //         kategori: router.query.category,
+      //         jenis_benda: finalQuestionDataState[indexBenda]?.show_name,
+      //         jumlah_dengar: indexQuestion,
+      //         timestamp: Date.now(),
+      //       })
+      //     );
+      //     formData.append("tipe_terapi", 0);
+
+      //     post("https://elbicare.my.id/api/vibio/insert_terapi/" + ret.value, formData, {
+      //       headers: {
+      //         "content-type": "multipart/form-data",
+      //       },
+      //     })
+      //       .then((response) => {
+      //         console.log(response.data);
+      //         if (indexBenda + 1 == 2) {
+      //           setDoneSubmitData(true);
+      //           setIsFinishQuiz(true);
+      //         } else {
+      //           setIndexBenda(indexBenda + 1);
+      //           setIndexQuestion(0);
+      //         }
+      //       })
+      //       .catch((error) => {
+      //         alert(error);
+      //         console.log("Error ========>", error);
+      //       });
+      //   });
+      // } catch (error) {
+      //   alert(error);
+      // }
     } else {
       setTimeout(() => {
         setIndexQuestion(indexQuestion + 1);
@@ -190,7 +201,9 @@ export default function MengejaGambar(props) {
   };
 
   useEffect(() => {
-    playActorSound();
+    if (!isTutorial) {
+      playActorSound();
+    }
   }, [indexQuestion]);
 
   //   {
@@ -214,8 +227,8 @@ export default function MengejaGambar(props) {
       </Head>
       {isFinishQuiz ? (
         <main className={styles.main}>
-          <h2 className={stylesCustom.menu_title_font}>{localeGeneral.play_finish}</h2>
-          <h4 className={stylesCustom.menu_subtitle_font}>{localeGeneral.play_finish_subtitle}</h4>
+          <h2 className={stylesCustom.menu_title_font}>Demo Selesai</h2>
+          <h4 className={stylesCustom.menu_subtitle_font} style={{textAlign: 'center'}}>Pada sesi terapi sebenarnya, data anda akan terekam dan dapat dipantau</h4>
           <motion.div
             initial={{
               scale: 1,
@@ -243,16 +256,16 @@ export default function MengejaGambar(props) {
             <div className={stylesCustom.mini_card_vertical}>
               <h4 style={{ marginBottom: "0px", color: "green", textAlign: "center" }}>
                 Jenis Benda<br></br>
-                {indexBenda + 1} / 3
+                {indexBenda + 1} / 2
               </h4>
             </div>
           </div>
 
           {isDoneSubmitData ? (
             <button
-              className="btn btn-primary"
+              className="btn btn-success"
               onClick={() => {
-                router.push("/play");
+                router.push("/home");
               }}
             >
               Kembali Ke Menu Terapi Wicara
@@ -265,11 +278,55 @@ export default function MengejaGambar(props) {
         <>
           {quizData.show_name ? (
             <>
-              <main className={styles.main} style={{ display: isStartQuiz ? "" : "none" }}>
+              <main className={styles.main} style={{ display: isStartQuiz ? "" : "none" }} id="tour_summary">
+                <Walktour
+                  isOpen={isTutorial}
+                  steps={[
+                    {
+                      selector: "#tour_perulangan",
+                      title: "Perulangan",
+                      description: "Menampilkan berapa perulangan untuk benda saat ini",
+                      disableMaskInteraction: true,
+                      disableClose: true,
+                      disableSmoothScroll: true,
+                      closeLabel: "",
+                    },
+                    {
+                      selector: "#tour_jenisbenda",
+                      title: "Jenis Benda",
+                      description: "Menampilkan Jenis Benda Tersisa yang akan ditampilkan",
+                      disableMaskInteraction: false,
+                      disableClose: true,
+                      disableSmoothScroll: true,
+                      closeLabel: "",
+                    },
+                    {
+                      selector: "#tour_gambarbenda",
+                      title: "Gambar Benda",
+                      description: "Berfungsi Sebagai ilustrasi dari benda yang disuarakan",
+                      disableMaskInteraction: false,
+                      disableClose: true,
+                      disableSmoothScroll: true,
+                      closeLabel: "",
+                      orientationPreferences: ["north"],
+                    },
+                    {
+                      selector: "#tour_summary",
+                      title: "Selamat Mencoba",
+                      description: "Tekan Tombol next/tutup dan permainan akan berlanjut",
+                      disableMaskInteraction: false,
+                      disableSmoothScroll: true,
+                      disableNext: false,
+                      closeLabel: "Tutup",
+                      customNextFunc: PlaySoundAfterTour,
+                      customCloseFunc: PlaySoundAfterTour
+                    },
+                  ]}
+                />
                 <div className="container">
                   <div className="row mt-5">
                     <div className="col-6 col-sm-6 col-md-4 mx-auto">
-                      <div className={stylesCustom.mini_card}>
+                      <div className={stylesCustom.mini_card} id="tour_perulangan">
                         <h4 style={{ marginBottom: "0px", color: "green", textAlign: "center" }}>
                           Perulangan<br></br>
                           {indexQuestion} / {RepeatedTimes}
@@ -277,10 +334,10 @@ export default function MengejaGambar(props) {
                       </div>
                     </div>
                     <div className="col-6 col-sm-6 col-md-4 mx-auto">
-                      <div className={stylesCustom.mini_card}>
+                      <div className={stylesCustom.mini_card} id="tour_jenisbenda">
                         <h4 style={{ marginBottom: "0px", color: "green", textAlign: "center" }}>
                           Jenis Benda<br></br>
-                          {indexBenda} / 3
+                          {indexBenda} / 2
                         </h4>
                       </div>
                     </div>
@@ -316,7 +373,7 @@ export default function MengejaGambar(props) {
                     repeatDelay: 1,
                   }}
                 >
-                  <div className={stylesCustom.card_option_dengar_gambar}>
+                  <div className={stylesCustom.card_option} id="tour_gambarbenda">
                     <Image
                       src={`/assets/items/${kategori}/image/${quizData?.image_file[indexImage]}`}
                       width={window.innerHeight * 0.8}

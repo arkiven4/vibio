@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import styles from "../../styles/Home.module.css";
 import axios, { post } from "axios";
 import pcm from "../../public/js/pcm";
