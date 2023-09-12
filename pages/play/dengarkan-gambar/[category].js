@@ -175,7 +175,35 @@ export default function MengejaGambar(props) {
               }
             })
             .catch((error) => {
-              alert(error);
+              Preferences.get({ key: "buffered_sendedData" }).then((ret) => {
+                if (ret.value != null) {
+                  let buffered_data = JSON.parse(ret.value);
+                  let length_entries = Object.keys(buffered_data).length;
+
+                  buffered_data[length_entries] = {
+                    json_data: JSON.stringify({
+                      kategori: router.query.category,
+                      jenis_benda: finalQuestionDataState[indexBenda]?.show_name,
+                      jumlah_dengar: indexQuestion,
+                      timestamp: Date.now(),
+                    }),
+                    tipe_terapi: 0,
+                  };
+
+                  Preferences.set({
+                    key: "buffered_sendedData",
+                    value: JSON.stringify(buffered_data),
+                  }).then(() => {
+                    if (indexBenda + 1 == 3) {
+                      setDoneSubmitData(true);
+                      setIsFinishQuiz(true);
+                    } else {
+                      setIndexBenda(indexBenda + 1);
+                      setIndexQuestion(0);
+                    }
+                  });
+                }
+              });
               console.log("Error ========>", error);
             });
         });

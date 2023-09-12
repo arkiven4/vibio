@@ -11,43 +11,26 @@ import { Preferences } from "@capacitor/preferences";
 import { getLocale } from "../utils/getLocaleText";
 import { FooterLogo } from "../components/general";
 
-import { ModalAnnaouncement } from "../components/modal";
+import { LoginModalAnnouncement } from "../components/modal";
 
 export default function Home({ localeData }) {
   const router = useRouter();
-  const { userdata, setUserdata } = useAppContext();
   const localeGeneral = localeData.general;
   const AudioSoundRef = useRef();
   const [showModal, setShowModal] = useState(false);
 
   const inputUserUUID = useRef();
-  const enableServerRecog = useRef();
 
   useEffect(() => {
-    // if (navigator.mediaDevices.getUserMedia) {
-    //   navigator.mediaDevices
-    //     .getUserMedia({
-    //       audio: true,
-    //     })
-    // } else {
-    //   alert("Media Tidak tersedia");
-    // }
-
-    Preferences.get({ key: "recognitionServer" }).then((ret) => {
-      console.log(ret);
-    });
-
-        AudioSoundRef.current.play();
-    AudioSoundRef.current.volume = 0.5;
-    console.log(userdata);
-    setUserdata({
-      username: "hola",
-    });
-
-    if (window.localStorage) {
-      console.log(window.localStorage.getItem("userSession"));
-      window.localStorage.setItem("userSession", "Loheee");
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: true,
+        });
     }
+
+    AudioSoundRef.current.play();
+    AudioSoundRef.current.volume = 0.5;
   }, []);
 
   function doLogin() {
@@ -56,10 +39,37 @@ export default function Home({ localeData }) {
       value: inputUserUUID.current.value,
     });
 
-    router.push("/home");
-    //
-    //setGameType(type);
-    //setPickGame(true);
+    initSettings() .then((result) => {
+      router.push("/home");
+    }).catch((err) => {
+      console.log(err)
+    });
+  }
+
+  async function initSettings() {
+    return new Promise((resolve, reject) => { 
+      Preferences.set({
+        key: "mainmenu_music",
+        value: "50",
+      });
+
+      Preferences.set({
+        key: "enableRecog",
+        value: "false",
+      });
+      
+      Preferences.set({
+        key: "buffered_sendedData",
+        value: JSON.stringify({}),
+      });
+
+      Preferences.set({
+        key: "isOnline",
+        value: "false",
+      });
+      
+      resolve("Ok")
+    })
   }
 
   const closeModal = () => {
@@ -90,7 +100,7 @@ export default function Home({ localeData }) {
           </div>
           <br></br>
           <div className="row">
-            <div className="col-8 col-sm-8 col-md-6 mb-4 h-10 mx-auto">
+            <div className="col-10 col-sm-10 col-md-6 mb-4 h-10 mx-auto">
               <div className="card  text-center">
                 <div className="card-header">Masukan Nomer HP</div>
                 <div className="card-body">
@@ -111,7 +121,7 @@ export default function Home({ localeData }) {
           </div>
         </div>
 
-        <ModalAnnaouncement isShow={showModal} clickFunction={closeModal}></ModalAnnaouncement>
+        <LoginModalAnnouncement isShow={showModal} clickFunction={closeModal}></LoginModalAnnouncement>
       </main>
       <audio ref={AudioSoundRef} controls loop autoPlay src={"/assets/music/bg-music1.wav"} style={{ display: "none" }}></audio>
     </div>

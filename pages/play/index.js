@@ -10,6 +10,7 @@ import { getJSONCategory } from "../../utils/getLocalJSON";
 import { getLocale } from "../../utils/getLocaleText";
 import { FooterLogo } from "../../components/general";
 
+import { Preferences } from "@capacitor/preferences";
 //TODO : Atur Category Card agar kalau jumlah itemnya 6, bagus keliatanya
 //TODO : Fit Screen No Scroll untuk pad dan Laptop
 
@@ -17,6 +18,7 @@ export default function HomePlay(props) {
   const router = useRouter();
   const [pickGame, setPickGame] = useState(false);
   const [gameType, setGameType] = useState("");
+  const [showDev, setShowDev] = useState(false);
 
   const kategoriObj = props.kategori_data;
   const localeGeneral = props.localeData.general;
@@ -46,6 +48,16 @@ export default function HomePlay(props) {
       tempArray = [];
     }
   });
+
+  useEffect(() => {
+    Preferences.get({ key: "user_uuid" }).then((ret) => {
+      if (ret.value != null) {
+        if (ret.value == "085708967654") {
+          setShowDev(true);
+        }
+      }
+    });
+  }, []);
 
   function setGame(type) {
     setGameType(type);
@@ -98,6 +110,15 @@ export default function HomePlay(props) {
                 <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle2}</p>
               </div>
             </div>
+            {showDev ? (
+              <div onClick={() => setGame("mengeja-gambar_dev")} className="col-6 col-sm-6 col-md-4 mt-2">
+                <div className="card">
+                  <Image style={{ borderRadius: "30px" }} src={`/assets/vector/mengeja-image.jpg`} width={300} height={300} alt="mengejaGambar"></Image>
+                  <h2 style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_title1}_dev &rarr;</h2>
+                  <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle1}</p>
+                </div>
+              </div>
+            ) : null}
           </div>
           <FooterLogo></FooterLogo>
         </motion.div>

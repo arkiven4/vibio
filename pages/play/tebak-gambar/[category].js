@@ -132,7 +132,30 @@ export default function PlayStart(props) {
               setIsFinishQuiz(true);
             })
             .catch((error) => {
-              alert(error);
+              Preferences.get({ key: "buffered_sendedData" }).then((ret) => {
+                if (ret.value != null) {
+                  let buffered_data = JSON.parse(ret.value);
+                  let length_entries = Object.keys(buffered_data).length;
+
+                  buffered_data[length_entries] = {
+                    json_data: JSON.stringify({
+                      kategori: router.query.category,
+                      jumlah_benar: rightQuestion,
+                      jumlah_salah: QuestionNumber - rightQuestion,
+                      timestamp: Date.now(),
+                    }),
+                    tipe_terapi: 2,
+                  };
+
+                  Preferences.set({
+                    key: "buffered_sendedData",
+                    value: JSON.stringify(buffered_data),
+                  }).then(() => {
+                    setDoneSubmitData(true);
+                    setIsFinishQuiz(true);
+                  });
+                }
+              });
               console.log("Error ========>", error);
             });
         });
@@ -219,7 +242,7 @@ export default function PlayStart(props) {
       ) : (
         <>
           {quizData.length != 0 ? (
-            <main className={styles.main}  style={{ paddingTop: "15px" }}>
+            <main className={styles.main} style={{ paddingTop: "15px" }}>
               <div className="container">
                 <div className="row mt-3 mb-3">
                   <div className="col-6 col-sm-6 col-md-4 mx-auto">
@@ -272,17 +295,17 @@ export default function PlayStart(props) {
                         </div>
                       </div>
                       <div className="col-6 col-sm-6 col-md-3 d-flex align-items-center justify-content-center my-2">
-                        <div onClick={() => selectOption(quizData[indexQuestion]?.options[1]?.name)} className={stylesCustom.button_image_tebak_gambar} >
+                        <div onClick={() => selectOption(quizData[indexQuestion]?.options[1]?.name)} className={stylesCustom.button_image_tebak_gambar}>
                           <Image src={quizOptionImage[1]} width={400} height={400} alt="Option2" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
                         </div>
                       </div>
                       <div className="col-6 col-sm-6 col-md-3 d-flex align-items-center justify-content-center my-2">
-                        <div onClick={() => selectOption(quizData[indexQuestion]?.options[2]?.name)}  className={stylesCustom.button_image_tebak_gambar}>
+                        <div onClick={() => selectOption(quizData[indexQuestion]?.options[2]?.name)} className={stylesCustom.button_image_tebak_gambar}>
                           <Image src={quizOptionImage[2]} width={400} height={400} alt="Option3" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
                         </div>
                       </div>
                       <div className="col-6 col-sm-6 col-md-3 d-flex align-items-center justify-content-center my-2">
-                        <div onClick={() => selectOption(quizData[indexQuestion]?.options[3]?.name)} className={stylesCustom.button_image_tebak_gambar} >
+                        <div onClick={() => selectOption(quizData[indexQuestion]?.options[3]?.name)} className={stylesCustom.button_image_tebak_gambar}>
                           <Image src={quizOptionImage[3]} width={400} height={400} alt="Option4" placeholder="blur" blurDataURL={"/assets/placeholder400400.png"} loading="lazy" />
                         </div>
                       </div>
