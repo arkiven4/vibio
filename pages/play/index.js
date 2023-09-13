@@ -102,7 +102,7 @@ export default function HomePlay(props) {
             <br></br>
           </div>
 
-          <div className="row mb-3">
+          <div className="row mb-3 d-flex justify-content-center">
             <div onClick={() => setGame("dengarkan-gambar")} className="col-6 col-sm-6 col-md-4 mt-2">
               <div className="card">
                 <Image className="card-img-top" style={{ borderRadius: "30px" }} src={`/assets/vector/dengarkan-image.jpg`} width={300} height={300} alt="dengarGambar"></Image>
@@ -124,7 +124,7 @@ export default function HomePlay(props) {
                 <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle2}</p>
               </div>
             </div>
-            {showDev ? (
+            {/* {showDev ? (
               <div onClick={() => setGame("mengeja-gambar_dev")} className="col-6 col-sm-6 col-md-4 mt-2">
                 <div className="card">
                   <Image style={{ borderRadius: "30px" }} src={`/assets/vector/mengeja-image.jpg`} width={300} height={300} alt="mengejaGambar"></Image>
@@ -132,7 +132,7 @@ export default function HomePlay(props) {
                   <p style={{ textAlign: "center", wordWrap: "break-word" }}>{localeGeneral.play_choose_subtitle1}</p>
                 </div>
               </div>
-            ) : null}
+            ) : null} */}
           </div>
           <FooterLogo></FooterLogo>
         </motion.div>

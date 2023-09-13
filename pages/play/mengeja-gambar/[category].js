@@ -10,19 +10,20 @@ import { useAppContext } from "../../../context/state";
 import { getJSONFlash, getJSONCategory } from "../../../utils/getLocalJSON";
 import { GenMengejaGambarData } from "../../../utils/genQuizData";
 import { getLocale } from "../../../utils/getLocaleText";
-import { ModalReactionQuiz } from "../../../components/modal";
+import { ModalReactionQuiz, ModalCountdownASRQuiz } from "../../../components/modal";
 import axios, { post } from "axios";
 import { Preferences } from "@capacitor/preferences";
-import { Plugins } from "@capacitor/core";
 
-import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from "capacitor-voice-recorder";
+import { Capacitor } from "@capacitor/core";
+
+import { SpeechRecognition } from "@capacitor-community/speech-recognition";
 
 import { motion } from "framer-motion";
 
 const QuestionNumber = 10;
 var chunks = [];
 
-export default function MengejaGambar(props) {
+export default function MengejaGambar_dev(props) {
   const router = useRouter();
   const { userdata, setUserdata } = useAppContext();
 
@@ -32,16 +33,22 @@ export default function MengejaGambar(props) {
 
   const [recordIcon, setRecordIcon] = useState("/assets/button_record.png");
   const [enableRecog, setEnableRecog] = useState(false);
+  const [recognitionType, setRecognitionType] = useState("server");
   const [RecogServer, setRecogServer] = useState("");
   const [quizData, setQuizData] = useState([]);
   const [indexQuestion, setIndexQuestion] = useState(0);
   const [rightQuestion, setRightQuestion] = useState(0);
   const [kategori, setKategori] = useState("");
+  const [isSendingAudio, setIsSendingAudio] = useState(false);
   const [isPlay, setIsPlay] = useState(false);
+  const [countdown_number, setCountdown_number] = useState(4);
   const [isFinishQuiz, setIsFinishQuiz] = useState(false);
   const [isDoneSubmitData, setDoneSubmitData] = useState(false);
   const [showModalData, setShowModalData] = useState({
     isCorrect: false,
+    showModal: false,
+  });
+  const [showModalDataCount, setShowModalDataCount] = useState({
     showModal: false,
   });
 
@@ -51,29 +58,55 @@ export default function MengejaGambar(props) {
   const AudioSoundRef = useRef();
 
   useEffect(() => {
-    //console.log(userdata);
-    if (navigator.mediaDevices.getUserMedia) {
-      SetIsRecordAvailable(true);
-
-      navigator.mediaDevices
-        .getUserMedia({
-          audio: true,
-        })
-        .then(onSuccess, onError);
-    } else {
-      SetIsRecordAvailable(false);
-    }
-
     var finalQuestionData = GenMengejaGambarData(props.kategori_data, QuestionNumber);
 
     setQuizData(finalQuestionData);
     setKategori(router.query.category);
 
-    setUserdata({
-      username: "Apa iya",
-    });
+    if (Capacitor.getPlatform() == "web") {
+      fetch("https://elbicare.my.id/api/vibio/check_recognitionServer", {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.error) {
+            setEnableRecog(false);
+          } else if (data.isonline == "true") {
+            if (navigator.mediaDevices.getUserMedia) {
+              SetIsRecordAvailable(true);
+              navigator.mediaDevices
+                .getUserMedia({
+                  audio: true,
+                })
+                .then(onSuccess, onError);
+            } else {
+              SetIsRecordAvailable(false);
+            }
+          }
+        })
+        .catch((error) => {
+          setEnableRecog(false);
+          console.log("Error ========>", error);
+        });
+    } else {
+      SpeechRecognition.requestPermissions().then((result) => {
+        SpeechRecognition.checkPermissions().then((result_permission) => {
+          console.log(result_permission.speechRecognition);
+        });
+      });
 
-    //console.log(window.localStorage.getItem("userSession"));
+      SpeechRecognition.available().then((result) => {
+        if (result.available) {
+          SpeechRecognition.getSupportedLanguages().then((result_lang) => {
+            if (result_lang.languages.includes("id-ID")) {
+              setEnableRecog(true);
+              setRecognitionType("native");
+            }
+          });
+        }
+      });
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -85,11 +118,13 @@ export default function MengejaGambar(props) {
       };
 
       mediaRecorder.onstop = ({ e }) => {
+        setIsSendingAudio(true);
         console.log("data available after MediaRecorder.stop() called.");
 
         const blob = new Blob(chunks, {
           type: "audio/wav;",
         });
+
         chunks = [];
 
         let file = new File([blob], "Lohe" + ".wav", {
@@ -100,10 +135,6 @@ export default function MengejaGambar(props) {
         const formData = new FormData();
         formData.append("file_audio", file);
 
-        // SetrecognizedData({
-        //   prediction: "apple"
-        // })
-        //fetch("https://vibio.elbicare.my.id/recognition", {
         fetch("https://elbicare.my.id/api/vibio/recognition", {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -112,97 +143,37 @@ export default function MengejaGambar(props) {
           .then((response) => response.json())
           .then((data) => {
             SetrecognizedData(data);
+            setIsSendingAudio(false);
+            setCountdown_number(4);
+            setShowModalDataCount({
+              showModal: false,
+            });
             console.log(data);
           })
           .catch((error) => {
+            setIsSendingAudio(false);
+            setCountdown_number(4);
+            setShowModalDataCount({
+              showModal: false,
+            });
             console.log("Error ========>", error);
           });
-
-        // let fileReader = new FileReader();
-        // let arrayBuffer;
-
-        // fileReader.onloadend = () => {
-        //   arrayBuffer = fileReader.result;
-        // };
-
-        // fileReader.readAsDataURL(superBlob);
-
-        // chunks = [];
-        // let file = new File([blob], "Lohe" + ".wav", {
-        //   type: "audio/wav",
-        //   lastModified: new Date().getTime(),
-        // });
-
-        // const formData = new FormData();
-        // formData.append("file_audio", file);
-
-        // blobToBase64(blob).then((base64) => {
-        //   fetch("https://vibio.elbicare.my.id/recognition", {
-        //     //fetch("http://127.0.0.1:5000/recognition", {
-        //     method: "POST", // *GET, POST, PUT, DELETE, etc.
-        //     mode: "no-cors", // no-cors, *cors, same-origin
-        //     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        //     body: formData,
-        //   })
-        //     .then((res) => {
-        //       console.log(res);
-        //       alert(JSON.stringify(res));
-        //     })
-        //     .catch((e) => {
-        //       console.log(e.message);
-        //       alert(e.message);
-        //     });
-        // .finally(() => {
-        //   setTimeout(() => {
-        //     router.push("/home");
-        //   }, 2000);
-        // });
-        // post(
-        //   RecogServer,
-        //   {
-        //     base64: base64,
-        //   },
-        //   {
-        //     headers: {
-        //       "content-type": "multipart/form-data",
-        //     },
-        //   }
-        // )
-        //   .then((response) => {
-        //     console.log(response.data);
-        //     SetrecognizedData(response.data);
-        //   })
-        //   .catch((error) => {
-        //     alert(error);
-        //     console.log("Error ========>", error);
-        //   });
-        // });
-
-        //alert(file[0])
-
-        // const formData = new FormData();
-        // formData.append("file_audio", file);
-
-        // try {
-        //   post(RecogServer, formData, {
-        //     headers: {
-        //       "content-type": "multipart/form-data",
-        //     },
-        //   })
-        //     .then((response) => {
-        //       console.log(response.data);
-        //       SetrecognizedData(response.data);
-        //     })
-        //     .catch((error) => {
-        //       alert(error);
-        //       console.log("Error ========>", error);
-        //     });
-        // } catch (error) {
-        //   alert(error);
-        // }
       };
     }
   }, [mediaRecorder]);
+
+  useEffect(() => {
+    if (showModalDataCount.showModal == true) {
+      const countdownInterval = setInterval(() => {
+        if (countdown_number > 0) {
+          setCountdown_number(countdown_number - 1);
+        }
+      }, 1000);
+
+      return () => clearInterval(countdownInterval);
+    }
+    // Clear the interval when the component unmounts
+  }, [countdown_number, showModalDataCount]);
 
   let onSuccess = function (stream) {
     var mediaRecorder = new MediaRecorder(stream);
@@ -224,12 +195,34 @@ export default function MengejaGambar(props) {
   const start_record = () => {
     setRecordIcon("/assets/button_onrecord.png");
     console.log("recorder started");
-    mediaRecorder.start();
 
-    setTimeout(() => {
-      setRecordIcon("/assets/button_record.png");
-      mediaRecorder.stop();
-    }, 3000);
+    if (recognitionType == "server") {
+      mediaRecorder.start();
+      setShowModalDataCount({
+        showModal: true,
+      });
+      setCountdown_number(4);
+
+      setTimeout(() => {
+        setCountdown_number(4);
+        setRecordIcon("/assets/button_record.png");
+        mediaRecorder.stop();
+      }, 4000);
+    } else if (recognitionType == "native") {
+      SpeechRecognition.start({
+        language: "id-ID",
+        maxResults: 1,
+        prompt: "Say something",
+        partialResults: false,
+        popup: true,
+      }).then((result) => {
+        console.log(result.matches);
+        SetrecognizedData({ prediction: result.matches[0].replace(/\W/g, "").toLowerCase() });
+        setRecordIcon("/assets/button_record.png");
+        SpeechRecognition.stop();
+        SpeechRecognition.removeAllListeners();
+      });
+    }
   };
 
   function playSound() {
@@ -259,7 +252,6 @@ export default function MengejaGambar(props) {
   const didMountRef = useRef(false);
   useEffect(() => {
     if (didMountRef.current) {
-      console.log(recognizedData.prediction.replace(/\W/g, "").toLowerCase());
       checkAnswer(recognizedData.prediction.replace(/\W/g, "").toLowerCase());
     }
     didMountRef.current = true;
@@ -269,9 +261,9 @@ export default function MengejaGambar(props) {
     var nowIndex = indexQuestion;
     var now_jawaban = quizData[nowIndex].name;
     var sp_prediction = prediction; // Remove char
-    //var sp_prediction = now_jawaban;
+    console.log(sp_prediction);
+    console.log(now_jawaban);
     var similarityWord = levenshteinSimilarity(sp_prediction, now_jawaban);
-    //var similarityWord = wordSimilarity(sp_prediction, now_jawaban);
     if (similarityWord > 0.7) {
       selectOption(true);
     } else {
@@ -485,9 +477,15 @@ export default function MengejaGambar(props) {
                 <code>audio</code> element.
               </audio>
               <ModalReactionQuiz isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></ModalReactionQuiz>
+              <ModalCountdownASRQuiz isShow={showModalDataCount.showModal} countdown={countdown_number} isSending={isSendingAudio}></ModalCountdownASRQuiz>
               <div className={stylesCustom.home_button} onClick={() => router.push("/home")}>
                 <div className={stylesCustom.button_card}>
                   <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
+                </div>
+              </div>
+              <div style={{ position: "absolute", top: "5vh", right: "5vh" }}>
+                <div className={stylesCustom.button_card}>
+                  <h4 style={{ marginBottom: "0px", color: "green" }}>Dev Page</h4>
                 </div>
               </div>
             </main>
