@@ -60,6 +60,14 @@ export default function Pengaturan({ localeData }) {
     router.push("/home");
   }
 
+  function logout() {
+    Preferences.remove({
+      key: "user_uuid",
+    });
+
+    router.push("/login");
+  }
+
   return (
     <div className={(styles.container, stylesCustom.backgound_image)} style={{ backgroundImage: "linear-gradient(rgba(36, 36, 36, 0.40), rgba(36, 36, 36, 0.40)), url('/bg2-uncom.jpg')" }}>
       <Head>
@@ -119,6 +127,10 @@ export default function Pengaturan({ localeData }) {
           </div>
           <div className={stylesCustom.button_card} onClick={() => savePengaturan()}>
             <h4 style={{ marginBottom: "0px", color: "green" }}>Simpan</h4>
+          </div>
+          <br></br>
+          <div className={stylesCustom.button_card} onClick={() => logout()}>
+            <h4 style={{ marginBottom: "0px", color: "red" }}>Logout</h4>
           </div>
         </div>
       </main>

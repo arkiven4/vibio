@@ -19,6 +19,7 @@ export default function Index() {
   const [currentBuffer, setCurrentBuffer] = useState({});
   const [lengthBuffered, setLengthBuffered] = useState(0);
   const [progressValue, setProgressValue] = useState(0);
+  const [noNeedBuffer, setNoNeedBuffer] = useState(false);
   const [progressMessage, setProgressMessage] = useState("Cek Koneksi");
 
   const AudioSoundRef = useRef();
@@ -52,43 +53,32 @@ export default function Index() {
                 let buffered_data = JSON.parse(ret.value);
                 let length_entries = Object.keys(buffered_data).length;
 
-                setCurrentBuffer(buffered_data);
                 setLengthBuffered(length_entries);
+                setCurrentBuffer(buffered_data);
 
                 if (length_entries > 0) {
                   setProgressValue(20 + (60 / length_entries) * 1);
                   setProgressMessage(`Menggugah Data Terapi ${0}/${length_entries}`);
                   sendBuffered_Data(buffered_data, length_entries);
+                } else {
+                  setProgressMessage("Mempersiapkan Permainan");
+                  setProgressValue(80);
+                  Preferences.get({ key: "user_uuid" }).then((ret) => {
+                    if (ret.value == null) {
+                      router.push("/login");
+                    } else {
+                      setTimeout(() => {
+                        router.push("/home");
+                      }, 2000);
+                    }
+                  });
+                  setNoNeedBuffer(true);
                 }
-
-                // add Data
-                // let list_entries = Object.keys(buffered_data);
-                // console.log(buffered_data);
-                // console.log(list_entries.length);
-
-                // buffered_data[list_entries.length] = {
-                //   json_data: JSON.stringify({
-                //     kategori: "buah",
-                //     jumlah_benar: 7,
-                //     jumlah_salah: 3,
-                //     timestamp: Date.now(),
-                //   }),
-                //   tipe_terapi: 1
-                // }
-
-                // console.log(buffered_data)
-                // Preferences.set({
-                //   key: "buffered_sendedData",
-                //   value: JSON.stringify(buffered_data),
-                // });
               }
             });
-
             setOnline(true);
           })
           .catch((e) => {
-            // console.log(e.message);
-            // alert(e.message);
             setOnline(false);
             setTimeout(() => {
               router.push("/home");
@@ -99,25 +89,22 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    if (lengthBuffered > 0) {
-      if (lengthBuffered == statusSendData.length) {
-        for (let index = 0; index < statusSendData.length; index++) {
-          if (statusSendData[index].status == "success") {
-            delete currentBuffer[statusSendData[index].key];
-          }
+    if (lengthBuffered == statusSendData.length && lengthBuffered > 0) {
+      for (let index = 0; index < statusSendData.length; index++) {
+        if (statusSendData[index].status == "success") {
+          delete currentBuffer[statusSendData[index].key];
         }
-        Preferences.set({
-          key: "buffered_sendedData",
-          value: JSON.stringify(currentBuffer),
-        }).then(() => {
-          setTimeout(() => {
-            router.push("/home");
-          }, 2000);
-        });
-        console.log("Done Upload");
       }
-    } else {
-            
+      Preferences.set({
+        key: "buffered_sendedData",
+        value: JSON.stringify(currentBuffer),
+      }).then(() => {
+        setNoNeedBuffer(true);
+      });
+    }
+
+    if (noNeedBuffer) {
+      setProgressMessage("Mempersiapkan Permainan");
       setProgressValue(80);
       Preferences.get({ key: "user_uuid" }).then((ret) => {
         if (ret.value == null) {
@@ -127,9 +114,9 @@ export default function Index() {
             router.push("/home");
           }, 2000);
         }
-      })
+      });
     }
-  }, [statusSendData]);
+  }, [statusSendData, noNeedBuffer]);
 
   async function sendBuffered_Data(buffered_datas, length_entries) {
     return new Promise((resolve, reject) => {
@@ -144,15 +131,21 @@ export default function Index() {
             postData(ret.value, formData, buffered_datas, key)
               .then((result) => {
                 if (result == "success") {
-                  statusSendData.push({
-                    key: key,
-                    status: "success",
-                  });
+                  setStatusSendData((statusSendData) => [
+                    ...statusSendData,
+                    {
+                      key: key,
+                      status: "success",
+                    },
+                  ]);
                 } else {
-                  statusSendData.push({
-                    key: key,
-                    status: "failed",
-                  });
+                  setStatusSendData((statusSendData) => [
+                    ...statusSendData,
+                    {
+                      key: key,
+                      status: "failed",
+                    },
+                  ]);
                 }
               })
               .finally(() => {
@@ -216,7 +209,7 @@ export default function Index() {
             </div>
           </div>
           <br></br>
-          <h3 style={{ textAlign: "center"}}>{progressMessage}.....</h3>
+          <h3 style={{ textAlign: "center" }}>{progressMessage}.....</h3>
           <br></br>
           {/* {isOnline ? <h3 style={{ color: "green" }}>Online</h3> : <h3 style={{ color: "red" }}>Offline Mode</h3>} */}
         </div>

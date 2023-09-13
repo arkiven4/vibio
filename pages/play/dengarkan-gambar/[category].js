@@ -130,7 +130,7 @@ export default function MengejaGambar(props) {
     setIsStartQuiz(true);
 
     setTimeout(() => {
-      //playActorSound();
+      playActorSound();
     }, 800);
   };
 

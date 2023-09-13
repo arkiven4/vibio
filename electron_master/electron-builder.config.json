@@ -1,0 +1,35 @@
+{
+  "appId": "com.elbicare.vibio",
+  "directories": {
+    "buildResources": "resources"
+  },
+  "files": [
+    "assets/**/*",
+    "build/**/*",
+    "capacitor.config.*",
+    "app/**/*"
+  ],
+  "publish": {
+    "provider": "github",
+    "owner": "arkiven4",
+    "repo": "vibio"
+  },
+  "nsis": {
+    "allowElevation": true,
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true
+  },
+  "win": {
+    "target": "nsis",
+    "icon": "assets/appIcon.ico"
+  },
+  "linux": {
+    "category": "Education",
+    "target": "AppImage",
+    "icon": "assets/appIcon.ico"
+  },
+  "mac": {
+    "category": "Education",
+    "target": "dmg"
+  }
+}
