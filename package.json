@@ -29,6 +29,7 @@
     "crypto-js": "^4.1.1",
     "electron-virtual-keyboard": "^1.0.7",
     "framer-motion": "^7.3.6",
+    "kioskboard": "^2.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "walktour": "^5.2.0"

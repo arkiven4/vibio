@@ -22,9 +22,14 @@ export default function Pengaturan({ localeData }) {
   const [showModal, setShowModal] = useState(true);
 
   const [enableRecog, setEnableRecog] = useState("false");
+  const [mainmusicVolume, setMainmusicVolume] = useState(0);
 
   const onOptionChangeEnableRecog = (e) => {
     setEnableRecog(e.target.value);
+  };
+
+  const onOptionChangeMusicSlider = (e) => {
+    setMainmusicVolume(e.target.value);
   };
 
   useEffect(() => {
@@ -33,17 +38,23 @@ export default function Pengaturan({ localeData }) {
     });
 
     Preferences.get({ key: "enableRecog" }).then((ret) => {
-      console.log(ret.value)
       setEnableRecog(ret.value);
-      //enableServerRecog.current.value = ret.value;
     });
 
+    Preferences.get({ key: "mainmenu_music" }).then((ret) => {
+      setMainmusicVolume(parseInt(ret.value));
+    });
   }, []);
 
   function savePengaturan() {
     Preferences.set({
       key: "enableRecog",
       value: enableRecog,
+    });
+
+    Preferences.set({
+      key: "mainmenu_music",
+      value: mainmusicVolume.toString(),
     });
 
     router.push("/home");
@@ -63,19 +74,45 @@ export default function Pengaturan({ localeData }) {
         <h3 className={stylesCustom.menu_subtitle_font}>{localeGeneral.setting_title}</h3>
         <br></br>
         <div className={stylesCustom.container_card_row}>
-          <div className={stylesCustom.card_menu_home} style={{ paddingBottom: "10px" }}>
+          <div className={stylesCustom.card_menu_home} style={{ paddingBottom: "10px", backgroundColor: "grey" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <h2 className={stylesCustom.card_menu_title_font}>Enable Recog</h2>
               <div className={"form-check"}>
-                <input className="form-check-input" type="radio" name="enableRecog" value="false" id="false_recog"  defaultChecked={enableRecog == "false"} onChange={onOptionChangeEnableRecog} />
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="enableRecog"
+                  value="false"
+                  id="false_recog"
+                  defaultChecked={enableRecog == "false"}
+                  onChange={onOptionChangeEnableRecog}
+                />
                 <label className="form-check-label" htmlFor="false_recog">
                   Disable
                 </label>
               </div>
               <div className={"form-check"}>
-                <input className="form-check-input" type="radio" name="enableRecog" value="true" id="true_recog" defaultChecked={enableRecog == "true"} onChange={onOptionChangeEnableRecog} />
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="enableRecog"
+                  value="true"
+                  id="true_recog"
+                  defaultChecked={enableRecog == "true"}
+                  onChange={onOptionChangeEnableRecog}
+                />
                 <label className="form-check-label" htmlFor="true_recog">
                   Enable
+                </label>
+              </div>
+            </div>
+            <hr></hr>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <h2 className={stylesCustom.card_menu_title_font}>Music Volume</h2>
+              <div className={"form-check"}>
+                <input type="range" class="form-range" id="customRange1" maxValue={100} minValue={0} value={mainmusicVolume} onChange={onOptionChangeMusicSlider} />
+                <label for="customRange1" class="form-label">
+                  {mainmusicVolume}%
                 </label>
               </div>
             </div>

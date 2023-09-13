@@ -9,3 +9,6 @@ https://chakra-ui.com/
 # Tambah Sayuran
 # Add Sure ASR
 # Buffering Data when No Internet and send when available -> Tinggal Check
+# Sesuakan Tampilan pada beberapa Device
+"electron:pack": "npm run build && electron-builder build -l -w --dir -c ./electron-builder.config.json",
+trigger CI

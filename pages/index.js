@@ -25,8 +25,11 @@ export default function Index() {
 
   useEffect(() => {
     AudioSoundRef.current.play();
-    AudioSoundRef.current.volume = 0.5;
-    AudioSoundRef.current.volume = 0.5;
+    Preferences.get({ key: "mainmenu_music" }).then((ret) => {
+      if (ret.value == null) {
+        AudioSoundRef.current.volume = parseInt(ret.value) / 100;
+      }
+    });
     setLoading(true);
 
     Preferences.get({ key: "user_uuid" }).then((ret) => {

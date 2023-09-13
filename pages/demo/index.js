@@ -10,7 +10,7 @@ import { getJSONCategory } from "../../utils/getLocalJSON";
 import { getLocale } from "../../utils/getLocaleText";
 import { FooterLogo } from "../../components/general";
 
-import { Walktour } from "walktour";
+import { Walktour } from "walktour"
 
 //TODO : Atur Category Card agar kalau jumlah itemnya 6, bagus keliatanya
 //TODO : Fit Screen No Scroll untuk pad dan Laptop

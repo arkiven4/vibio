@@ -8,6 +8,8 @@ import React, { useState, useEffect, useRef } from "react";
 
 import { Preferences } from "@capacitor/preferences";
 
+import KioskBoard from "kioskboard";
+
 import { getLocale } from "../utils/getLocaleText";
 import { FooterLogo } from "../components/general";
 
@@ -18,46 +20,92 @@ export default function Home({ localeData }) {
   const localeGeneral = localeData.general;
   const AudioSoundRef = useRef();
   const [showModal, setShowModal] = useState(false);
-
+  const [marginDynamic, setMarginDynamic] = useState('0vh');
+  const numpadRef = useRef(null);
   const inputUserUUID = useRef();
 
   useEffect(() => {
     if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({
-          audio: true,
-        });
+      navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
     }
 
     AudioSoundRef.current.play();
-    AudioSoundRef.current.volume = 0.5;
+    AudioSoundRef.current.volume = 0.3;
+    
+    setInterval(() => {
+      if (document.getElementById("KioskBoard-VirtualKeyboard")) {
+        setMarginDynamic('30vh');
+      } else {
+        setMarginDynamic('0vh');
+      }
+    }, 700);
   }, []);
 
-  function doLogin() {
-    Preferences.set({
-      key: "user_uuid",
-      value: inputUserUUID.current.value,
-    });
+  useEffect(() => {
+    if (numpadRef.current) {
+      KioskBoard.run(numpadRef.current, {
+        allowRealKeyboard: false,
+        allowMobileKeyboard: false,
+        autoScroll: false,
+        keysEnterText: "Login",
+        theme: "light",
+        keysArrayOfObjects: [
+          {
+            0: "7",
+            1: "8",
+            2: "9",
+          },
+          {
+            0: "4",
+            1: "5",
+            2: "6",
+          },
+          {
+            0: "1",
+            1: "2",
+            2: "3",
+          },
+          {
+            0: "0",
+            1: ".",
+          },
+        ],
+        keysEnterCallback: doLogin,
+      });
+    }
+  }, [numpadRef]);
 
-    initSettings() .then((result) => {
-      router.push("/home");
-    }).catch((err) => {
-      console.log(err)
-    });
+  function doLogin() {
+    if (numpadRef.current.value.length > 10) {
+      Preferences.set({
+        key: "user_uuid",
+        value: numpadRef.current.value,
+      });
+
+      initSettings()
+        .then((result) => {
+          router.push("/home");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   async function initSettings() {
-    return new Promise((resolve, reject) => { 
+    return new Promise((resolve, reject) => {
       Preferences.set({
         key: "mainmenu_music",
-        value: "50",
+        value: "30",
       });
 
       Preferences.set({
         key: "enableRecog",
         value: "false",
       });
-      
+
       Preferences.set({
         key: "buffered_sendedData",
         value: JSON.stringify({}),
@@ -67,9 +115,9 @@ export default function Home({ localeData }) {
         key: "isOnline",
         value: "false",
       });
-      
-      resolve("Ok")
-    })
+
+      resolve("Ok");
+    });
   }
 
   const closeModal = () => {
@@ -99,12 +147,12 @@ export default function Home({ localeData }) {
             </h4>
           </div>
           <br></br>
-          <div className="row">
+          <div className="row" style={{marginBottom: marginDynamic}}>
             <div className="col-10 col-sm-10 col-md-6 mb-4 h-10 mx-auto">
               <div className="card  text-center">
                 <div className="card-header">Masukan Nomer HP</div>
                 <div className="card-body">
-                  <input type="text" ref={inputUserUUID} />
+                  <input className="inputFromKey" ref={numpadRef} type="text" data-kioskboard-type="numpad" placeholder="Masukan Nomer HP anda" />
                 </div>
                 <div className="card-footer">
                   <button className="btn btn-primary" onClick={() => doLogin()}>

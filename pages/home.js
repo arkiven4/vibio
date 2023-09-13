@@ -35,7 +35,11 @@ export default function Home({ localeData }) {
     });
 
     AudioSoundRef.current.play();
-    AudioSoundRef.current.volume = 0.5;
+    Preferences.get({ key: "mainmenu_music" }).then((ret) => {
+      if (ret.value == null) {
+        AudioSoundRef.current.volume = parseInt(ret.value) / 100;
+      }
+    });
     console.log(userdata);
     setUserdata({
       username: "hola",
