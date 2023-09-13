@@ -443,7 +443,7 @@ export default function MengejaGambar_dev(props) {
               </div>
 
               {enableRecog ? (
-                <div className={stylesCustom.button_container}>
+                <div className={stylesCustom.button_container_mengeja_gambar}>
                   <div
                     className={stylesCustom.button_image_subtitle}
                     onClick={() => {
@@ -454,7 +454,7 @@ export default function MengejaGambar_dev(props) {
                   </div>
                 </div>
               ) : (
-                <div className={stylesCustom.button_container}>
+                <div className={stylesCustom.button_container_mengeja_gambar}>
                   <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(false)}>
                     <Image src={`/assets/button_no.png`} width={window.innerHeight * 0.15} height={window.innerHeight * 0.15} alt="ButtonNo" style={{ cursor: "pointer" }} />
                     <h4 style={{ marginBottom: "0px" }}>Salah</h4>
@@ -483,11 +483,11 @@ export default function MengejaGambar_dev(props) {
                   <h4 style={{ marginBottom: "0px", color: "green" }}>Home</h4>
                 </div>
               </div>
-              <div style={{ position: "absolute", top: "5vh", right: "5vh" }}>
+              {/* <div style={{ position: "absolute", top: "5vh", right: "5vh" }}>
                 <div className={stylesCustom.button_card}>
                   <h4 style={{ marginBottom: "0px", color: "green" }}>Dev Page</h4>
                 </div>
-              </div>
+              </div> */}
             </main>
           ) : (
             <main className={styles.main}>

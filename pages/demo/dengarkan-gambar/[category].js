@@ -324,7 +324,7 @@ export default function MengejaGambar(props) {
                   ]}
                 />
                 <div className="container">
-                  <div className="row mt-5">
+                  <div className="row mt-1">
                     <div className="col-6 col-sm-6 col-md-4 mx-auto">
                       <div className={stylesCustom.mini_card} id="tour_perulangan">
                         <h4 style={{ marginBottom: "0px", color: "green", textAlign: "center" }}>
@@ -376,8 +376,8 @@ export default function MengejaGambar(props) {
                   <div className={stylesCustom.card_option} id="tour_gambarbenda">
                     <Image
                       src={`/assets/items/${kategori}/image/${quizData?.image_file[indexImage]}`}
-                      width={window.innerHeight * 0.8}
-                      height={window.innerHeight * 0.8}
+                      width={window.innerHeight * 0.65}
+                      height={window.innerHeight * 0.65}
                       alt="BendaImage"
                       style={{ cursor: "pointer" }}
                     />

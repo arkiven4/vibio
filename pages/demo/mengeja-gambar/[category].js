@@ -454,7 +454,7 @@ export default function MengejaGambar(props) {
               </div>
 
               {enableRecog ? (
-                <div className={stylesCustom.button_container}>
+                <div className={stylesCustom.button_container_mengeja_gambar}>
                   <div
                     className={stylesCustom.button_image_subtitle}
                     onClick={() => {
@@ -465,7 +465,7 @@ export default function MengejaGambar(props) {
                   </div>
                 </div>
               ) : (
-                <div className={stylesCustom.button_container}>
+                <div className={stylesCustom.button_container_mengeja_gambar}>
                   <div className={stylesCustom.button_image_subtitle} onClick={() => selectOption(false)} id="tour_jawabansalah">
                     <Image src={`/assets/button_no.png`} width={window.innerHeight * 0.15} height={window.innerHeight * 0.15} alt="ButtonNo" style={{ cursor: "pointer" }} />
                     <h4 style={{ marginBottom: "0px" }}>Salah</h4>

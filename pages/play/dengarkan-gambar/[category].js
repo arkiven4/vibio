@@ -130,7 +130,7 @@ export default function MengejaGambar(props) {
     setIsStartQuiz(true);
 
     setTimeout(() => {
-      playActorSound();
+      //playActorSound();
     }, 800);
   };
 
@@ -295,7 +295,7 @@ export default function MengejaGambar(props) {
             <>
               <main className={styles.main} style={{ display: isStartQuiz ? "" : "none" }}>
                 <div className="container">
-                  <div className="row mt-5">
+                  <div className="row mt-1">
                     <div className="col-6 col-sm-6 col-md-4 mx-auto">
                       <div className={stylesCustom.mini_card}>
                         <h4 style={{ marginBottom: "0px", color: "green", textAlign: "center" }}>
@@ -347,8 +347,8 @@ export default function MengejaGambar(props) {
                   <div className={stylesCustom.card_option_dengar_gambar}>
                     <Image
                       src={`/assets/items/${kategori}/image/${quizData?.image_file[indexImage]}`}
-                      width={window.innerHeight * 0.8}
-                      height={window.innerHeight * 0.8}
+                      width={window.innerHeight * 0.65}
+                      height={window.innerHeight * 0.65}
                       alt="BendaImage"
                       style={{ cursor: "pointer" }}
                     />
@@ -363,7 +363,7 @@ export default function MengejaGambar(props) {
                   <code>audio</code> element.
                 </audio>
                 <ModalReactionQuiz isShow={showModalData.showModal} isCorrect={showModalData.isCorrect} clickFunction={nextQuestion}></ModalReactionQuiz>
-                <div className={stylesCustom.home_button} onClick={() => router.push("/home")}>
+                <div style={{position: "absolute", top: "5vh", left: "5vh", cursor: "pointer"}} onClick={() => router.push("/home")}>
                   <div className={stylesCustom.button_card}>
                     <h5 style={{ marginBottom: "0px", color: "green" }}>Home</h5>
                   </div>
