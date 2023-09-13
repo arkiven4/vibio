@@ -25,27 +25,41 @@ export default function HomePlay(props) {
 
   const kategoriArray = [];
   var tempArray = [];
+  let isPotrait = false;
+
+  if (typeof window !== "undefined") {
+    if (window.innerHeight > window.innerWidth) {
+      isPotrait = true;
+    }
+  }
+
+  let widthPercent = (100 / Object.keys(kategoriObj).length);
+  let classCard_pL = isPotrait ? "col-4 col-sm-4 col-md-3 mb-4" : "col-4 col-sm-4 col-md-2 mb-4";
 
   Object.keys(kategoriObj).map((key, id) => {
-    var classTemp = stylesCustom.card_menu;
-    // if (key === "buah" || key === "binatang") {
-    //   classTemp = stylesCustom.card_menu;
-    // }
     tempArray.push(
-      <div key={id} onClick={() => router.push({ pathname: "/play/" + gameType + "/" + key })} className="col-6 col-sm-6 col-md-3 mb-4">
-        <div className="card">
+      <div key={id} onClick={() => router.push({ pathname: "/play/" + gameType + "/" + key })} className={classCard_pL} style={!isPotrait ? {width: widthPercent + "%"} : {width: "40%"}}>
+        <div className="card" style={!isPotrait ? { height: "45vh" } : null}>
           <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={"600vw"} height={"600vw"} alt="PlayButton"></Image>
           <h2 style={{ textAlign: "center", fontSize: "3vw" }}>{kategoriObj[key].show_name} &rarr;</h2>
         </div>
       </div>
     );
-    if ((id + 1) % 4 == 0 && id != 0) {
-      kategoriArray.push(tempArray);
-      tempArray = [];
-    }
-    if (id + 1 == Object.keys(kategoriObj).length) {
-      kategoriArray.push(tempArray);
-      tempArray = [];
+
+    if (isPotrait) {
+      if ((id + 1) % 2 == 0 && id != 0) {
+        kategoriArray.push(tempArray);
+        tempArray = [];
+      }
+      if (id + 1 == Object.keys(kategoriObj).length) {
+        kategoriArray.push(tempArray);
+        tempArray = [];
+      }
+    } else {
+      if (id + 1 == Object.keys(kategoriObj).length) {
+        kategoriArray.push(tempArray);
+        tempArray = [];
+      }
     }
   });
 
@@ -138,7 +152,7 @@ export default function HomePlay(props) {
           <div className="mx-4">
             {kategoriArray.map((value, id) => {
               return (
-                <div key={id} className="row">
+                <div key={id} className="row d-flex justify-content-center">
                   {kategoriArray[id]}
                 </div>
               );
