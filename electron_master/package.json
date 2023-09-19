@@ -1,6 +1,6 @@
 {
   "name": "vibio",
-  "version": "1.2.0",
+  "version": "1.2.6",
   "description": "An Amazing Capacitor App",
   "author": {
     "name": "ytfhtfht",
@@ -18,7 +18,7 @@
     "electron:start": "ELECTRON_DISABLE_SECURITY_WARNINGS=true npm run build && electron --inspect=5858 ./",
     "electron:pack": "GH_TOKEN=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 npm run build && electron-builder build --dir -l -w -c ./electron-builder.config.json",
     "electron:make": "GH_TOKEN=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 npm run build && electron-builder build -l -w --publish always -c ./electron-builder.config.json",
-    "publish": "GH_TOKEN=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 npm run build && GH_TOKEN=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 electron-builder build -lw --publish=always -c ./electron-builder.config.json",
+    "publish": "GH_TOKEN=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 npm run build && GH_TOKEN=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 electron-builder build -lw --publish=always -c ./electron-builder.config.json",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {

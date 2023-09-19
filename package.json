@@ -14,7 +14,8 @@
     "live_android_avd1": "next build && next export && npx cap sync && npx capacitor run android --livereload --external --target=avd1",
     "live_android": "next build && next export && npx cap sync && npx capacitor run android --livereload --external --target=789a2ffc",
     "live_android2": "next build && next export && npx cap sync && npx capacitor run android --livereload --external --target=3VLYD22817601242",
-    "electron": "rm -rf electron && next build && next export && npx cap sync && npx cap add @capacitor-community/electron && npx cap open @capacitor-community/electron "
+    "electron_first": "rm -rf electron && next build && next export && npx cap sync && npx cap add @capacitor-community/electron && npx cap open @capacitor-community/electron",
+    "electron_run": "next build && next export && npx cap sync && rm -rf electron/app/* && cp -r out/. electron/app/ && npx cap open @capacitor-community/electron"
   },
   "dependencies": {
     "@capacitor-community/electron": "^4.1.2",
