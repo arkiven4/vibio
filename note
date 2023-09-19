@@ -12,3 +12,5 @@ https://chakra-ui.com/
 # Sesuakan Tampilan pada beberapa Device
 "electron:pack": "npm run build && electron-builder build -l -w --dir -c ./electron-builder.config.json",
 trigger CI
+
+ℹ Copying Web App to Electron platform: Copying /run/media/arkiven4/Project/Lab/Vibio/Gen1/vibio_apk/vibio/out into /run/media/arkiven4/Project/Lab/Vibio/Gen1/vibio_apk/vibio/electron/app

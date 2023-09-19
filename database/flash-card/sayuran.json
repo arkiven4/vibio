@@ -1,1 +1,134 @@
-{"ayam":{"show_name":"Ayam","image_file":["ayam_1.png","ayam_2.png","ayam_3.png","ayam_4.png","ayam_5.png"],"sound_file":["ayam.mp3"]},"buaya":{"show_name":"Buaya","image_file":["buaya_1.png","buaya_2.png","buaya_3.png","buaya_4.png","buaya_5.png"],"sound_file":["buaya.mp3"]},"cacing":{"show_name":"Cacing","image_file":["cacing_1.png","cacing_2.png"],"sound_file":["cacing.mp3"]},"capung":{"show_name":"Capung","image_file":["capung_1.png","capung_2.png"],"sound_file":["capung.mp3"]},"cicak":{"show_name":"Cicak","image_file":["cicak_1.png","cicak_2.png"],"sound_file":["cicak.mp3"]},"gajah":{"show_name":"Gajah","image_file":["gajah_1.png","gajah_2.png","gajah_3.png","gajah_4.png","gajah_5.png"],"sound_file":["gajah.mp3"]},"harimau":{"show_name":"Harimau","image_file":["harimau_1.png","harimau_2.png","harimau_3.png","harimau_4.png","harimau_5.png"],"sound_file":["harimau.mp3"]},"ikan":{"show_name":"Ikan","image_file":["ikan_1.png","ikan_2.png"],"sound_file":["ikan.mp3"]},"kucing":{"show_name":"Kucing","image_file":["kucing_1.png","kucing_2.png"],"sound_file":["kucing.mp3"]},"lalat":{"show_name":"Lalat","image_file":["lalat_1.png","lalat_2.png"],"sound_file":["lalat.mp3"]},"nyamuk":{"show_name":"Nyamuk","image_file":["nyamuk_1.png","nyamuk_2.png"],"sound_file":["nyamuk.mp3"]},"semut":{"show_name":"Semut","image_file":["semut_1.png","semut_2.png"],"sound_file":["semut.mp3"]},"tikus":{"show_name":"Tikus","image_file":["tikus_1.png","tikus_2.png"],"sound_file":["tikus.mp3"]}}
+{
+    "wortel": {
+        "show_name": "Wortel",
+        "image_file": [
+            "wortel_1.png",
+            "wortel_2.png",
+            "wortel_3.png"
+        ],
+        "sound_file": [
+            "wortel.mp3"
+        ]
+    },
+    "tomat": {
+        "show_name": "Tomat",
+        "image_file": [
+            "tomat_1.png",
+            "tomat_2.png"
+        ],
+        "sound_file": [
+            "tomat.mp3"
+        ]
+    },
+    "kentang": {
+        "show_name": "Kentang",
+        "image_file": [
+            "kentang_1.png",
+            "kentang_2.png"
+        ],
+        "sound_file": [
+            "kentang.mp3"
+        ]
+    },
+    "jagung": {
+        "show_name": "Jagung",
+        "image_file": [
+            "jagung_1.png",
+            "jagung_2.png"
+        ],
+        "sound_file": [
+            "jagung.mp3"
+        ]
+    },
+    "terong": {
+        "show_name": "Terong",
+        "image_file": [
+            "terong_1.png",
+            "terong_2.png"
+        ],
+        "sound_file": [
+            "terong.mp3"
+        ]
+    },
+    "cabai": {
+        "show_name": "Cabai",
+        "image_file": [
+            "cabai_1.png",
+            "cabai_2.png"
+        ],
+        "sound_file": [
+            "cabai.mp3"
+        ]
+    },
+    "brokoli": {
+        "show_name": "Brokoli",
+        "image_file": [
+            "brokoli_1.png",
+            "brokoli_2.png"
+        ],
+        "sound_file": [
+            "brokoli.mp3"
+        ]
+    },
+    "jamur": {
+        "show_name": "Jamur",
+        "image_file": [
+            "jamur_1.png",
+            "jamur_2.png"
+        ],
+        "sound_file": [
+            "jamur.mp3"
+        ]
+    },
+    "timun": {
+        "show_name": "Timun",
+        "image_file": [
+            "timun_1.png",
+            "timun_2.png",
+            "timun_3.png"
+        ],
+        "sound_file": [
+            "timun.mp3"
+        ]
+    },
+    "labu": {
+        "show_name": "Labu",
+        "image_file": [
+            "labu_1.png",
+            "labu_2.png"
+        ],
+        "sound_file": [
+            "labu.mp3"
+        ]
+    },
+    "kubis": {
+        "show_name": "Kubis",
+        "image_file": [
+            "kubis_1.png",
+            "kubis_2.png"
+        ],
+        "sound_file": [
+            "kubis.mp3"
+        ]
+    },
+    "kecambah": {
+        "show_name": "Kecambah",
+        "image_file": [
+            "kecambah_1.png",
+            "kecambah_2.png"
+        ],
+        "sound_file": [
+            "kecambah.mp3"
+        ]
+    },
+    "kangkung": {
+        "show_name": "Kangkung",
+        "image_file": [
+            "kangkung_1.png",
+            "kangkung_2.png"
+        ],
+        "sound_file": [
+            "kangkung.mp3"
+        ]
+    }
+}

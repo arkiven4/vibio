@@ -36,7 +36,7 @@ export default function Home({ localeData }) {
 
     AudioSoundRef.current.play();
     Preferences.get({ key: "mainmenu_music" }).then((ret) => {
-      if (ret.value == null) {
+      if (ret.value != null) {
         AudioSoundRef.current.volume = parseInt(ret.value) / 100;
       }
     });

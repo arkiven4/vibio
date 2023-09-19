@@ -24,6 +24,7 @@ export default function Evaluasi(props) {
   useEffect(() => {
     Preferences.get({ key: "user_uuid" }).then((ret) => {
       let encryted_uuid = encodeURI(CryptoJS.AES.encrypt(ret.value, VIBIO_SCRET_KEY).toString().replace("/", "Por21Ld").replace("/", "Por21Ld"));
+      console.log("https://elbicare.my.id/vibio_hidden/terapi-list/" + encodeURI(encryted_uuid))
       setEvaluasiURL("https://elbicare.my.id/vibio_hidden/terapi-list/" + encodeURI(encryted_uuid));
     });
   }, []);

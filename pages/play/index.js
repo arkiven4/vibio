@@ -40,7 +40,7 @@ export default function HomePlay(props) {
     tempArray.push(
       <div key={id} onClick={() => router.push({ pathname: "/play/" + gameType + "/" + key })} className={classCard_pL} style={!isPotrait ? {width: widthPercent + "%"} : {width: "40%"}}>
         <div className="card d-flex justify-content-center" style={!isPotrait ? { height: "45vh" } : null}>
-          <Image src={`/assets/items/${key}/image/${kategoriObj[key].image_file[0]}`} width={"600vw"} height={"600vw"} alt="PlayButton"></Image>
+          <Image src={`/assets/main_menu/${key}.png`} width={"600vw"} height={"600vw"} alt="PlayButton"></Image>
           <h2 style={{ textAlign: "center", fontSize: "3vw" }}>{kategoriObj[key].show_name} &rarr;</h2>
         </div>
       </div>
