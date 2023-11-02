@@ -206,13 +206,13 @@ export default function MengejaGambar(props) {
     var mediaRecorder = new MediaRecorder(stream);
     SetImediaRecorder(mediaRecorder);
 
-    Preferences.get({ key: "recognitionServer" }).then((ret) => {
-      setRecogServer(ret.value);
-    });
+    // Preferences.get({ key: "recognitionServer" }).then((ret) => {
+    //   setRecogServer(ret.value);
+    // });
 
-    Preferences.get({ key: "enableRecog" }).then((ret) => {
-      setEnableRecog(ret.value == "true");
-    });
+    // Preferences.get({ key: "enableRecog" }).then((ret) => {
+    //   setEnableRecog(ret.value == "true");
+    // });
   };
 
   let onError = function (err) {

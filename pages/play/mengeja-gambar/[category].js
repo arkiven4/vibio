@@ -74,6 +74,9 @@ export default function MengejaGambar_dev(props) {
             setEnableRecog(false);
           } else if (data.isonline == "true") {
             if (navigator.mediaDevices.getUserMedia) {
+              Preferences.get({ key: "enableRecog" }).then((ret) => {
+                setEnableRecog(ret.value);
+              });
               SetIsRecordAvailable(true);
               navigator.mediaDevices
                 .getUserMedia({
@@ -104,6 +107,32 @@ export default function MengejaGambar_dev(props) {
               setRecognitionType("native");
             }
           });
+        } else {
+          fetch("https://elbicare.my.id/api/vibio/check_recognitionServer", {
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.error) {
+                setEnableRecog(false);
+              } else if (data.isonline == "true") {
+                if (navigator.mediaDevices.getUserMedia) {
+                  SetIsRecordAvailable(true);
+                  navigator.mediaDevices
+                    .getUserMedia({
+                      audio: true,
+                    })
+                    .then(onSuccess, onError);
+                } else {
+                  SetIsRecordAvailable(false);
+                }
+              }
+            })
+            .catch((error) => {
+              setEnableRecog(false);
+              console.log("Error ========>", error);
+            });
         }
       });
     }
@@ -179,13 +208,13 @@ export default function MengejaGambar_dev(props) {
     var mediaRecorder = new MediaRecorder(stream);
     SetImediaRecorder(mediaRecorder);
 
-    Preferences.get({ key: "recognitionServer" }).then((ret) => {
-      setRecogServer(ret.value);
-    });
+    // Preferences.get({ key: "recognitionServer" }).then((ret) => {
+    //   setRecogServer(ret.value);
+    // });
 
-    Preferences.get({ key: "enableRecog" }).then((ret) => {
-      setEnableRecog(ret.value == "true");
-    });
+    // Preferences.get({ key: "enableRecog" }).then((ret) => {
+    //   setEnableRecog(ret.value == "true");
+    // });
   };
 
   let onError = function (err) {

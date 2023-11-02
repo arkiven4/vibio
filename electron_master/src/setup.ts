@@ -101,10 +101,15 @@ export class ElectronCapacitorApp {
     const icon = nativeImage.createFromPath(
       join(app.getAppPath(), 'assets', process.platform === 'win32' ? 'appIcon.ico' : 'appIcon.png')
     );
+    // Dedicated_Device
     this.mainWindowState = windowStateKeeper({
-      defaultWidth: 1000,
-      defaultHeight: 800,
+      defaultWidth: 1024,
+      defaultHeight: 600,
     });
+    // this.mainWindowState = windowStateKeeper({
+    //   defaultWidth: 1024,
+    //   defaultHeight: 800,
+    // });
     // Setup preload script path and construct our main window.
     const preloadPath = join(app.getAppPath(), 'build', 'src', 'preload.js');
     this.MainWindow = new BrowserWindow({
@@ -123,7 +128,8 @@ export class ElectronCapacitorApp {
       },
       autoHideMenuBar: true,
     });
-    this.MainWindow.maximize();
+    // General
+    //this.MainWindow.maximize();
     this.MainWindow.show();
     this.mainWindowState.manage(this.MainWindow);
 

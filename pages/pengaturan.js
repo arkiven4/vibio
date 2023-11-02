@@ -118,8 +118,8 @@ export default function Pengaturan({ localeData }) {
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <h2 className={stylesCustom.card_menu_title_font}>Music Volume</h2>
               <div className={"form-check"}>
-                <input type="range" class="form-range" id="customRange1" maxValue={100} minValue={0} value={mainmusicVolume} onChange={onOptionChangeMusicSlider} />
-                <label for="customRange1" class="form-label">
+                <input type="range" className="form-range" id="customRange1" maxvalue={100} minvalue={0} value={mainmusicVolume} onChange={onOptionChangeMusicSlider} />
+                <label htmlFor="customRange1" className="form-label">
                   {mainmusicVolume}%
                 </label>
               </div>

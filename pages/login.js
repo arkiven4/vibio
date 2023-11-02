@@ -53,9 +53,9 @@ export default function Home({ localeData }) {
         theme: "light",
         keysArrayOfObjects: [
           {
-            0: "7",
-            1: "8",
-            2: "9",
+            0: "1",
+            1: "2",
+            2: "3",
           },
           {
             0: "4",
@@ -63,9 +63,9 @@ export default function Home({ localeData }) {
             2: "6",
           },
           {
-            0: "1",
-            1: "2",
-            2: "3",
+            0: "7",
+            1: "8",
+            2: "9",
           },
           {
             0: "0",
